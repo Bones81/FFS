@@ -167,6 +167,16 @@ app.get('/movies/:id/edit', (req, res) => {
   })
 })
 
+//CONFIRM DELETE ROUTE
+app.get('/movies/:id/confirm-delete', (req, res) => {
+  Movie.findById(req.params.id, (err, foundMovie) => {
+    res.render('confirmDelete.ejs', {
+      tabTitle: 'Confirm delete?',
+      movie: foundMovie
+    })
+  })
+})
+
 //DELETE ROUTE
 app.delete('/movies/:id', (req, res) => {
   Movie.findByIdAndRemove(req.params.id, (err, foundMovie) => {

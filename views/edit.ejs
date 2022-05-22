@@ -10,7 +10,7 @@
   <div id="edit-container">
       <h1 class="page-title"><%=movie.title.toUpperCase()%></h1>
       <h3>Edit Movie Details</h3>
-    <form action="/movies/<%=movie.id%>?_method=PUT" method="POST" id='edit-form'>
+    <form action="/movies/<%=movie._id%>?_method=PUT" method="POST" id='edit-form'>
       <table>
         <tr>
           <td><label for="movie-title">Title: </label></td>
