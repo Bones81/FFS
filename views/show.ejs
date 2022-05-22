@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('./partials/head.ejs')%>
+</head>
+<body>
+  <header>
+    <%- include('./partials/header.ejs')%>
+  </header>
+  <div class="card show-card">
+    <h1 class="page-title"><%=movie.title.toUpperCase()%></h1>
+    <img src="<%=movie.poster%>" alt="poster for <%=movie.title%>"><br/>
+    <table>
+      <tr>
+        <td class="info-start-text">Date Screened:</td>
+        <td class="info-data-text"><%=movie.dateScreened%></td>
+      </tr>
+      <tr>
+        <td class="info-start-text">Release Year:</td>
+        <td class="info-data-text"><%=movie.year%></td>
+      </tr>
+      <tr>
+        <td class="info-start-text">Director:</td>
+        <td class="info-data-text"><%=movie.director%></td>
+      </tr>
+      <tr>
+        <td class="info-start-text">Cast:</td>
+        <td class="info-data-text"><%=movie.cast.join(', ')%></td>
+      </tr>
+    </table>
+    <h3>
+      <a href="/movies/<%=movie.id%>/edit"><button class="btn edit-btn">Edit Movie Details</button></a>
+    </h3>
+    
+    <form action="/movies/<%=movie.id%>?_method=DELETE" method="POST" class="show-form">
+      <input type="submit" class='btn delete-btn' value="DELETE movie from database">
+    </form>
+  </div>
+</body>
+</html>
