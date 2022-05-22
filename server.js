@@ -42,6 +42,11 @@ app.get('/movies/json', (req, res) => {
   })
 })
 
+//HOME ROUTE
+app.get('/', (req, res) => {
+  res.redirect('/movies')
+})
+
 //INDEX ROUTE
 app.get('/movies', (req, res) => {
   Movie.find({}, (err, allMovies) => {
