@@ -6,12 +6,15 @@ const db = mongoose.connection
 
 const methodOverride = require('method-override')
 
-const mongoURI = 'mongodb://localhost:27017/movies'
 
 app.use(express.static('public'))
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
 app.use(methodOverride('_method')) // enables use of _method attribute
+require('dotenv').config()
+
+const mongoURI = process.env.MONGODB_URI
+const PORT = process.env.PORT || 3003
 
 const seedMovies = require('./models/seed_movies.js')
 const Movie = require('./models/movies.js')
@@ -20,11 +23,14 @@ const res = require('express/lib/response')
 const { aggregate } = require('./models/movies.js')
   
 //SEED INITIAL MOVIE DATA
-// Movie.create(seedMovies, (err, data) => {
-//   console.log(data)
-//   if (err) console.log(err.message)
-//   console.log('added provided movie data')  
-// })
+app.get('/movies/seed', (req, res) => {
+  Movie.create(seedMovies, (err, data) => {
+    console.log(data)
+    if (err) console.log(err.message)
+    console.log('added provided movie data')  
+    res.redirect('/movies')
+  })
+})
 
 //DROP COLLECTION
 // Movie.collection.drop()
@@ -175,6 +181,6 @@ mongoose.connect(mongoURI, () => {
   console.log('The connection with mongod is established')
 })
 
-app.listen(3000, () => {
+app.listen(PORT, () => {
   console.log('listening...')
 })
