@@ -30,11 +30,11 @@
         </tr>
         <tr>
           <td><label for="movie-cast">Cast: </label></td>
-          <td><input type="text" name="cast" id="movie-cast" value="<%=movie.cast.join(', ')%>" size="80"></textarea></td>
+          <td><textarea name="cast" rows=4 cols=50 id="movie-cast"><%=movie.cast.join(', ')%></textarea></td>
         </tr>
         <tr>
           <td><label for="movie-poster">Poster Image URL: </label></td>
-          <td><input type="url" name="poster" id="movie-poster" value="<%=movie.poster%>" size="80"></td>
+          <td><input type="url" name="poster" id="movie-poster" value="<%=movie.poster%>" size="50"></td>
         </tr>
       </table>
       <input type="submit" class="submit-btn" value="SUBMIT CHANGES">
