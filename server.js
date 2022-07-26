@@ -167,7 +167,7 @@ app.post('/movies/sort', (req, res) => {
       })
       // res.send(sortedMovies)
       res.render('index.ejs', {
-        tabTitle: 'Sorted By' + req.body.sortChoice,
+        tabTitle: 'Sorted By ' + req.body.sortChoice,
         movies: sortedMovies
       })
     })
@@ -207,7 +207,7 @@ app.post('/movies/sort', (req, res) => {
         }
       })
       res.render('index.ejs', {
-        tabTitle: 'Sorted By' + req.body.sortChoice,
+        tabTitle: 'Sorted By ' + req.body.sortChoice,
         movies: sortedMovies
       })
     })
@@ -224,7 +224,7 @@ app.post('/movies/sort', (req, res) => {
         }
       })
       res.render('index.ejs', {
-        tabTitle: 'Sorted By' + req.body.sortChoice,
+        tabTitle: 'Sorted By ' + req.body.sortChoice,
         movies: sortedMovies
       })
     })
