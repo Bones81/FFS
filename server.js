@@ -14,6 +14,7 @@ app.use(methodOverride('_method')) // enables use of _method attribute
 require('dotenv').config()
 
 const mongoURI = process.env.MONGODB_URI
+const mongoLOC = 'mongodb://localhost:27017/'+'FFS'
 const PORT = process.env.PORT || 3003
 
 const seedMovies = require('./models/seed_movies.js')
@@ -24,9 +25,10 @@ const { aggregate } = require('./models/movies.js')
   
 //SEED INITIAL MOVIE DATA
 app.get('/movies/seed', (req, res) => {
+  // console.log(seedMovies)
   Movie.create(seedMovies, (err, data) => {
     console.log(data)
-    if (err) console.log(err.message)
+    if (err) console.log(err)
     console.log('added provided movie data')  
     res.redirect('/movies')
   })
@@ -42,6 +44,7 @@ app.get('/movies/json', (req, res) => {
   })
 })
 
+
 //HOME ROUTE
 app.get('/', (req, res) => {
   res.redirect('/movies')
@@ -50,9 +53,20 @@ app.get('/', (req, res) => {
 //INDEX ROUTE
 app.get('/movies', (req, res) => {
   Movie.find({}, (err, allMovies) => {
+    const sortedMovies = allMovies.sort((a,b) => {
+      if (a.dateScreened > b.dateScreened) {
+        return 1
+      } else if (a.dateScreened < b.dateScreened) {
+        return -1
+      } else {
+        return 0
+      }
+    })
+
+  //  res.json(allMovies);
     res.render('index.ejs', {
       tabTitle: 'The Fortnightly Film Society Website',
-      movies: allMovies
+      movies: sortedMovies
     })
   })
 })
@@ -68,11 +82,44 @@ app.get('/movies/new', (req, res) => {
 app.post('/movies', (req, res) => {
   let castArray = req.body.cast.split(', ')
   req.body.cast = castArray
+  let date = new Date(req.body.dateScreened)
+  console.log('original date: ' + date.toString())
+  formattedDate = new Date(
+    date.getUTCFullYear(),
+    date.getUTCMonth(),
+    date.getUTCDate(),
+    date.getUTCHours(),
+    date.getUTCMinutes(),
+    date.getUTCSeconds(),
+    date.getUTCMilliseconds()
+  )
+  console.log('Date with UTC params: ' + formattedDate.toString());
+  req.body.dateScreened = formattedDate
   Movie.create(req.body, (err, newMovie) => {
     if(err) {console.log(err.message);}
     else { res.redirect('/movies')}
   })
 })
+
+//FIX DATES ROUTE
+app.get('/movies/fixdates', (req, res) => {
+  Movie.find({}, (err, allMovies) => {
+    if (err) {
+      console.log(err)
+    }
+    for (const movie of allMovies) {
+      //convert movie.dateScreened into date format and res.json into new seed data
+      // console.log(new Date(movie.dateScreened));
+      let newDateData = new Date(movie.dateScreened)
+      Movie.findOneAndUpdate({title: movie.title}, {$set: {dateScreened: newDateData}}, (err, updatedMovie) => {
+        console.log(updatedMovie);
+      } )
+      //then, if possible, PUT new date data into dateScreened property for each movie
+    }
+    res.json(allMovies)
+  })
+})
+
 
 //SHOW ROUTE
 app.get('/movies/:id', (req, res) => {
@@ -147,7 +194,41 @@ app.post('/movies/sort', (req, res) => {
         movies: sortedMovies
       })
     })
-  } else {
+  } else if (req.body.sortChoice === 'most_recent') { 
+    Movie.find({}, (err, allMovies) => {
+      if(err) console.log(err.message);
+      const sortedMovies = allMovies.sort((a,b) => {
+        if (a.dateScreened < b.dateScreened) {
+          return 1
+        } else if (a.dateScreened > b.dateScreened) {
+          return -1 
+        } else {
+          return 0
+        }
+      })
+      res.render('index.ejs', {
+        tabTitle: 'Sorted By' + req.body.sortChoice,
+        movies: sortedMovies
+      })
+    })
+  } else if (req.body.sortChoice === 'screening_order') { 
+    Movie.find({}, (err, allMovies) => {
+      if(err) console.log(err.message);
+      const sortedMovies = allMovies.sort((a,b) => {
+        if (a.dateScreened > b.dateScreened) {
+          return 1
+        } else if (a.dateScreened < b.dateScreened) {
+          return -1 
+        } else {
+          return 0
+        }
+      })
+      res.render('index.ejs', {
+        tabTitle: 'Sorted By' + req.body.sortChoice,
+        movies: sortedMovies
+      })
+    })
+  }else {
     Movie.find({}, null, {sort: req.body.sortChoice}, (err, sortedMovies) => {
       res.render('index.ejs', {
         tabTitle: 'Sorted By ' + req.body.sortChoice,
@@ -187,12 +268,26 @@ app.delete('/movies/:id', (req, res) => {
 //PUT ROUTE
 app.put('/movies/:id', (req, res) => {
   req.body.cast = req.body.cast.split(', ')
+  let date = new Date(req.body.dateScreened)
+  console.log('original date: ' + date.toString())
+  formattedDate = new Date(
+    date.getUTCFullYear(),
+    date.getUTCMonth(),
+    date.getUTCDate(),
+    date.getUTCHours(),
+    date.getUTCMinutes(),
+    date.getUTCSeconds(),
+    date.getUTCMilliseconds()
+  )
+  console.log('Date with UTC params: ' + formattedDate.toString());
+  req.body.dateScreened = formattedDate
   Movie.findByIdAndUpdate(req.params.id, req.body, (err, foundMovie) => {
     res.redirect('/movies')
   })
 })
 
-mongoose.connect(mongoURI, () => {
+
+mongoose.connect(mongoLOC, () => {
   console.log('The connection with mongod is established')
 })
 

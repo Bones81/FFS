@@ -13,7 +13,8 @@
     <table>
       <tr>
         <td class="info-start-text">Date Screened:</td>
-        <td class="info-data-text"><%=movie.dateScreened%></td>
+        <% let formattedDate = movie.dateScreened.toString().slice(3,15) %> 
+        <td class="info-data-text"><%=formattedDate%></td>
       </tr>
       <tr>
         <td class="info-start-text">Release Year:</td>
