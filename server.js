@@ -51,7 +51,7 @@ app.get('/', (req, res) => {
 app.get('/movies', (req, res) => {
   Movie.find({}, (err, allMovies) => {
     res.render('index.ejs', {
-      tabTitle: 'Movies Home',
+      tabTitle: 'The Fortnightly Film Society Website',
       movies: allMovies
     })
   })
