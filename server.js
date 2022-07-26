@@ -14,6 +14,7 @@ app.use(methodOverride('_method')) // enables use of _method attribute
 require('dotenv').config()
 
 const mongoURI = process.env.MONGODB_URI
+const mongoLOC = 'mongodb://localhost:27017/'+'FFS'
 const PORT = process.env.PORT || 3003
 
 const seedMovies = require('./models/seed_movies.js')
@@ -24,9 +25,10 @@ const { aggregate } = require('./models/movies.js')
   
 //SEED INITIAL MOVIE DATA
 app.get('/movies/seed', (req, res) => {
+  // console.log(seedMovies)
   Movie.create(seedMovies, (err, data) => {
     console.log(data)
-    if (err) console.log(err.message)
+    if (err) console.log(err)
     console.log('added provided movie data')  
     res.redirect('/movies')
   })
@@ -41,6 +43,7 @@ app.get('/movies/json', (req, res) => {
     res.json(movies)
   })
 })
+
 
 //HOME ROUTE
 app.get('/', (req, res) => {
@@ -83,11 +86,14 @@ app.get('/movies/fixdates', (req, res) => {
     }
     for (const movie of allMovies) {
       //convert movie.dateScreened into date format and res.json into new seed data
-      console.log(new Date(movie.dateScreened));
+      // console.log(new Date(movie.dateScreened));
+      let newDateData = new Date(movie.dateScreened)
+      Movie.findOneAndUpdate({title: movie.title}, {$set: {dateScreened: newDateData}}, (err, updatedMovie) => {
+        console.log(updatedMovie);
+      } )
       //then, if possible, PUT new date data into dateScreened property for each movie
-      
     }
-    // res.json(allMovies)
+    res.json(allMovies)
   })
 })
 
@@ -211,7 +217,7 @@ app.put('/movies/:id', (req, res) => {
 })
 
 
-mongoose.connect(mongoURI, () => {
+mongoose.connect(mongoLOC, () => {
   console.log('The connection with mongod is established')
 })
 
