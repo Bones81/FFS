@@ -82,6 +82,19 @@ app.get('/movies/new', (req, res) => {
 app.post('/movies', (req, res) => {
   let castArray = req.body.cast.split(', ')
   req.body.cast = castArray
+  let date = new Date(req.body.dateScreened)
+  console.log('original date: ' + date.toString())
+  formattedDate = new Date(
+    date.getUTCFullYear(),
+    date.getUTCMonth(),
+    date.getUTCDate(),
+    date.getUTCHours(),
+    date.getUTCMinutes(),
+    date.getUTCSeconds(),
+    date.getUTCMilliseconds()
+  )
+  console.log('Date with UTC params: ' + formattedDate.toString());
+  req.body.dateScreened = formattedDate
   Movie.create(req.body, (err, newMovie) => {
     if(err) {console.log(err.message);}
     else { res.redirect('/movies')}
@@ -181,7 +194,41 @@ app.post('/movies/sort', (req, res) => {
         movies: sortedMovies
       })
     })
-  } else {
+  } else if (req.body.sortChoice === 'most_recent') { 
+    Movie.find({}, (err, allMovies) => {
+      if(err) console.log(err.message);
+      const sortedMovies = allMovies.sort((a,b) => {
+        if (a.dateScreened < b.dateScreened) {
+          return 1
+        } else if (a.dateScreened > b.dateScreened) {
+          return -1 
+        } else {
+          return 0
+        }
+      })
+      res.render('index.ejs', {
+        tabTitle: 'Sorted By' + req.body.sortChoice,
+        movies: sortedMovies
+      })
+    })
+  } else if (req.body.sortChoice === 'screening_order') { 
+    Movie.find({}, (err, allMovies) => {
+      if(err) console.log(err.message);
+      const sortedMovies = allMovies.sort((a,b) => {
+        if (a.dateScreened > b.dateScreened) {
+          return 1
+        } else if (a.dateScreened < b.dateScreened) {
+          return -1 
+        } else {
+          return 0
+        }
+      })
+      res.render('index.ejs', {
+        tabTitle: 'Sorted By' + req.body.sortChoice,
+        movies: sortedMovies
+      })
+    })
+  }else {
     Movie.find({}, null, {sort: req.body.sortChoice}, (err, sortedMovies) => {
       res.render('index.ejs', {
         tabTitle: 'Sorted By ' + req.body.sortChoice,
@@ -221,6 +268,19 @@ app.delete('/movies/:id', (req, res) => {
 //PUT ROUTE
 app.put('/movies/:id', (req, res) => {
   req.body.cast = req.body.cast.split(', ')
+  let date = new Date(req.body.dateScreened)
+  console.log('original date: ' + date.toString())
+  formattedDate = new Date(
+    date.getUTCFullYear(),
+    date.getUTCMonth(),
+    date.getUTCDate(),
+    date.getUTCHours(),
+    date.getUTCMinutes(),
+    date.getUTCSeconds(),
+    date.getUTCMilliseconds()
+  )
+  console.log('Date with UTC params: ' + formattedDate.toString());
+  req.body.dateScreened = formattedDate
   Movie.findByIdAndUpdate(req.params.id, req.body, (err, foundMovie) => {
     res.redirect('/movies')
   })

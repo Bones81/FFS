@@ -15,12 +15,17 @@
   <% } %>
   <form action="/movies/sort" id="sort-box" method="POST">
     <h2 id="sort-header">Sort options (very much in beta testing):</h2>
+
+
+    <input type="radio" id="sort-by-screening-order" name="sortChoice" value="screening_order">
+    <label for="sort-by-screening-order">Order Screened</label><br/> 
+
+    <input type="radio" id="sort-by-most-recent-screening" name="sortChoice" value="most_recent">
+    <label for="sort-by-most-recent-screening">Most Recently Screened</label><br/> 
+
     <input type="radio" id="sort-by-title" name="sortChoice" value="title">
     <label for="sort-by-title">Title</label><br/>
-
-    <!-- <input type="radio" id="sort-by-screen-date" name="sortChoice" value="dateScreened">
-    <label for="sort-by-screen-date">Date of Screening</label><br/>  -->
-    <!-- (because dates are strings, this currently sorts "correctly" but not by actual dates) -->
+    
     <input type="radio" id="sort-by-director" name="sortChoice" value="director">
     <label for="sort-by-director">Director (sorts by last name)</label><br/>
 
@@ -37,7 +42,8 @@
       <% let formattedDate = movie.dateScreened.toString().slice(3,15) %> 
       <a href="/movies/<%=movie.id%>" class="card-link">
         <div class="card">
-          <img src="<%=movie.poster%>" alt="pic of <%=movie.title%>">
+          <img src="<%=movie.poster%>" alt="pic of <%=movie.title%>"></br>
+          <span><%=movies.indexOf(movie) + 1%></span>
           <h3><%=movie.title%></h3>
           <h4>Date screened: <%=formattedDate%></h4>
         </div>
