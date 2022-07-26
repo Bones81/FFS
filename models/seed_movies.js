@@ -2,7 +2,7 @@
   {
   "_id": "620419483e71e6bdd77c325a",
   "title": "John Carter",
-  "dateScreened": "4/11/20",
+  "dateScreened": "4/25/20",
   "year": "2012",
   "director": "Andrew Stanton",
   "cast": [
@@ -13,7 +13,7 @@
   "Samantha Morton"
   ],
   "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/a/aa/John_carter_poster.jpg/220px-John_carter_poster.jpg",
-  "updatedAt": "2022-02-09T19:43:04.623Z",
+  "updatedAt": "2022-05-23T22:13:53.726Z",
   "createdAt": "2022-02-09T19:43:04.623Z",
   "__v": 0
   },
@@ -31,7 +31,7 @@
   "Alicia Silverstone"
   ],
   "poster": "https://upload.wikimedia.org/wikipedia/en/3/37/Batman_%26_Robin_poster.jpg",
-  "updatedAt": "2022-02-09T19:43:04.624Z",
+  "updatedAt": "2022-05-22T05:06:49.871Z",
   "createdAt": "2022-02-09T19:43:04.624Z",
   "__v": 0
   },
@@ -48,7 +48,7 @@
   "Dylan Walsh"
   ],
   "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/3/3f/Congo_movie_poster.jpg/220px-Congo_movie_poster.jpg",
-  "updatedAt": "2022-05-22T04:31:43.710Z",
+  "updatedAt": "2022-05-22T05:38:40.369Z",
   "createdAt": "2022-02-09T19:43:04.624Z",
   "__v": 0
   },
@@ -140,7 +140,7 @@
   "James Caan"
   ],
   "poster": "https://upload.wikimedia.org/wikipedia/en/9/9d/Dick_tracy1.jpg",
-  "updatedAt": "2022-02-10T04:09:11.017Z",
+  "updatedAt": "2022-05-22T04:59:06.745Z",
   "createdAt": "2022-02-10T04:09:11.017Z",
   "__v": 0
   },
@@ -793,21 +793,21 @@
   {
   "_id": "622d67facb0265c7eb72904a",
   "title": "Police Academy: Mission to Moscow",
-  "dateScreened": "03/12/22",
+  "dateScreened": "3/12/22",
   "year": "1994",
   "director": "Alan Metter",
   "cast": [
   "Michael Winslow"
   ],
   "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/c/cb/Police_Academy_Mission_to_Moscow_-_Filmi_1994.jpg/220px-Police_Academy_Mission_to_Moscow_-_Filmi_1994.jpg",
-  "updatedAt": "2022-03-13T03:41:46.411Z",
+  "updatedAt": "2022-05-22T05:08:55.854Z",
   "createdAt": "2022-03-13T03:41:46.411Z",
   "__v": 0
   },
   {
   "_id": "622d69e6cb0265c7eb729068",
   "title": "Twins",
-  "dateScreened": "02/26/22",
+  "dateScreened": "2/26/22",
   "year": "1988",
   "director": "Ivan Reitman",
   "cast": [
@@ -815,7 +815,7 @@
   "Danny Devito"
   ],
   "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/6/6b/Twins_Poster.jpg/220px-Twins_Poster.jpg",
-  "updatedAt": "2022-03-13T03:49:58.021Z",
+  "updatedAt": "2022-05-22T05:08:42.975Z",
   "createdAt": "2022-03-13T03:49:58.021Z",
   "__v": 0
   },
@@ -939,7 +939,72 @@
   ],
   "poster": "https://upload.wikimedia.org/wikipedia/en/0/06/Red_sonja_film_poster.jpg",
   "createdAt": "2022-05-22T04:30:16.542Z",
-  "updatedAt": "2022-05-22T04:30:16.542Z",
+  "updatedAt": "2022-05-22T15:38:36.803Z",
+  "__v": 0
+  },
+  {
+  "_id": "629c1e61342c11d09428fb93",
+  "title": "Moonfall",
+  "dateScreened": "6/4/22",
+  "year": "2022",
+  "director": "Roland Emmerich",
+  "cast": [
+  "Halle Berry, Patrick Wilson, John Bradley, Michael Peña, Charlie Plummer, Kelly Yu, Donald Sutherland"
+  ],
+  "poster": "https://upload.wikimedia.org/wikipedia/en/d/d3/Moonfall_film_poster.jpg",
+  "createdAt": "2022-06-05T03:09:21.177Z",
+  "updatedAt": "2022-06-05T03:09:55.238Z",
+  "__v": 0
+  },
+  {
+  "_id": "62ae71286bd993eec26d6339",
+  "title": "Krull",
+  "dateScreened": "06/18/22",
+  "year": "1983",
+  "director": "Peter Yates",
+  "cast": [
+  "Ken Marshall, Lysette Anthony,, Freddie Jones,, Francesca Annis,, Liam Neeson,, Robbie Coltrane"
+  ],
+  "poster": "https://upload.wikimedia.org/wikipedia/en/f/fa/Krull.jpg",
+  "createdAt": "2022-06-19T00:43:20.242Z",
+  "updatedAt": "2022-06-19T03:10:36.073Z",
+  "__v": 0
+  },
+  {
+  "_id": "62c0efae801c1ad44cf565fb",
+  "title": "Revolution",
+  "dateScreened": "7/2/22",
+  "year": "1985",
+  "director": "Hugh Hudson",
+  "cast": [
+  "Al Pacino",
+  "Donald Sutherland",
+  "Nastassja Kinski",
+  "Robbie Coltrane",
+  "Annie Lennox",
+  "Graham Greene"
+  ],
+  "poster": "https://upload.wikimedia.org/wikipedia/en/3/36/Revolution_imp.jpg",
+  "createdAt": "2022-07-03T01:23:58.856Z",
+  "updatedAt": "2022-07-03T01:23:58.856Z",
+  "__v": 0
+  },
+  {
+  "_id": "62d7902ce2227b380fea1326",
+  "title": "Double Dragon",
+  "dateScreened": "7/16/22",
+  "year": "1994",
+  "director": "James Yukich",
+  "cast": [
+  "Robert Patrick",
+  "Mark Dacascos",
+  "Scott Wolf",
+  "Julia Nickson",
+  "Alyssa Milano"
+  ],
+  "poster": "https://upload.wikimedia.org/wikipedia/en/4/43/Double_Dragon_1994_movie_poster.jpg",
+  "createdAt": "2022-07-20T05:18:36.753Z",
+  "updatedAt": "2022-07-20T05:18:36.753Z",
   "__v": 0
   }
   ]

@@ -50,6 +50,7 @@ app.get('/', (req, res) => {
 //INDEX ROUTE
 app.get('/movies', (req, res) => {
   Movie.find({}, (err, allMovies) => {
+  //  res.json(allMovies);
     res.render('index.ejs', {
       tabTitle: 'The Fortnightly Film Society Website',
       movies: allMovies
@@ -73,6 +74,23 @@ app.post('/movies', (req, res) => {
     else { res.redirect('/movies')}
   })
 })
+
+//FIX DATES ROUTE
+app.get('/movies/fixdates', (req, res) => {
+  Movie.find({}, (err, allMovies) => {
+    if (err) {
+      console.log(err)
+    }
+    for (const movie of allMovies) {
+      //convert movie.dateScreened into date format and res.json into new seed data
+      console.log(new Date(movie.dateScreened));
+      //then, if possible, PUT new date data into dateScreened property for each movie
+      
+    }
+    // res.json(allMovies)
+  })
+})
+
 
 //SHOW ROUTE
 app.get('/movies/:id', (req, res) => {
@@ -191,6 +209,7 @@ app.put('/movies/:id', (req, res) => {
     res.redirect('/movies')
   })
 })
+
 
 mongoose.connect(mongoURI, () => {
   console.log('The connection with mongod is established')
