@@ -53,10 +53,20 @@ app.get('/', (req, res) => {
 //INDEX ROUTE
 app.get('/movies', (req, res) => {
   Movie.find({}, (err, allMovies) => {
+    const sortedMovies = allMovies.sort((a,b) => {
+      if (a.dateScreened > b.dateScreened) {
+        return 1
+      } else if (a.dateScreened < b.dateScreened) {
+        return -1
+      } else {
+        return 0
+      }
+    })
+
   //  res.json(allMovies);
     res.render('index.ejs', {
       tabTitle: 'The Fortnightly Film Society Website',
-      movies: allMovies
+      movies: sortedMovies
     })
   })
 })
