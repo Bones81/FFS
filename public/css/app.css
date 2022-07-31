@@ -166,7 +166,7 @@ header {
 nav {
   display: flex;
   flex-flow: row wrap;
-  justify-content: space-around;
+  justify-content: space-evenly;
   width: 70vw;
   margin: 0 auto;
   padding: 1em;
