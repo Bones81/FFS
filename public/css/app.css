@@ -172,7 +172,7 @@ nav {
   padding: 1em;
   gap: 1em;
   background: linear-gradient(to top, gold, yellow, gold);
-  background: gold;
+  background: goldenrod;
   border-bottom-left-radius: 25px;
   border-bottom-right-radius: 25px;
 }
