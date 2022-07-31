@@ -18,5 +18,14 @@
     "method-override": "^3.0.0",
     "mongoose": "^6.2.1"
   },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bones81/FFS.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Bones81/FFS/issues"
+  },
+  "homepage": "https://github.com/Bones81/FFS#readme",
   "description": ""
 }
