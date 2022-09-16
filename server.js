@@ -292,5 +292,5 @@ mongoose.connect(mongoURI, () => {
 })
 
 app.listen(PORT, () => {
-  console.log('listening...')
+  console.log('listening on ' + PORT)
 })
