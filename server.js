@@ -88,14 +88,21 @@ app.get('/nominations', (req, res) => {
   })
 })
 
-//NEW ROUTE
+//"ADD NEW" ROUTES
 app.get('/movies/new', (req, res) => {
   res.render('new.ejs', {
     tabTitle: 'Add Movie'
   })
 })
 
-//CREATE ROUTE
+app.get('/nominations/new', (req, res) => {
+  res.render('new_nomination.ejs', {
+    tabTitle: 'Add Nomination'
+  })
+})
+
+//CREATE ROUTES
+//FOR SELECTED FILMS
 app.post('/movies', (req, res) => {
   let castArray = req.body.cast.split(', ')
   req.body.cast = castArray
@@ -118,7 +125,30 @@ app.post('/movies', (req, res) => {
   })
 })
 
+//FOR NOMINATED FILMS
+app.post('/nominations', (req, res) => {
+  let date = new Date(req.body.forWhatScreening)
+  console.log('original date: ' + date.toString())
+  formattedDate = new Date(
+    date.getUTCFullYear(),
+    date.getUTCMonth(),
+    date.getUTCDate(),
+    date.getUTCHours(),
+    date.getUTCMinutes(),
+    date.getUTCSeconds(),
+    date.getUTCMilliseconds()
+  )
+  console.log('Date with UTC params: ' + formattedDate.toString());
+  req.body.forWhatScreening = formattedDate
+
+  Nomination.create(req.body, (err, newNomination) => {
+    if(err) {console.log(err.message);}
+    else { res.redirect('/nominations')}
+  })
+})
+
 //FIX DATES ROUTE
+//I think this route was used to convert previously entered text dates to proper date format. Shouldn't be necessary any more... I think.
 app.get('/movies/fixdates', (req, res) => {
   Movie.find({}, (err, allMovies) => {
     if (err) {
@@ -253,7 +283,7 @@ app.post('/movies/sort', (req, res) => {
   }
 })
 
-//EDIT ROUTE
+//EDIT ROUTES
 app.get('/movies/:id/edit', (req, res) => {
   Movie.findById(req.params.id, (err, foundMovie) => {
     res.render('edit.ejs', {
@@ -263,7 +293,16 @@ app.get('/movies/:id/edit', (req, res) => {
   })
 })
 
-//CONFIRM DELETE ROUTE
+app.get('/nominations/:id/edit', (req, res) => {
+  Nomination.findById(req.params.id, (err, foundNom) => {
+    res.render('edit_nomination.ejs', {
+      tabTitle: foundNom.title + " | Edit Nomination",
+      nomination: foundNom
+    })
+  })
+})
+
+//CONFIRM DELETE ROUTES
 app.get('/movies/:id/confirm-delete', (req, res) => {
   Movie.findById(req.params.id, (err, foundMovie) => {
     res.render('confirmDelete.ejs', {
@@ -273,14 +312,29 @@ app.get('/movies/:id/confirm-delete', (req, res) => {
   })
 })
 
-//DELETE ROUTE
+app.get('/nominations/:id/confirm-delete', (req, res) => {
+  Nomination.findById(req.params.id, (err, foundNom) => {
+    res.render('confirm_nomination_delete.ejs', {
+      tabTitle: 'Confirm delete?',
+      nomination: foundNom
+    })
+  })
+})
+
+//DELETE ROUTES
 app.delete('/movies/:id', (req, res) => {
   Movie.findByIdAndRemove(req.params.id, (err, foundMovie) => {
     res.redirect('/movies')
   })
 })
 
-//PUT ROUTE
+app.delete('/nominations/:id', (req, res) => {
+  Nomination.findByIdAndRemove(req.params.id, (err, foundNomination) => {
+    res.redirect('/nominations')
+  })
+})
+
+//PUT ROUTES
 app.put('/movies/:id', (req, res) => {
   req.body.cast = req.body.cast.split(', ')
   let date = new Date(req.body.dateScreened)
@@ -298,6 +352,28 @@ app.put('/movies/:id', (req, res) => {
   req.body.dateScreened = formattedDate
   Movie.findByIdAndUpdate(req.params.id, req.body, (err, foundMovie) => {
     res.redirect('/movies')
+  })
+})
+
+app.put('/nominations/:id', (req, res) => {
+  let date = new Date(req.body.forWhatScreening)
+  console.log('original date: ' + date.toString())
+  formattedDate = new Date(
+    date.getUTCFullYear(),
+    date.getUTCMonth(),
+    date.getUTCDate(),
+    date.getUTCHours(),
+    date.getUTCMinutes(),
+    date.getUTCSeconds(),
+    date.getUTCMilliseconds()
+  )
+  console.log('Date with UTC params: ' + formattedDate.toString());
+  req.body.forWhatScreening = formattedDate
+  console.log(req.body.winner)
+  let checked = req.body.winner === "on" ? true : false
+  req.body.winner = checked
+  Nomination.findByIdAndUpdate(req.params.id, req.body, (err, foundNomination) => {
+    res.redirect('/nominations')
   })
 })
 

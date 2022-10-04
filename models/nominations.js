@@ -3,10 +3,11 @@ const Schema = mongoose.Schema
 
 const nominationSchema = new Schema({
   title: {type: String, required: true},
-  screeningWeek: {type: Number},
-  submittedBy: {type: String},
-  posterURL: {type: String},
+  forWhatScreening: {type: Date, required: true},
+  submittedBy: {type: String, required: true},
+  poster: {type: String},
   blurb: {type: String},
+  winner: {type: Boolean}
 }, {timestamps: true}
 )
 

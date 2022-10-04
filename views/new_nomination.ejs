@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('./partials/head.ejs')%>
+</head>
+<body>
+  <header>
+    <%- include('./partials/header.ejs')%>
+  </header>
+  <h1 class="page-title">Enter New Nomination</h1>
+  <form action="/nominations" method="POST" id="new-form">
+    <table>
+      <tr>
+        <td class="info-start-text"><span class="red">* </span>Title: </td>
+        <td class="new-data-text"><input type="text" name="title" placeholder="Title of Nomination" size="50"></td>
+      </tr>
+      <tr>
+        <td class="info-start-text"><span class="red">* </span>Nominating for Screening Date: </td>
+        <td class="new-data-text"><input type="date" name="forWhatScreening"></td>
+      </tr>
+      <tr>
+        <td class="info-start-text"><span class="red">* </span>Person Submitting Nomination: </td>
+        <td class="new-data-text"><input type="text" name="submittedBy" placeholder="your name here" size="30"></td>
+      </tr>
+      <tr>
+          <td class="info-start-text">Comments: </td>
+          <td class="new-data-text"><textarea name="blurb" rows=4 cols=50 placeholder="(Optional) Why should we consider this nomination?"></textarea></td>
+      </tr>
+      <tr>
+        <td class="info-start-text">Poster Image: </td>
+        <td class="new-data-text"><input type="url" name="poster" placeholder="(Optional, but encouraged) URL of poster image" size="80"></td>
+      </tr>
+    </table>
+    <input type="submit" id="create-btn" value="Add new nomination with this data">
+  </form>
+</body>
+</html>

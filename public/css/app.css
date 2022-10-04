@@ -45,12 +45,12 @@ body {
 }
 
 .card h3 {
-  font-size: 1.25em;
+  font-size: 1em;
   margin: 0.25em;
 }
 
 h1 {
-  font-size: 2em;
+  font-size: 1.5em;
 }
 
 .blurb {
@@ -75,6 +75,11 @@ h2 {
   padding: 0.5em;
   background: radial-gradient(whitesmoke, orange);
   font-family: 'Raleway', sans-serif;
+  font-size: 0.83em;
+}
+
+h3 {
+  font-size: 0.75em;
 }
 
 h3 a {
@@ -109,6 +114,10 @@ ul {
   padding: 0;
 }
 
+label {
+  font-size: 0.75em;
+}
+
 #sort-box {
   text-align: left;
   width: 80vw;
@@ -125,7 +134,7 @@ table {
 td {
   /* padding: 1px; */
   border: 1px solid grey;
-  font-size: 1em;
+  font-size: 0.67em;
   font-family: 'Raleway', sans-serif;
 }
 
@@ -179,7 +188,7 @@ nav {
 
 nav a {
   font-family: 'Rowdies', cursive;
-  font-size: 1.5em;
+  font-size: 0.83em;
   text-decoration: none;
   color: black;
   transition: all .3s;
@@ -192,6 +201,7 @@ nav a:hover {
 #search-form {
   flex-basis: 100%;
   text-align: center;
+  font-size: 0.83em;
 }
 #new-form, #edit-form {
   margin: 1em auto;
@@ -207,7 +217,55 @@ nav a:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.75em;
+  font-size: 1.25em;
   margin: 1em auto;
   text-shadow: black 2px 2px 5px;
+}
+
+.red {
+  color: red;
+}
+
+@media (min-width: 840px) {
+  header a, #search-form {
+    font-size: 1em;
+  }
+
+  .page-title {
+    font-size: 1.5em;
+  }
+
+  h2 {
+    font-size: 1.25em;
+  }
+
+  .card h3, h3 {
+    font-size: 1em;
+  }
+
+  td, label {
+    font-size: 0.83em;
+  }
+}
+
+@media (min-width: 1080px) {
+  header a, #search-form {
+    font-size: 1.25em;
+  }
+
+  .page-title {
+    font-size: 1.75em;
+  }
+
+  h2 {
+    font-size: 1.5em;
+  }
+
+  .card h3, h3 {
+    font-size: 1.25em;;
+  }
+
+  td, label {
+    font-size: 1em;
+  }
 }
