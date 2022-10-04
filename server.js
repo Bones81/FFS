@@ -140,7 +140,8 @@ app.post('/nominations', (req, res) => {
   )
   console.log('Date with UTC params: ' + formattedDate.toString());
   req.body.forWhatScreening = formattedDate
-
+  let checked = req.body.winner === "on" ? true : false
+  req.body.winner = checked
   Nomination.create(req.body, (err, newNomination) => {
     if(err) {console.log(err.message);}
     else { res.redirect('/nominations')}
