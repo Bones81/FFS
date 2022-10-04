@@ -19,9 +19,11 @@ const PORT = process.env.PORT || 3003
 
 const seedMovies = require('./models/seed_movies.js')
 const Movie = require('./models/movies.js')
+const Nomination = require('./models/nominations.js')
 const req = require('express/lib/request')
 const res = require('express/lib/response')
 const { aggregate } = require('./models/movies.js')
+const { application } = require('express')
   
 //SEED INITIAL MOVIE DATA
 app.get('/movies/seed', (req, res) => {
@@ -37,10 +39,16 @@ app.get('/movies/seed', (req, res) => {
 //DROP COLLECTION
 // Movie.collection.drop()
 
-//JSON route
+//JSON routes
 app.get('/movies/json', (req, res) => {
   Movie.find({}, (err, movies) => {
     res.json(movies)
+  })
+})
+
+app.get('/nominations/json', (req, res) => {
+  Nomination.find({}, (err, nominations) => {
+    res.json(nominations)
   })
 })
 
@@ -50,7 +58,7 @@ app.get('/', (req, res) => {
   res.redirect('/movies')
 })
 
-//INDEX ROUTE
+//INDEX ROUTES
 app.get('/movies', (req, res) => {
   Movie.find({}, (err, allMovies) => {
     const sortedMovies = allMovies.sort((a,b) => {
@@ -67,6 +75,15 @@ app.get('/movies', (req, res) => {
     res.render('index.ejs', {
       tabTitle: 'The Fortnightly Film Society Website',
       movies: sortedMovies
+    })
+  })
+})
+
+app.get('/nominations', (req, res) => {
+  Nomination.find({}, (err, nominations) => {
+    res.render('nominations.ejs', {
+      tabTitle: 'FFS Nominations',
+      nominations: nominations
     })
   })
 })
@@ -142,9 +159,7 @@ app.post('/movies/search', (req, res) => {
   })
 })
 
-//SORT ROUTE -- TESTING
-
-
+//SORT ROUTE
 app.post('/movies/sort', (req, res) => {
   if (req.body.sortChoice === 'cast') {
     Movie.find({}, (err, allMovies) => {
