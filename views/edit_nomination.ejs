@@ -17,7 +17,7 @@
           <td><input type="text" id='nomination-title' name="title" value="<%=nomination.title%>" required size="50"></td>
         </tr>
         <tr>
-          <td><label for="forWhatScreening">Nominating for the following Screening Date: <br/>(Always re-enter this when updating nomination.)</label></td>
+          <td><label for="forWhatScreening">Nominating for the following Screening Date: <br/><b>(Always re-enter this when updating nomination.)</b></label></td>
           <td><input type="date" name="forWhatScreening" id="forWhatScreening" value="<%=nomination.forWhatScreening%>"></td>
         </tr>
         <tr>
@@ -31,6 +31,16 @@
         <tr>
           <td><label for="blurb">Comments: </label></td>
           <td><input type="text" name="blurb" id='blurb' value="<%=nomination.blurb%>" size="30"></td>
+        </tr>
+        <tr>
+          <td><label for="winner">Did it win?: </label></td>
+          <td>
+            <% if (nomination.winner) { %> 
+                <input type="checkbox" name="winner" id='winner' checked />
+            <% } else { %> 
+                <input type="checkbox" name="winner" id='winner' />
+            <% } %>
+          </td>
         </tr>
       </table>
       <input type="submit" class="submit-btn" value="SUBMIT CHANGES">

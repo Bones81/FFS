@@ -140,6 +140,7 @@ app.post('/nominations', (req, res) => {
   )
   console.log('Date with UTC params: ' + formattedDate.toString());
   req.body.forWhatScreening = formattedDate
+
   Nomination.create(req.body, (err, newNomination) => {
     if(err) {console.log(err.message);}
     else { res.redirect('/nominations')}
@@ -368,6 +369,9 @@ app.put('/nominations/:id', (req, res) => {
   )
   console.log('Date with UTC params: ' + formattedDate.toString());
   req.body.forWhatScreening = formattedDate
+  console.log(req.body.winner)
+  let checked = req.body.winner === "on" ? true : false
+  req.body.winner = checked
   Nomination.findByIdAndUpdate(req.params.id, req.body, (err, foundNomination) => {
     res.redirect('/nominations')
   })

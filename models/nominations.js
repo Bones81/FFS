@@ -7,6 +7,7 @@ const nominationSchema = new Schema({
   submittedBy: {type: String, required: true},
   poster: {type: String},
   blurb: {type: String},
+  winner: {type: Boolean}
 }, {timestamps: true}
 )
 
