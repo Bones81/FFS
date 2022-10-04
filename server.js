@@ -178,6 +178,15 @@ app.get('/movies/:id', (req, res) => {
   })
 })
 
+app.get('/nominations/:id', (req, res) => {
+  Nomination.findById(req.params.id, (err, foundNomination) => {
+    res.render('show_nomination.ejs', {
+      nomination: foundNomination,
+      tabTitle: foundNomination.title + ' | Nomination' 
+    })
+  })
+})
+
 
 //SEARCH RESULTS ROUTE
 app.post('/movies/search', (req, res) => {
