@@ -3,9 +3,9 @@ const Schema = mongoose.Schema
 
 const nominationSchema = new Schema({
   title: {type: String, required: true},
-  screeningWeek: {type: Number},
+  forWhatScreening: {type: Date},
   submittedBy: {type: String},
-  posterURL: {type: String},
+  poster: {type: String},
   blurb: {type: String},
 }, {timestamps: true}
 )
