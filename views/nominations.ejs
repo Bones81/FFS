@@ -8,6 +8,7 @@
         <%- include('./partials/header.ejs')%>
     </header>
     <h1 class="page-title nominations-title">Nominations</h1>
+    <h3 class="blurb">Notes: Screenings from prior to the 'Voting Era' are included with the nominator listed as 'Brain Trust.' 'Brain Trust' may also apply to a film that was nominated or chosen unilaterally in lieu of a formal or informal nomination or voting process for that screening week. Additional (but not all) nominations from prior to the Voting Era are included, if the nominee was clearly considered by the FFS.</h3>
     <div class="flex-container">
         <% for (let nomination of nominations) { %>
           <% let formattedDate = nomination.forWhatScreening.toString().slice(3,15) %> 
