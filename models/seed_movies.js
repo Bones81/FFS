@@ -53,21 +53,6 @@ module.exports = [
   "__v": 0
   },
   {
-  "_id": "62041beaa5c47c967618a73e",
-  "title": "Barbarella",
-  "dateScreened": "2020-05-23T04:00:00.000Z",
-  "year": "1968",
-  "director": "Roger Vadim",
-  "cast": [
-  "Jane Fonda",
-  "Marcel Marceau"
-  ],
-  "poster": "https://upload.wikimedia.org/wikipedia/en/5/53/Barbarella_English_Poster.jpg",
-  "updatedAt": "2022-07-26T04:54:16.980Z",
-  "createdAt": "2022-02-09T19:54:18.567Z",
-  "__v": 0
-  },
-  {
   "_id": "620423e6a5c47c967618a765",
   "title": "Alita: Battle Angel",
   "dateScreened": "2020-06-06T04:00:00.000Z",
@@ -85,6 +70,21 @@ module.exports = [
   "__v": 0
   },
   {
+  "_id": "62041beaa5c47c967618a73e",
+  "title": "Barbarella",
+  "dateScreened": "2020-05-23T04:00:00.000Z",
+  "year": "1968",
+  "director": "Roger Vadim",
+  "cast": [
+  "Jane Fonda",
+  "Marcel Marceau"
+  ],
+  "poster": "https://upload.wikimedia.org/wikipedia/en/5/53/Barbarella_English_Poster.jpg",
+  "updatedAt": "2022-07-26T04:54:16.980Z",
+  "createdAt": "2022-02-09T19:54:18.567Z",
+  "__v": 0
+  },
+  {
   "_id": "62041b9da5c47c967618a73a",
   "title": "A View to a Kill",
   "dateScreened": "2020-05-09T04:00:00.000Z",
@@ -99,26 +99,6 @@ module.exports = [
   "poster": "https://upload.wikimedia.org/wikipedia/en/0/03/A_View_to_a_Kill_-_UK_cinema_poster.jpg",
   "updatedAt": "2022-07-26T04:54:16.980Z",
   "createdAt": "2022-02-09T19:53:01.893Z",
-  "__v": 0
-  },
-  {
-  "_id": "62048ec47311155aa1dca6e3",
-  "title": "Valerian and the City of a Thousand Planets",
-  "dateScreened": "2020-04-11T04:00:00.000Z",
-  "year": "2017",
-  "director": "Luc Besson",
-  "cast": [
-  "Cara Delevingne",
-  "Dane DeHaan",
-  "Clive Owen",
-  "Rihanna",
-  "Ethan Hawke",
-  "Rutger Hauer",
-  "Herbie Hancock"
-  ],
-  "poster": "https://upload.wikimedia.org/wikipedia/en/0/07/Valerian_and_the_City_of_a_Thousand_Planets.jpg",
-  "updatedAt": "2022-07-26T04:54:16.980Z",
-  "createdAt": "2022-02-10T04:04:20.472Z",
   "__v": 0
   },
   {
@@ -161,6 +141,26 @@ module.exports = [
   "__v": 0
   },
   {
+  "_id": "62048ec47311155aa1dca6e3",
+  "title": "Valerian and the City of a Thousand Planets",
+  "dateScreened": "2020-04-11T04:00:00.000Z",
+  "year": "2017",
+  "director": "Luc Besson",
+  "cast": [
+  "Cara Delevingne",
+  "Dane DeHaan",
+  "Clive Owen",
+  "Rihanna",
+  "Ethan Hawke",
+  "Rutger Hauer",
+  "Herbie Hancock"
+  ],
+  "poster": "https://upload.wikimedia.org/wikipedia/en/0/07/Valerian_and_the_City_of_a_Thousand_Planets.jpg",
+  "updatedAt": "2022-07-26T04:54:16.980Z",
+  "createdAt": "2022-02-10T04:04:20.472Z",
+  "__v": 0
+  },
+  {
   "_id": "62042a7ba5c47c967618a776",
   "title": "Flash Gordon",
   "dateScreened": "2020-07-18T04:00:00.000Z",
@@ -174,6 +174,37 @@ module.exports = [
   "poster": "https://upload.wikimedia.org/wikipedia/en/5/50/Flash_gordon_movie_poster.jpg",
   "updatedAt": "2022-07-26T04:54:16.981Z",
   "createdAt": "2022-02-09T20:56:27.447Z",
+  "__v": 0
+  },
+  {
+  "_id": "620491e77311155aa1dca6fa",
+  "title": "Runaway",
+  "dateScreened": "2020-10-24T04:00:00.000Z",
+  "year": "1984",
+  "director": "Michael Crichton",
+  "cast": [
+  "Tom Selleck",
+  "Cynthia Rhodes",
+  "Gene Simmons",
+  "Kirstie Alley"
+  ],
+  "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/b/b3/Runawayposter.jpg/220px-Runawayposter.jpg",
+  "updatedAt": "2022-07-26T04:54:16.981Z",
+  "createdAt": "2022-02-10T04:17:43.893Z",
+  "__v": 0
+  },
+  {
+  "_id": "620492137311155aa1dca6fd",
+  "title": "Zardoz",
+  "dateScreened": "2020-11-07T05:00:00.000Z",
+  "year": "1974",
+  "director": "John Boorman",
+  "cast": [
+  "Sean Connery"
+  ],
+  "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/6/68/Original_movie_poster_for_the_film_Zardoz.jpg/220px-Original_movie_poster_for_the_film_Zardoz.jpg",
+  "updatedAt": "2022-07-26T04:54:16.981Z",
+  "createdAt": "2022-02-10T04:18:27.356Z",
   "__v": 0
   },
   {
@@ -209,37 +240,6 @@ module.exports = [
   "__v": 0
   },
   {
-  "_id": "620491e77311155aa1dca6fa",
-  "title": "Runaway",
-  "dateScreened": "2020-10-24T04:00:00.000Z",
-  "year": "1984",
-  "director": "Michael Crichton",
-  "cast": [
-  "Tom Selleck",
-  "Cynthia Rhodes",
-  "Gene Simmons",
-  "Kirstie Alley"
-  ],
-  "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/b/b3/Runawayposter.jpg/220px-Runawayposter.jpg",
-  "updatedAt": "2022-07-26T04:54:16.981Z",
-  "createdAt": "2022-02-10T04:17:43.893Z",
-  "__v": 0
-  },
-  {
-  "_id": "620492137311155aa1dca6fd",
-  "title": "Zardoz",
-  "dateScreened": "2020-11-07T05:00:00.000Z",
-  "year": "1974",
-  "director": "John Boorman",
-  "cast": [
-  "Sean Connery"
-  ],
-  "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/6/68/Original_movie_poster_for_the_film_Zardoz.jpg/220px-Original_movie_poster_for_the_film_Zardoz.jpg",
-  "updatedAt": "2022-07-26T04:54:16.981Z",
-  "createdAt": "2022-02-10T04:18:27.356Z",
-  "__v": 0
-  },
-  {
   "_id": "6204908b7311155aa1dca6f0",
   "title": "Cats",
   "dateScreened": "2020-08-29T04:00:00.000Z",
@@ -259,21 +259,6 @@ module.exports = [
   "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Cats_2019_poster.jpg/220px-Cats_2019_poster.jpg",
   "updatedAt": "2022-07-26T04:54:16.981Z",
   "createdAt": "2022-02-10T04:11:55.106Z",
-  "__v": 0
-  },
-  {
-  "_id": "620492d47311155aa1dca706",
-  "title": "One Magic Christmas",
-  "dateScreened": "2020-12-19T05:00:00.000Z",
-  "year": "1985",
-  "director": "Phillip Borsos",
-  "cast": [
-  "Mary Steenburgen",
-  "Harry Dean Stanton"
-  ],
-  "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/1/15/One_Magic_Christmas_Poster.jpg/220px-One_Magic_Christmas_Poster.jpg",
-  "updatedAt": "2022-07-26T04:54:16.981Z",
-  "createdAt": "2022-02-10T04:21:40.164Z",
   "__v": 0
   },
   {
@@ -304,6 +289,21 @@ module.exports = [
   "poster": "https://upload.wikimedia.org/wikipedia/en/8/8c/Cocktail_1988.jpg",
   "updatedAt": "2022-07-26T04:54:16.981Z",
   "createdAt": "2022-02-10T04:19:31.574Z",
+  "__v": 0
+  },
+  {
+  "_id": "620492d47311155aa1dca706",
+  "title": "One Magic Christmas",
+  "dateScreened": "2020-12-19T05:00:00.000Z",
+  "year": "1985",
+  "director": "Phillip Borsos",
+  "cast": [
+  "Mary Steenburgen",
+  "Harry Dean Stanton"
+  ],
+  "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/1/15/One_Magic_Christmas_Poster.jpg/220px-One_Magic_Christmas_Poster.jpg",
+  "updatedAt": "2022-07-26T04:54:16.981Z",
+  "createdAt": "2022-02-10T04:21:40.164Z",
   "__v": 0
   },
   {
@@ -362,22 +362,21 @@ module.exports = [
   "__v": 0
   },
   {
-  "_id": "6204952f7311155aa1dca718",
-  "title": "BloodRayne",
-  "dateScreened": "2021-03-27T04:00:00.000Z",
-  "year": "2005",
-  "director": "Uwe Boll",
+  "_id": "620494b37311155aa1dca715",
+  "title": "The Phantom",
+  "dateScreened": "2021-03-13T05:00:00.000Z",
+  "year": "1996",
+  "director": "Simon Wincer",
   "cast": [
-  "Kristanna Loken",
-  "Ben Kingsley",
-  "Michael Madsen",
   "Billy Zane",
-  "Michelle Rodriguez",
-  "Meat Loaf"
+  "Treat Williams",
+  "Kristy Swanson",
+  "Catherine Zeta-Jones",
+  "James Remar"
   ],
-  "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/f/f0/BloodRayne_%28film%29.png/220px-BloodRayne_%28film%29.png",
+  "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/7/75/Phantompost.jpg/220px-Phantompost.jpg",
   "updatedAt": "2022-07-26T04:54:16.982Z",
-  "createdAt": "2022-02-10T04:31:43.910Z",
+  "createdAt": "2022-02-10T04:29:39.477Z",
   "__v": 0
   },
   {
@@ -400,37 +399,22 @@ module.exports = [
   "__v": 0
   },
   {
-  "_id": "620494b37311155aa1dca715",
-  "title": "The Phantom",
-  "dateScreened": "2021-03-13T05:00:00.000Z",
-  "year": "1996",
-  "director": "Simon Wincer",
+  "_id": "6204952f7311155aa1dca718",
+  "title": "BloodRayne",
+  "dateScreened": "2021-03-27T04:00:00.000Z",
+  "year": "2005",
+  "director": "Uwe Boll",
   "cast": [
+  "Kristanna Loken",
+  "Ben Kingsley",
+  "Michael Madsen",
   "Billy Zane",
-  "Treat Williams",
-  "Kristy Swanson",
-  "Catherine Zeta-Jones",
-  "James Remar"
+  "Michelle Rodriguez",
+  "Meat Loaf"
   ],
-  "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/7/75/Phantompost.jpg/220px-Phantompost.jpg",
+  "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/f/f0/BloodRayne_%28film%29.png/220px-BloodRayne_%28film%29.png",
   "updatedAt": "2022-07-26T04:54:16.982Z",
-  "createdAt": "2022-02-10T04:29:39.477Z",
-  "__v": 0
-  },
-  {
-  "_id": "620495d57311155aa1dca71e",
-  "title": "Xanadu",
-  "dateScreened": "2021-04-24T04:00:00.000Z",
-  "year": "1980",
-  "director": "Robert Greenwald",
-  "cast": [
-  "Olivia Newton-John",
-  "Gene Kelly",
-  "Michael Beck"
-  ],
-  "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/d/d4/Xanadufilm.jpg/220px-Xanadufilm.jpg",
-  "updatedAt": "2022-07-26T04:54:16.982Z",
-  "createdAt": "2022-02-10T04:34:29.537Z",
+  "createdAt": "2022-02-10T04:31:43.910Z",
   "__v": 0
   },
   {
@@ -448,6 +432,22 @@ module.exports = [
   "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/a/a1/BioDomeposter.jpg/220px-BioDomeposter.jpg",
   "updatedAt": "2022-07-26T04:54:16.982Z",
   "createdAt": "2022-02-10T04:35:37.206Z",
+  "__v": 0
+  },
+  {
+  "_id": "620495d57311155aa1dca71e",
+  "title": "Xanadu",
+  "dateScreened": "2021-04-24T04:00:00.000Z",
+  "year": "1980",
+  "director": "Robert Greenwald",
+  "cast": [
+  "Olivia Newton-John",
+  "Gene Kelly",
+  "Michael Beck"
+  ],
+  "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/d/d4/Xanadufilm.jpg/220px-Xanadufilm.jpg",
+  "updatedAt": "2022-07-26T04:54:16.982Z",
+  "createdAt": "2022-02-10T04:34:29.537Z",
   "__v": 0
   },
   {
@@ -484,6 +484,22 @@ module.exports = [
   "__v": 0
   },
   {
+  "_id": "6204975d7311155aa1dca72d",
+  "title": "Robot Jox",
+  "dateScreened": "2021-07-03T04:00:00.000Z",
+  "year": "1990",
+  "director": "Stuart Gordon",
+  "cast": [
+  "Gary Graham",
+  "Anne-Marie Johnson",
+  "Paul Koslo"
+  ],
+  "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/8/8c/Robot_jox.jpg/190px-Robot_jox.jpg",
+  "updatedAt": "2022-07-26T04:54:16.982Z",
+  "createdAt": "2022-02-10T04:41:01.580Z",
+  "__v": 0
+  },
+  {
   "_id": "620497047311155aa1dca72a",
   "title": "The Beastmaster",
   "dateScreened": "2021-06-19T04:00:00.000Z",
@@ -498,22 +514,6 @@ module.exports = [
   "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/a/a7/TheBeastmaster.jpg/220px-TheBeastmaster.jpg",
   "updatedAt": "2022-07-26T04:54:16.982Z",
   "createdAt": "2022-02-10T04:39:32.819Z",
-  "__v": 0
-  },
-  {
-  "_id": "6204975d7311155aa1dca72d",
-  "title": "Robot Jox",
-  "dateScreened": "2021-07-03T04:00:00.000Z",
-  "year": "1990",
-  "director": "Stuart Gordon",
-  "cast": [
-  "Gary Graham",
-  "Anne-Marie Johnson",
-  "Paul Koslo"
-  ],
-  "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/8/8c/Robot_jox.jpg/190px-Robot_jox.jpg",
-  "updatedAt": "2022-07-26T04:54:16.982Z",
-  "createdAt": "2022-02-10T04:41:01.580Z",
   "__v": 0
   },
   {
@@ -532,39 +532,6 @@ module.exports = [
   "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/3/3b/Cliffordposter.jpg/220px-Cliffordposter.jpg",
   "updatedAt": "2022-07-26T04:54:16.982Z",
   "createdAt": "2022-02-10T04:43:42.919Z",
-  "__v": 0
-  },
-  {
-  "_id": "620497b47311155aa1dca730",
-  "title": "Ballistic: Ecks vs. Sever",
-  "dateScreened": "2021-07-17T04:00:00.000Z",
-  "year": "2002",
-  "director": "Kaos",
-  "cast": [
-  "Antonio Banderas",
-  "Lucy Liu",
-  "Gregg Henry",
-  "Ray Park"
-  ],
-  "poster": "https://upload.wikimedia.org/wikipedia/en/2/26/Ballistic_-_Ecks_vs_Sever_%28movie_poster%29.jpg",
-  "updatedAt": "2022-07-26T04:54:16.982Z",
-  "createdAt": "2022-02-10T04:42:28.952Z",
-  "__v": 0
-  },
-  {
-  "_id": "6204991d7311155aa1dca73c",
-  "title": "Freejack",
-  "dateScreened": "2021-09-11T04:00:00.000Z",
-  "year": "1992",
-  "director": "Geoff Murphy",
-  "cast": [
-  "Mick Jagger",
-  "Emilio Estevez",
-  "Anthony Hopkins"
-  ],
-  "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/b/be/Freejack.jpg/220px-Freejack.jpg",
-  "updatedAt": "2022-07-26T04:54:16.982Z",
-  "createdAt": "2022-02-10T04:48:29.868Z",
   "__v": 0
   },
   {
@@ -608,6 +575,39 @@ module.exports = [
   "__v": 0
   },
   {
+  "_id": "6204991d7311155aa1dca73c",
+  "title": "Freejack",
+  "dateScreened": "2021-09-11T04:00:00.000Z",
+  "year": "1992",
+  "director": "Geoff Murphy",
+  "cast": [
+  "Mick Jagger",
+  "Emilio Estevez",
+  "Anthony Hopkins"
+  ],
+  "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/b/be/Freejack.jpg/220px-Freejack.jpg",
+  "updatedAt": "2022-07-26T04:54:16.982Z",
+  "createdAt": "2022-02-10T04:48:29.868Z",
+  "__v": 0
+  },
+  {
+  "_id": "620497b47311155aa1dca730",
+  "title": "Ballistic: Ecks vs. Sever",
+  "dateScreened": "2021-07-17T04:00:00.000Z",
+  "year": "2002",
+  "director": "Kaos",
+  "cast": [
+  "Antonio Banderas",
+  "Lucy Liu",
+  "Gregg Henry",
+  "Ray Park"
+  ],
+  "poster": "https://upload.wikimedia.org/wikipedia/en/2/26/Ballistic_-_Ecks_vs_Sever_%28movie_poster%29.jpg",
+  "updatedAt": "2022-07-26T04:54:16.982Z",
+  "createdAt": "2022-02-10T04:42:28.952Z",
+  "__v": 0
+  },
+  {
   "_id": "620496997311155aa1dca727",
   "title": "Equilibrium",
   "dateScreened": "2021-06-05T04:00:00.000Z",
@@ -645,24 +645,6 @@ module.exports = [
   "__v": 0
   },
   {
-  "_id": "62049a157311155aa1dca746",
-  "title": "Dracula: Dead and Loving It",
-  "dateScreened": "2021-10-23T04:00:00.000Z",
-  "year": "1995",
-  "director": "Mel Brooks",
-  "cast": [
-  "Leslie Nielsen",
-  "Mel Brooks",
-  "Peter MacNicol",
-  "Steven Weber",
-  "Amy Yasbeck"
-  ],
-  "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/5/54/Drac_dead_and_loving_it.jpg/220px-Drac_dead_and_loving_it.jpg",
-  "updatedAt": "2022-07-26T04:54:16.982Z",
-  "createdAt": "2022-02-10T04:52:37.754Z",
-  "__v": 0
-  },
-  {
   "_id": "62049a917311155aa1dca749",
   "title": "Wild Wild West",
   "dateScreened": "2021-11-06T04:00:00.000Z",
@@ -679,22 +661,21 @@ module.exports = [
   "__v": 0
   },
   {
-  "_id": "62049b5d7311155aa1dca74f",
-  "title": "Super Mario Bros.",
-  "dateScreened": "2021-12-04T05:00:00.000Z",
-  "year": "1993",
-  "director": "Rocky Morton, Annabel Jankel",
+  "_id": "62049a157311155aa1dca746",
+  "title": "Dracula: Dead and Loving It",
+  "dateScreened": "2021-10-23T04:00:00.000Z",
+  "year": "1995",
+  "director": "Mel Brooks",
   "cast": [
-  "Bob Hoskins",
-  "John Leguizamo",
-  "Dennis Hopper",
-  "Samantha Mathis",
-  "Fisher Stevens",
-  "Fiona Shaw"
+  "Leslie Nielsen",
+  "Mel Brooks",
+  "Peter MacNicol",
+  "Steven Weber",
+  "Amy Yasbeck"
   ],
-  "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/9/94/SMB_Movie_Poster.jpg/220px-SMB_Movie_Poster.jpg",
+  "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/5/54/Drac_dead_and_loving_it.jpg/220px-Drac_dead_and_loving_it.jpg",
   "updatedAt": "2022-07-26T04:54:16.982Z",
-  "createdAt": "2022-02-10T04:58:05.000Z",
+  "createdAt": "2022-02-10T04:52:37.754Z",
   "__v": 0
   },
   {
@@ -720,6 +701,25 @@ module.exports = [
   "__v": 0
   },
   {
+  "_id": "62049b5d7311155aa1dca74f",
+  "title": "Super Mario Bros.",
+  "dateScreened": "2021-12-04T05:00:00.000Z",
+  "year": "1993",
+  "director": "Rocky Morton, Annabel Jankel",
+  "cast": [
+  "Bob Hoskins",
+  "John Leguizamo",
+  "Dennis Hopper",
+  "Samantha Mathis",
+  "Fisher Stevens",
+  "Fiona Shaw"
+  ],
+  "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/9/94/SMB_Movie_Poster.jpg/220px-SMB_Movie_Poster.jpg",
+  "updatedAt": "2022-07-26T04:54:16.982Z",
+  "createdAt": "2022-02-10T04:58:05.000Z",
+  "__v": 0
+  },
+  {
   "_id": "62049bca7311155aa1dca752",
   "title": "The Nutcracker in 3D",
   "dateScreened": "2021-12-18T05:00:00.000Z",
@@ -735,23 +735,6 @@ module.exports = [
   "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/4/47/The_Nutcracker_in_3D_poster.jpg/220px-The_Nutcracker_in_3D_poster.jpg",
   "updatedAt": "2022-07-26T04:54:16.982Z",
   "createdAt": "2022-02-10T04:59:54.867Z",
-  "__v": 0
-  },
-  {
-  "_id": "62049c7e7311155aa1dca758",
-  "title": "Tank Girl",
-  "dateScreened": "2022-01-29T05:00:00.000Z",
-  "year": "1995",
-  "director": "Rachel Talalay",
-  "cast": [
-  "Lori Petty",
-  "Naomi Watts",
-  "Malcolm McDowell",
-  "Ice T"
-  ],
-  "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/1/12/Tank_girl_poster.jpg/220px-Tank_girl_poster.jpg",
-  "updatedAt": "2022-07-26T04:54:16.982Z",
-  "createdAt": "2022-02-10T05:02:54.043Z",
   "__v": 0
   },
   {
@@ -771,6 +754,23 @@ module.exports = [
   "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/a/ab/The_craft_movie_poster.jpg/220px-The_craft_movie_poster.jpg",
   "updatedAt": "2022-07-26T04:54:16.982Z",
   "createdAt": "2022-02-10T05:01:39.868Z",
+  "__v": 0
+  },
+  {
+  "_id": "62049c7e7311155aa1dca758",
+  "title": "Tank Girl",
+  "dateScreened": "2022-01-29T05:00:00.000Z",
+  "year": "1995",
+  "director": "Rachel Talalay",
+  "cast": [
+  "Lori Petty",
+  "Naomi Watts",
+  "Malcolm McDowell",
+  "Ice T"
+  ],
+  "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/1/12/Tank_girl_poster.jpg/220px-Tank_girl_poster.jpg",
+  "updatedAt": "2022-07-26T04:54:16.982Z",
+  "createdAt": "2022-02-10T05:02:54.043Z",
   "__v": 0
   },
   {
@@ -1046,6 +1046,96 @@ module.exports = [
   "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/a/a1/Cutthroat_island_ver2.jpg/220px-Cutthroat_island_ver2.jpg",
   "createdAt": "2022-07-31T02:59:24.870Z",
   "updatedAt": "2022-07-31T02:59:52.359Z",
+  "__v": 0
+  },
+  {
+  "_id": "62f85f1bb7c3db70f8285bc8",
+  "title": "Over the Top",
+  "dateScreened": "2022-08-13T00:00:00.000Z",
+  "year": "1987",
+  "director": "Menahem Golan",
+  "cast": [
+  "Sylvester Stallone",
+  "Robert Loggia",
+  "Susan Blakely",
+  "David Mendenhall"
+  ],
+  "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/d/dd/Overthetop.jpg/220px-Overthetop.jpg",
+  "createdAt": "2022-08-14T02:34:03.211Z",
+  "updatedAt": "2022-08-14T02:34:03.211Z",
+  "__v": 0
+  },
+  {
+  "_id": "630addf46fb0876125bc59b0",
+  "title": "Virtuosity",
+  "dateScreened": "2022-08-27T00:00:00.000Z",
+  "year": "1995",
+  "director": "Brett Leonard",
+  "cast": [
+  "Denzel Washington",
+  "Russell Crowe",
+  "Kelly Lynch",
+  "Stephen Spinella",
+  "William Forsythe",
+  "Louise Fletcher",
+  "Traci Lords",
+  "Michael Buffer"
+  ],
+  "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/1/13/Virtuosity_ver2.jpg/220px-Virtuosity_ver2.jpg",
+  "createdAt": "2022-08-28T03:16:04.026Z",
+  "updatedAt": "2022-08-28T03:16:04.026Z",
+  "__v": 0
+  },
+  {
+  "_id": "631d3f62ac3efe69f815c3ed",
+  "title": "Because I Said So",
+  "dateScreened": "2022-09-10T00:00:00.000Z",
+  "year": "2007",
+  "director": "Michael Lehmann",
+  "cast": [
+  "Diane Keaton",
+  "Mandy Moore",
+  "Gabriel Macht",
+  "Tom Everett Scott",
+  "Lauren Graham",
+  "Piper Perabo",
+  "Stephen Collins"
+  ],
+  "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/e/e7/Because_I_Said_So_Poster.jpg/220px-Because_I_Said_So_Poster.jpg",
+  "createdAt": "2022-09-11T01:52:34.935Z",
+  "updatedAt": "2022-09-11T01:52:34.935Z",
+  "__v": 0
+  },
+  {
+  "_id": "632fa4a1450aa38ebbbbcda2",
+  "title": "Valentine's Day",
+  "dateScreened": "2022-09-24T00:00:00.000Z",
+  "year": "2010",
+  "director": "Garry Marshall",
+  "cast": [
+  "Jessica Alba",
+  "Kathy Bates",
+  "Jessica Biel",
+  "Bradley Cooper",
+  "Eric Dane",
+  "Patrick Dempsey",
+  "Héctor Elizondo",
+  "Jamie Foxx",
+  "Jennifer Garner",
+  "Topher Grace",
+  "Anne Hathaway",
+  "Ashton Kutcher",
+  "Queen Latifah",
+  "Taylor Lautner",
+  "George Lopez",
+  "Shirley MacLaine",
+  "Emma Roberts",
+  "Julia Roberts",
+  "Taylor Swift"
+  ],
+  "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/e/e4/Valentines_day_poster_10.jpg/220px-Valentines_day_poster_10.jpg",
+  "createdAt": "2022-09-25T00:45:21.593Z",
+  "updatedAt": "2022-09-25T00:45:21.593Z",
   "__v": 0
   }
   ]

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include ('./partials/head.ejs') %>
+</head>
+<body>
+  <header>
+    <%- include('./partials/header.ejs') %>
+  </header>
+  <div class="container">
+    <h1 class="page-title" id="confirm-delete-title">Confirm Delete?</h1>
+    <h2>ARE YOU SURE?</h2>
+    <img src="<%=nomination.poster%>"/>
+    <% let formattedDate = nomination.forWhatScreening.toString().slice(3,15) %>
+    <h3>Clicking confirm will remove <%=nomination.title%> from the list of nominations for the <%=formattedDate%> screening!</h3>
+    <h3>
+      <a href="/nominations/<%=nomination._id%>/edit"><button class="btn">Go Back</button></a>
+    </h3>
+    <form action="/nominations/<%=nomination._id%>?_method=DELETE" method="POST" class="show-form">
+      <button type="submit" class="btn delete-btn">Confirm Delete of <%=nomination.title%></button>
+    </form>
+  </div>
+
+
+</body>
+</html>

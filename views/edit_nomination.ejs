@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('./partials/head.ejs')%>
+</head>
+<body>
+  <header>
+    <%- include('./partials/header.ejs')%>
+  </header>
+  <div id="edit-container">
+      <h1 class="page-title"><%=nomination.title.toUpperCase()%></h1>
+      <h3>Edit Nomination Details</h3>
+    <form action="/nominations/<%=nomination._id%>?_method=PUT" method="POST" id='edit-form'>
+      <table>
+        <tr>
+          <td><label for="nomination-title">Title: </label></td>
+          <td><input type="text" id='nomination-title' name="title" value="<%=nomination.title%>" required size="50"></td>
+        </tr>
+        <tr>
+          <td><label for="forWhatScreening">Nominating for the following Screening Date: <br/>(Always re-enter this when updating nomination.)</label></td>
+          <td><input type="date" name="forWhatScreening" id="forWhatScreening" value="<%=nomination.forWhatScreening%>"></td>
+        </tr>
+        <tr>
+          <td><label for="submittedBy">Release Year: </label></td>
+          <td><input type="text" name="submittedBy" id="submittedBy" value="<%=nomination.submittedBy%>" size="30"></td>
+        </tr>
+        <tr>
+          <td><label for="nomination-poster">Poster Image URL: </label></td>
+          <td><input type="url" name="poster" id="nomination-poster" value="<%=nomination.poster%>" size="50"></td>
+        </tr>
+        <tr>
+          <td><label for="blurb">Comments: </label></td>
+          <td><input type="text" name="blurb" id='blurb' value="<%=nomination.blurb%>" size="30"></td>
+        </tr>
+      </table>
+      <input type="submit" class="submit-btn" value="SUBMIT CHANGES">
+    </form>
+    <form action="/nominations/<%=nomination._id%>/confirm-delete" class="show-form">
+        <input type="submit" class='btn delete-btn' value="DELETE nomination from database">
+      </form>
+  </div>
+</body>
+</html>

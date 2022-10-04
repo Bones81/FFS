@@ -11,15 +11,15 @@
     <div class="flex-container">
         <% for (let nomination of nominations) { %>
           <% let formattedDate = nomination.forWhatScreening.toString().slice(3,15) %> 
-
+          <a href="/nominations/<%=nomination.id%>/edit" class="card-link">
             <div class="card">
               <img src="<%=nomination.poster%>" alt="pic of <%=nomination.title%>"></br>
               <h3><%=nomination.title%></h3>
-              <h4>Nominated for: <%=formattedDate%> screening</h4>
-              <h4>Nominated by: <=%nomination.submittedBy%></h4>
+              <h4>Nominated for Screening Date: <br/><%=formattedDate%></h4>
+              <h4>Nominated by: <%=nomination.submittedBy%></h4>
               <p>Comments: <%=nomination.blurb%></p>
             </div>
-
+          </a>
         <% } %>
       </div>
 </body>
