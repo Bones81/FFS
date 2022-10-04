@@ -8,14 +8,14 @@
         <%- include('./partials/header.ejs')%>
     </header>
     <h1 class="page-title nominations-title">Nominations</h1>
-    <h3 class="blurb">Notes: Screenings from prior to the 'Voting Era' are included with the nominator listed as 'Brain Trust.' 'Brain Trust' may also apply to a film that was nominated or chosen unilaterally in lieu of a formal or informal nomination or voting process for that screening week. Additional (but not all) nominations from prior to the Voting Era are included, if the nominee was clearly considered by the FFS.</h3>
+    <h3 class="blurb">Notes: Screenings from prior to the 'Voting Era' are included, with the nominator listed as 'Brain Trust.' 'Brain Trust' may also apply to a film that was chosen (or nominated) unilaterally by the FFS Brain Trust, in lieu of a formal or informal nomination or voting process for that screening week. Additional nominations by specific members from prior to the Voting Era are included. The Voting Era is regarded as beginning with the nominations and votes for the FFS's 6/20/2020 screening, won by <em>Cutthroat Island</em> via a Brain-Trust-formalized ranked choice voting process.</h3>
     <div class="flex-container">
         <% for (let nomination of nominations) { %>
           <% let formattedDate = nomination.forWhatScreening.toString().slice(3,15) %> 
           <a href="/nominations/<%=nomination.id%>" class="card-link">
             <div class="card">             
               <img src="<%=nomination.poster%>" alt="pic of <%=nomination.title%>"></br>
-              <% if (nomination.winner) { %><h3> ⭐ </h3><% } %>
+              <% if (nomination.winner) { %><h3> ⭐ FFS Selection ⭐</h3><% } %>
               <h3><%=nomination.title%></h3>
               <h4>Nominated for Screening Date: <br/><%=formattedDate%></h4>
               <h4>Nominator: <%=nomination.submittedBy%></h4>
