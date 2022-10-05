@@ -57,7 +57,6 @@ app.get('/nominations/json', (req, res) => {
   })
 })
 
-
 //HOME ROUTE
 app.get('/', (req, res) => {
   res.redirect('/movies')

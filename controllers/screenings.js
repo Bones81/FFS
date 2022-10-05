@@ -38,4 +38,15 @@ router.get('/new', (req, res) => {
     })
 })
 
+//CREATE
+router.post('/', (req, res) => {
+    req.body.weekID = req.body.screeningNumAndDate
+    req.body.date = screeningWeeksSeed[req.body.screeningNumAndDate]
+    Screening.create(req.body, (err, createdScreening) => {
+        err ? console.log(err) : console.log(createdScreening)
+        res.json(createdScreening)
+    })
+    // res.json(req.body)
+})
+
 module.exports = router

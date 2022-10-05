@@ -4,9 +4,9 @@ const Schema = mongoose.Schema
 const screeningSchema = new Schema({
   weekID: {type: Number, required: true},
   date: {type: Date, required: true},
-  notes: {type: String}
-  //selection: Movie -- will be of format movieSchema
-  //nominations: [Nominations] -- will be an array of objects in the format of nominationSchema
+  notes: {type: String},
+  selection: {type: String},
+  nominees: [String]
 }, {timestamps: true}
 )
 
