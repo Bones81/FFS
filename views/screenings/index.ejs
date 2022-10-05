@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head.ejs')%>
+</head>
+<body>
+  <header>
+    <%- include('../partials/header.ejs')%>
+  </header>
+  <h1 class="page-title" id="home-title">Fortnightly Film Society Screenings</h1>
+  <h2>Click on a screening to see/edit its details</h2>
+  <h3 class="blurb">Major flops, sci-fi shlock, video game adaptations, high camp, oddball curiosities of cinema, or just plain "dumb" movies... The Fortnightly Film Society has screened them all!</h3>
+  
+
+  <h1>FFS Screenings</h1>
+  <div class="flex-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Screening #</th>
+                <th>Date</th>
+                <th>Selection</th>
+                <th>Comments</th>
+                <th>Nominees</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for (let screening of screenings) { %> 
+                <tr>
+                    <td><%=screening.weekID%></td>
+                    <td><%=screening.date%></td>
+                    <td><%=screening.selection.title%></td>
+                    <td><%=screening.notes%></td>
+                    <td><% for (let movie of screening.nominees) { %>
+                        <%=movie.title%><br/>
+                        <% } %>
+                    </td>
+                </tr>
+            
+            <% } %>
+        </tbody>
+    </table>
+  </div>
+    <% for (let week of screeningWeeks) { %>
+        <p><%=week.weekID%> -- <%=week.date%></p>
+    <% } %>
+</body>
+</html>

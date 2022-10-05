@@ -24,7 +24,12 @@ const req = require('express/lib/request')
 const res = require('express/lib/response')
 const { aggregate } = require('./models/movies.js')
 const { application } = require('express')
-  
+
+//MIDDLEWARE
+const screeningsController = require('./controllers/screenings.js')
+app.use('/screenings', screeningsController)
+
+
 //SEED INITIAL MOVIE DATA
 app.get('/movies/seed', (req, res) => {
   // console.log(seedMovies)
