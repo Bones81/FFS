@@ -7,9 +7,48 @@ const screeningWeeks = require('../models/screening_weeks')
 const screeningWeeksSeed = require('../models/seed_screening_weeks')
 
 const seedMovies = require('../models/seed_movies')
-for (let movie of seedMovies) {
-    ç
+
+//Mapping old list of winners to new screenings db, by checking for matching dates then adding movie._id
+// for (let movie of seedMovies) {
+//     movie.dateScreened = movie.dateScreened.slice(0,10)
+//     // console.log(movie.dateScreened);
+//     let newDateObj = new Date(movie.dateScreened)
+//     newDateObj.setTime(newDateObj.getTime() + (1000 * 60 * 60 * 24.5)) //change to UTC time at 8:30pm ET
+//     console.log(newDateObj);
+
+//     Screening.find({}, (err, allScreenings) => {
+//         err ? console.log(err) : console.log('All screenings accessed...');
+//         for (let screening of allScreenings) {
+//             // console.log(screening.date.toISOString().slice(0, 10));
+//             if (screening.date.toISOString().slice(0, 10) === newDateObj.toISOString().slice(0, 10)) {
+//                 // console.log(true);
+//                 //assign movie to screening
+//                 Screening.findByIdAndUpdate(screening._id, {$set: {selection: movie._id}}, {new: true}, (err, updatedScreening) => {
+//                     console.log('Screenings updated');
+//                 })
+//             }
+//         }
+//     } )
+// }
+
+//CONTINUE SETTING UP 1-MANY RELATIONSHIP
+
+
+//ATTEMPTING TO POPULATE "selection" field in screenings db
+
+const createScreening = (screening) => {
+    return Screening.create(screening).then((docScreening) => {
+        console.log("\n>> Created Screening:\n", docScreening);
+        return docScreening
+    })
 }
+
+const createMovie = (screeningID, movie) => {
+    console.log("\n>> Created Movie:\n", movie);
+    return Screening.findByIdAndUpdate(screeningID, {$set: {selection: movie}}, {new: true})
+
+}
+
 
 // const screeningsSeed = screeningWeeksSeed.map((week, idx) => {
 //     return {
@@ -44,6 +83,13 @@ router.get('/json/screening_weeks', (req, res) => {
 //Return the seed data for screening weeks, with LOTR days excluded
 router.get('/json/screening_weeks/seed', (req, res) => {
     res.json(screeningWeeksSeed)
+})
+
+router.get('/json', (req, res) => {
+    Screening.find({}, (err, allScreenings) => {
+        err ? console.log(err) : console.log('All screenings found');;
+        res.json(allScreenings)
+    })
 })
 
 
