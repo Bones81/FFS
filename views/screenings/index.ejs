@@ -28,21 +28,16 @@
             <% for (let screening of screenings) { %> 
                 <tr>
                     <td><%=screening.weekID%></td>
-                    <td><%=screening.date%></td>
-                    <td><%=screening.selection.title%></td>
+                    <td><%=screening.date.toString().slice(3,15)%></td>
+                    <td>Title of Screened Film will go here</td>
                     <td><%=screening.notes%></td>
-                    <td><% for (let movie of screening.nominees) { %>
-                        <%=movie.title%><br/>
-                        <% } %>
-                    </td>
+                    <td>Nominee List will go here</td>
                 </tr>
             
             <% } %>
         </tbody>
     </table>
   </div>
-    <% for (let week of screeningWeeks) { %>
-        <p><%=week.weekID%> -- <%=week.date%></p>
-    <% } %>
 </body>
 </html>
+

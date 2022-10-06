@@ -1,10 +1,27 @@
 const express = require('express')
-const { models } = require('mongoose')
+const { models, default: mongoose } = require('mongoose')
 const router = express.Router()
 
 const Screening = require('../models/screening')
 const screeningWeeks = require('../models/screening_weeks')
 const screeningWeeksSeed = require('../models/seed_screening_weeks')
+
+const seedMovies = require('../models/seed_movies')
+for (let movie of seedMovies) {
+    ç
+}
+
+// const screeningsSeed = screeningWeeksSeed.map((week, idx) => {
+//     return {
+//         weekID: idx + 1,
+//         date: week,
+//         notes: "",
+//         selection: undefined,
+//         nominations: []
+//     }
+// })
+
+// console.log(screeningsSeed);
 
 
 //INDEX
@@ -40,8 +57,6 @@ router.get('/new', (req, res) => {
 
 //CREATE
 router.post('/', (req, res) => {
-    req.body.weekID = req.body.screeningNumAndDate
-    req.body.date = screeningWeeksSeed[req.body.screeningNumAndDate]
     Screening.create(req.body, (err, createdScreening) => {
         err ? console.log(err) : console.log(createdScreening)
         res.json(createdScreening)

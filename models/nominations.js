@@ -2,12 +2,10 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const nominationSchema = new Schema({
-  title: {type: String, required: true},
-  forWhatScreening: {type: Date, required: true},
-  submittedBy: {type: String, required: true},
-  poster: {type: String},
+  screening: {type: mongoose.Schema.Types.ObjectId, ref: "Screening", required: true},
+  nominator: {type: String, required: true},
   blurb: {type: String},
-  winner: {type: Boolean}
+  nominee: {type: mongoose.Schema.Types.ObjectId, ref: "Movie", required: true}
 }, {timestamps: true}
 )
 

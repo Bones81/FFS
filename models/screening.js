@@ -5,8 +5,8 @@ const screeningSchema = new Schema({
   weekID: {type: Number, required: true},
   date: {type: Date, required: true},
   notes: {type: String},
-  selection: {type: String},
-  nominees: [String]
+  selection: {type: mongoose.Schema.Types.ObjectId, ref: "Movie"},
+  nominations: [{type: mongoose.Schema.Types.ObjectId, ref: "Nomination"}]
 }, {timestamps: true}
 )
 

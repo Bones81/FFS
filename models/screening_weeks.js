@@ -4,10 +4,10 @@ const screeningWeeks = []
 
 //First FFS screening was on 4/11/2020
 let startDate = new Date(2020, 3, 11, 20, 30) //gets the date object at Apr 11, 2020 at 8:30pm ET
-console.log(startDate);
+// console.log(startDate);
 
 let currentDate = new Date()
-console.log(currentDate)
+// console.log(currentDate)
 
 //Loop through every 14 days and spit out the date object
 let targetDate = startDate
@@ -17,7 +17,5 @@ while (targetDate <= currentDate) { //ensure that upcoming screening date is inc
     targetDate = new Date(nextDateTime)
     screeningWeeks.push(targetDate) //push in date 14 days from previous date
 }
-
-screeningWeeks.reverse()
 
 module.exports = screeningWeeks
