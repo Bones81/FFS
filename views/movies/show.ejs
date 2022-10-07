@@ -1,21 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <%- include('./partials/head.ejs')%>
+  <%- include('../partials/head.ejs')%>
 </head>
 <body>
   <header>
-    <%- include('./partials/header.ejs')%>
+    <%- include('../partials/header.ejs')%>
   </header>
   <div class="card show-card">
     <h1 class="page-title"><%=movie.title.toUpperCase()%></h1>
     <img src="<%=movie.poster%>" alt="poster for <%=movie.title%>"><br/>
     <table>
-      <tr>
-        <td class="info-start-text">Date Screened:</td>
-        <% let formattedDate = movie.dateScreened.toString().slice(3,15) %> 
-        <td class="info-data-text"><%=formattedDate%></td>
-      </tr>
       <tr>
         <td class="info-start-text">Release Year:</td>
         <td class="info-data-text"><%=movie.year%></td>

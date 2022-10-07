@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <%- include('./partials/head.ejs')%>
+  <%- include('../partials/head.ejs')%>
 </head>
 <body>
   <header>
-    <%- include('./partials/header.ejs')%>
+    <%- include('../partials/header.ejs')%>
   </header>
   <div id="edit-container">
       <h1 class="page-title"><%=movie.title.toUpperCase()%></h1>
@@ -13,28 +13,39 @@
     <form action="/movies/<%=movie._id%>?_method=PUT" method="POST" id='edit-form'>
       <table>
         <tr>
-          <td><label for="movie-title">Title: </label></td>
-          <td><input type="text" id='movie-title' name="title" value="<%=movie.title%>" required size="50"></td>
+          <td><label for="title"><span class="red">* </span>Title: </label></td>
+          <td><input type="text" id='title' name="title" value="<%=movie.title%>" required size="50"></td>
         </tr>
         <tr>
-          <td><label for="date-screened">Date Screened:</label></td>
-          <td><input type="date" name="dateScreened" id="date-screened" value="<%=movie.dateScreened%>"></td>
+          <td class="info-start-text"><label for="poster">Poster Image: </label></td>
+          <td class="new-data-text"><input type="url" name="poster" id="poster" value="<%=movie.poster%>" size="80"></td>
         </tr>
         <tr>
-          <td><label for="movie-year">Release Year: </label></td>
-          <td><input type="text" name="year" id="movie-year" value="<%=movie.year%>" size="4"></td>
+          <td class="info-start-text"><label for="cast">Cast List: </label></td>
+          <td class="new-data-text"><textarea id="cast" name="cast" rows=10 cols=50 id="movie-cast"><%=movie.cast.join(', ')%></textarea></td>
         </tr>
         <tr>
-          <td><label for="movie-director">Director: </label></td>
-          <td><input type="text" name="director" id='movie-director' value="<%=movie.director%>" size="30"></td>
+          <td class="info-start-text"><label for="year">Release Year: </label></td>
+          <td class="new-data-text">
+              <select id="year" name="year" value="<%=movie.year.toString()%>">
+                  <option value="">--none selected--</option>
+                  <% for (let i = new Date().getFullYear(); i >=1900; i--) { %>
+                      <option value=<%=i%> 
+                          <% if (movie.year === i) { %> 
+                            selected
+                          <% } %>
+                        ><%=i%></option>
+                  <% } %>
+              </select>
+          </td>
         </tr>
         <tr>
-          <td><label for="movie-cast">Cast: </label></td>
-          <td><textarea name="cast" rows=4 cols=50 id="movie-cast"><%=movie.cast.join(', ')%></textarea></td>
+          <td class="info-start-text"><label for="director">Director: </label></td>
+          <td class="new-data-text"><input type="text" name="director" id='director' value="<%=movie.director%>" size="30"></td>
         </tr>
         <tr>
-          <td><label for="movie-poster">Poster Image URL: </label></td>
-          <td><input type="url" name="poster" id="movie-poster" value="<%=movie.poster%>" size="50"></td>
+          <td class="info-start-text"><label for="genre">Genres: </label></td>
+          <td class="new-data-text"><textarea id="genre" name="genre" rows="2" cols="50"><%=movie.genre.join(', ')%></textarea></td>
         </tr>
       </table>
       <input type="submit" class="submit-btn" value="SUBMIT CHANGES">

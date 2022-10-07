@@ -5,12 +5,11 @@ const Movie = require('../models/movies')
 const movieSeed = require('../models/seed_movies')
 const seedMoviesNew = require('../models/seed_movies_new')
 
-router.get('/', (req, res) => {
-    Movie.find({}, (err, allMovies) => {
-        err ? console.log(err) : console.log('All movies found');
-        res.json(allMovies)
-    })
-})
+// router.get('/', (req, res) => {
+//     Movie.find({}, (err, allMovies) => {
+//         res.json(allMovies)
+//     })
+// })
 
 router.get('/json', (req, res) => {
     Movie.find({}, (err, movies) => {
@@ -59,9 +58,11 @@ router.get('/json/seed_movies_new', (req, res) => {
 //   })
 
 //INDEX ROUTES
+//UNCOMMENT AFTER index.ejs written
 router.get('/', (req, res) => {
     Movie.find({}, (err, allMovies) => {  
-    //  res.json(allMovies);
+        err ? console.log(err) : console.log('All movies found');
+        // res.json(allMovies);
       res.render('movies/index.ejs', {
         tabTitle: 'The Fortnightly Film Society Website',
         movies: allMovies
