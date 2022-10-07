@@ -10,6 +10,11 @@ const Movie = require('../models/movies')
 const seedMovies = require('../models/seed_movies')
 const seedMoviesNew = require('../models/seed_movies_new')
 
+//REMOVE LAST SCREENING
+// Screening.findByIdAndRemove("633e8748e26cc37fe711d20f", (err, deletedScreen) => {
+//     console.log(deletedScreen);
+// })
+
 //FIXING THE MOVIE OBJECT IDS ASSOCIATED WITH SCREENINGS
 // for (let movie of seedMovies) {
 //     Movie.findOne({title: movie.title}, (err, foundMovie) => {
@@ -146,7 +151,7 @@ router.get('/', (req, res) => {
             screenings: allScreenings,
             screeningWeeks: screeningWeeks
         })
-    })
+    }).populate("selection")
 })
 
 //JSON
