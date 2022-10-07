@@ -175,7 +175,7 @@ router.get('/json', (req, res) => {
 
 //NEW
 router.get('/new', (req, res) => {
-    res.render('screenings/new.ejs', {
+    res.render('new.ejs', {
         tabTitle: 'Add New Screening Info',
         weeks: screeningWeeksSeed
     })

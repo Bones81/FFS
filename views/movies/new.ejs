@@ -1,0 +1,59 @@
+<!-- title: {type: String, required: true}, //name of movie
+year: Number, //year of movie's release
+director: String,
+cast: [String],
+poster: String, //url string
+origNominator: String,
+allNominators: [String],
+nominations: [{type: mongoose.Schema.Types.ObjectId, ref: 'Nomination'}],
+screened: Boolean,
+genre: [String] -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head.ejs')%>
+</head>
+<body>
+  <header>
+    <%- include('../partials/header.ejs')%>
+  </header>
+  <h1 class="page-title">Enter New Movie</h1>
+  <form action="/nominations" method="POST" id="new-form">
+    <table>
+        <tr>
+            <td class="info-start-text"><span class="red">* </span>Title: </td>
+            <td class="new-data-text"><input type="text" name="title" placeholder="Title of Movie" size="50" /></td>
+        </tr>
+        <tr>
+            <td class="info-start-text">Poster Image: </td>
+            <td class="new-data-text"><input type="url" name="poster" placeholder="(Optional, but encouraged) URL of poster image" size="80" /></td>
+        </tr>
+        <tr>
+            <td class="info-start-text">Comments: </td>
+            <td class="new-data-text"><textarea name="blurb" rows=10 cols=50 placeholder="(Optional) Legacy Notes / Why should we consider this nomination?"></textarea></td>
+        </tr>
+        <tr>
+            <td class="info-start-text">Cast List (comma-separated): </td>
+            <td class="new-data-text"><textarea id="cast" name="cast" rows="10" cols="50"></textarea></td>
+        </tr>
+        <tr>
+            <td class="info-start-text">Release Year: </td>
+            <td class="new-data-text">
+                <select id="year" name="year">
+                    <option value="">--none selected--</option>
+                    <% for (let i = new Date().getFullYear(); i >=1900; i--) { %>
+                        <option value=<%=i%>><%=i%></option>
+                    <% } %>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="info-start-text">Director: </td>
+            <td class="new-data-text"><input type="text" name="director" placeholder="Director of Movie" size="50" /></td>
+        </tr>
+    </table>
+    <input type="submit" id="create-btn" value="Add new nomination with this data">
+  </form>
+</body>
+</html>
