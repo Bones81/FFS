@@ -90,7 +90,6 @@ router.post('/', (req, res) => {
     movieObj.screened = false
     movieObj.genre = req.body.genre.split(', ')
     console.log(movieObj)
-    //LIKELY WILL NEED TO MODIFY REQ.BODY HERE BEFORE RUNNING THE CREATE COMMAND
     Movie.create(movieObj, (err, createdMovie) => {
         err ? console.log(err) : console.log('Movie created: ' + createdMovie);
         res.json(createdMovie)
@@ -265,19 +264,7 @@ router.get('/:id/edit', (req, res) => {
 //PUT ROUTES
 router.put('/:id', (req, res) => {
     req.body.cast = req.body.cast.split(', ')
-    let date = new Date(req.body.dateScreened)
-    console.log('original date: ' + date.toString())
-    formattedDate = new Date(
-        date.getUTCFullYear(),
-        date.getUTCMonth(),
-        date.getUTCDate(),
-        date.getUTCHours(),
-        date.getUTCMinutes(),
-        date.getUTCSeconds(),
-        date.getUTCMilliseconds()
-    )
-    console.log('Date with UTC params: ' + formattedDate.toString());
-    req.body.dateScreened = formattedDate
+    req.body.genre = req.body.genre.split(', ')
     Movie.findByIdAndUpdate(req.params.id, req.body, (err, foundMovie) => {
         res.redirect('/movies')
     })
