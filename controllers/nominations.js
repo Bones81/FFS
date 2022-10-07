@@ -4,6 +4,15 @@ const router = express.Router()
 const Nomination = require('../models/nominations')
 const nominationSeed = require('../models/seed_nominations')
 
+
+//JSON
+router.get('/json', (req, res) => {
+  Nomination.find({}, (err, nominations) => {
+    res.json(nominations)
+  })
+})
+
+
 //INDEX
 router.get('/', (req, res) => {
     Nomination.find({}, (err, nominations) => {
@@ -15,7 +24,7 @@ router.get('/', (req, res) => {
 })
 
 //NEW
-router.get('/nominations/new', (req, res) => {
+router.get('/new', (req, res) => {
     res.render('nominations/new.ejs', {
       tabTitle: 'Add Nomination'
     })
@@ -82,6 +91,7 @@ router.delete('/:id', (req, res) => {
     })
 })
 
+//UPDATE
 router.put('/:id', (req, res) => {
     let date = new Date(req.body.forWhatScreening)
     console.log('original date: ' + date.toString())
@@ -103,7 +113,8 @@ router.put('/:id', (req, res) => {
       res.redirect('/nominations')
     })
   })
-  
+
+
   
 
 module.exports = router

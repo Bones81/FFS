@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('./partials/head.ejs')%>
+</head>
+<body>
+  <header>
+    <%- include('./partials/header.ejs')%>
+  </header>
+  <div id="edit-container">
+      <h1 class="page-title"><%=movie.title.toUpperCase()%></h1>
+      <h3>Edit Movie Details</h3>
+    <form action="/movies/<%=movie._id%>?_method=PUT" method="POST" id='edit-form'>
+      <table>
+        <tr>
+          <td><label for="movie-title">Title: </label></td>
+          <td><input type="text" id='movie-title' name="title" value="<%=movie.title%>" required size="50"></td>
+        </tr>
+        <tr>
+          <td><label for="date-screened">Date Screened:</label></td>
+          <td><input type="date" name="dateScreened" id="date-screened" value="<%=movie.dateScreened%>"></td>
+        </tr>
+        <tr>
+          <td><label for="movie-year">Release Year: </label></td>
+          <td><input type="text" name="year" id="movie-year" value="<%=movie.year%>" size="4"></td>
+        </tr>
+        <tr>
+          <td><label for="movie-director">Director: </label></td>
+          <td><input type="text" name="director" id='movie-director' value="<%=movie.director%>" size="30"></td>
+        </tr>
+        <tr>
+          <td><label for="movie-cast">Cast: </label></td>
+          <td><textarea name="cast" rows=4 cols=50 id="movie-cast"><%=movie.cast.join(', ')%></textarea></td>
+        </tr>
+        <tr>
+          <td><label for="movie-poster">Poster Image URL: </label></td>
+          <td><input type="url" name="poster" id="movie-poster" value="<%=movie.poster%>" size="50"></td>
+        </tr>
+      </table>
+      <input type="submit" class="submit-btn" value="SUBMIT CHANGES">
+    </form>
+  </div>
+</body>
+</html>

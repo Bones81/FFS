@@ -19,23 +19,19 @@ genre: [String] -->
     <%- include('../partials/header.ejs')%>
   </header>
   <h1 class="page-title">Enter New Movie</h1>
-  <form action="/nominations" method="POST" id="new-form">
+  <form action="/movies" method="POST" id="new-form">
     <table>
         <tr>
             <td class="info-start-text"><span class="red">* </span>Title: </td>
-            <td class="new-data-text"><input type="text" name="title" placeholder="Title of Movie" size="50" /></td>
+            <td class="new-data-text"><input type="text" name="title" placeholder="(Required) Title of Movie" size="50" /></td>
         </tr>
         <tr>
             <td class="info-start-text">Poster Image: </td>
             <td class="new-data-text"><input type="url" name="poster" placeholder="(Optional, but encouraged) URL of poster image" size="80" /></td>
         </tr>
         <tr>
-            <td class="info-start-text">Comments: </td>
-            <td class="new-data-text"><textarea name="blurb" rows=10 cols=50 placeholder="(Optional) Legacy Notes / Why should we consider this nomination?"></textarea></td>
-        </tr>
-        <tr>
-            <td class="info-start-text">Cast List (comma-separated): </td>
-            <td class="new-data-text"><textarea id="cast" name="cast" rows="10" cols="50"></textarea></td>
+            <td class="info-start-text">Cast List: </td>
+            <td class="new-data-text"><textarea id="cast" name="cast" rows="10" cols="50" placeholder="(Optional) List of cast members, comma-separated. e.g. 'Will Ferrell, Christina Applegate, Steve Carrell, Paul Rudd, David Koechner, Fred Willard, Vince Vaughan, Chris Parnell, etc.'"></textarea></td>
         </tr>
         <tr>
             <td class="info-start-text">Release Year: </td>
@@ -50,10 +46,14 @@ genre: [String] -->
         </tr>
         <tr>
             <td class="info-start-text">Director: </td>
-            <td class="new-data-text"><input type="text" name="director" placeholder="Director of Movie" size="50" /></td>
+            <td class="new-data-text"><input type="text" name="director" placeholder="(Optional) Director of Movie" size="50" /></td>
+        </tr>
+        <tr>
+            <td class="info-start-text">Genres: </td>
+            <td class="new-data-text"><textarea id="genre" name="genre" placeholder="(Optional) Genres of Movie, comma-separated" rows="2" cols="50"></textarea></td>
         </tr>
     </table>
-    <input type="submit" id="create-btn" value="Add new nomination with this data">
+    <input type="submit" id="create-btn" value="Add new movie with this data">
   </form>
 </body>
 </html>
