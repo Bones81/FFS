@@ -6,7 +6,7 @@ const movieSchema = new Schema({
   year: Number, //year of movie's release
   director: String,
   cast: [String],
-  poster: String,
+  poster: String, //url string
   origNominator: String,
   allNominators: [String],
   nominations: [{type: mongoose.Schema.Types.ObjectId, ref: 'Nomination'}],

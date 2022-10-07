@@ -49,11 +49,7 @@ app.get('/movies/seed', (req, res) => {
 // Movie.collection.drop()
 
 //JSON routes
-app.get('/movies/json', (req, res) => {
-  Movie.find({}, (err, movies) => {
-    res.json(movies)
-  })
-})
+
 
 app.get('/nominations/json', (req, res) => {
   Nomination.find({}, (err, nominations) => {

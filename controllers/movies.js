@@ -3,12 +3,23 @@ const router = express.Router()
 
 const Movie = require('../models/movies')
 const movieSeed = require('../models/seed_movies')
+const seedMoviesNew = require('../models/seed_movies_new')
 
 router.get('/', (req, res) => {
     Movie.find({}, (err, allMovies) => {
         err ? console.log(err) : console.log('All movies found');
         res.json(allMovies)
     })
+})
+
+router.get('/json', (req, res) => {
+    Movie.find({}, (err, movies) => {
+      res.json(movies)
+    })
+  })
+
+router.get('/json/seed_movies_new', (req, res) => {
+    res.json(seedMoviesNew)
 })
 
 // MAP OVER OLD DATA TO NEW MOVIE SCHEMA

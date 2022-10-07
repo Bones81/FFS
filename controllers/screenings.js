@@ -7,8 +7,27 @@ const screeningWeeks = require('../models/screening_weeks')
 const screeningWeeksSeed = require('../models/seed_screening_weeks')
 
 const Movie = require('../models/movies')
-
 const seedMovies = require('../models/seed_movies')
+const seedMoviesNew = require('../models/seed_movies_new')
+
+//FIXING THE MOVIE OBJECT IDS ASSOCIATED WITH SCREENINGS
+// for (let movie of seedMovies) {
+//     Movie.findOne({title: movie.title}, (err, foundMovie) => {
+//         Screening.findOneAndUpdate({selection: movie}, {$set: {selection: foundMovie}}, {new: true}, (err, updatedScreening) => {
+//             console.log(updatedScreening);
+//         })
+//     })
+// }
+
+// Movie.find({}, (err, allMovies) => {
+//     for (let movie of allMovies) {
+
+//             Screening.findOneAndUpdate({selection: foundMovie}, {$set: {selection: movie}}, {new: true}, (err, updatedScreening) => {
+//                 console.log(updatedScreening);
+//             })
+//     }
+// }) 
+
 
 //Mapping old list of winners to new screenings db, by checking for matching dates then adding movie._id
 // for (let movie of seedMovies) {
@@ -37,6 +56,11 @@ const seedMovies = require('../models/seed_movies')
 
 
 //ATTEMPTING TO POPULATE "selection" field in screenings db
+
+Screening.find({}).populate("selection").exec((err, allScreenings) => {
+    console.log(allScreenings);
+})
+
 
 const createScreening = (screening) => {
     return Screening.create(screening).then((docScreening) => {
@@ -86,6 +110,9 @@ const run = async () => {
 }
 
 // run()
+
+    
+
 
 
 //TO DELETE TEST SCREENINGS
@@ -137,7 +164,7 @@ router.get('/json', (req, res) => {
     Screening.find({}, (err, allScreenings) => {
         err ? console.log(err) : console.log('All screenings found');;
         res.json(allScreenings)
-    })
+    }).populate("selection")
 })
 
 
