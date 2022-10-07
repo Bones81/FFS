@@ -62,57 +62,57 @@ const seedMoviesNew = require('../models/seed_movies_new')
 
 //ATTEMPTING TO POPULATE "selection" field in screenings db
 
-Screening.find({}).populate("selection").exec((err, allScreenings) => {
-    console.log(allScreenings);
-})
+// Screening.find({}).populate("selection").exec((err, allScreenings) => {
+//     console.log(allScreenings);
+// })
 
 
-const createScreening = (screening) => {
-    return Screening.create(screening).then((docScreening) => {
-        console.log("\n>> Created Screening:\n", docScreening);
-        return docScreening
-    })
-}
+// const createScreening = (screening) => {
+//     return Screening.create(screening).then((docScreening) => {
+//         console.log("\n>> Created Screening:\n", docScreening);
+//         return docScreening
+//     })
+// }
 
-const createMovie = (movie) => {
-    console.log("\n>> Adding Movie to DB:\n", movie);
-    return Movie.create(movie).then((createdMovie) => {
-        console.log('>> Movie created:' + createdMovie);
-        return createdMovie
-    })
-}
+// const createMovie = (movie) => {
+//     console.log("\n>> Adding Movie to DB:\n", movie);
+//     return Movie.create(movie).then((createdMovie) => {
+//         console.log('>> Movie created:' + createdMovie);
+//         return createdMovie
+//     })
+// }
 
-const setSelection = (screeningID, selection) => {
-    console.log("\n>> Adding Selection to Screening...\n");
-    return Screening.findByIdAndUpdate(screeningID, {$set: {selection: selection}}, {new: true}).then((updatedScreening) => {
-        console.log('>>Screening updated: ' + updatedScreening);
-        return updatedScreening
-    })
-}
+// const setSelection = (screeningID, selection) => {
+//     console.log("\n>> Adding Selection to Screening...\n");
+//     return Screening.findByIdAndUpdate(screeningID, {$set: {selection: selection}}, {new: true}).then((updatedScreening) => {
+//         console.log('>>Screening updated: ' + updatedScreening);
+//         return updatedScreening
+//     })
+// }
 
-const run = async () => {
-    let [screening, movie] = await Promise.all([
-        createScreening({
-            weekID: 0,
-            date: new Date("2000-01-01T20:30:00Z"),
-            selection: undefined,
-            notes: "Test comment",
-            nominations: []
-        }), createMovie({
-            title: "Anchorman",
-            screened: true,
-            year: 2004,
-            director: 'Adam McKay',
-            cast: ["Will Ferrell","Christina Applegate","Fred Willard","Steve Carrell","Paul Rudd", "David Koechner", "Vince Vaughan", "Jack Black", "Danny Trejo", "Chris Parnell"],
-            origNominator: "Nathan",
-            allNominators: ["Nathan"],
-            nominations: [],
-            genre: ["Comedy"]
-        })
-    ])
+// const run = async () => {
+//     let [screening, movie] = await Promise.all([
+//         createScreening({
+//             weekID: 0,
+//             date: new Date("2000-01-01T20:30:00Z"),
+//             selection: undefined,
+//             notes: "Test comment",
+//             nominations: []
+//         }), createMovie({
+//             title: "Anchorman",
+//             screened: true,
+//             year: 2004,
+//             director: 'Adam McKay',
+//             cast: ["Will Ferrell","Christina Applegate","Fred Willard","Steve Carrell","Paul Rudd", "David Koechner", "Vince Vaughan", "Jack Black", "Danny Trejo", "Chris Parnell"],
+//             origNominator: "Nathan",
+//             allNominators: ["Nathan"],
+//             nominations: [],
+//             genre: ["Comedy"]
+//         })
+//     ])
 
-    setSelection(screening._id, movie)
-}
+//     setSelection(screening._id, movie)
+// }
 
 // run()
 
