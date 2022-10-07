@@ -6,6 +6,8 @@ const Screening = require('../models/screening')
 const screeningWeeks = require('../models/screening_weeks')
 const screeningWeeksSeed = require('../models/seed_screening_weeks')
 
+const Movie = require('../models/movies')
+
 const seedMovies = require('../models/seed_movies')
 
 //Mapping old list of winners to new screenings db, by checking for matching dates then adding movie._id
@@ -43,12 +45,58 @@ const createScreening = (screening) => {
     })
 }
 
-const createMovie = (screeningID, movie) => {
-    console.log("\n>> Created Movie:\n", movie);
-    return Screening.findByIdAndUpdate(screeningID, {$set: {selection: movie}}, {new: true})
-
+const createMovie = (movie) => {
+    console.log("\n>> Adding Movie to DB:\n", movie);
+    return Movie.create(movie).then((createdMovie) => {
+        console.log('>> Movie created:' + createdMovie);
+        return createdMovie
+    })
 }
 
+const setSelection = (screeningID, selection) => {
+    console.log("\n>> Adding Selection to Screening...\n");
+    return Screening.findByIdAndUpdate(screeningID, {$set: {selection: selection}}, {new: true}).then((updatedScreening) => {
+        console.log('>>Screening updated: ' + updatedScreening);
+        return updatedScreening
+    })
+}
+
+const run = async () => {
+    let [screening, movie] = await Promise.all([
+        createScreening({
+            weekID: 0,
+            date: new Date("2000-01-01T20:30:00Z"),
+            selection: undefined,
+            notes: "Test comment",
+            nominations: []
+        }), createMovie({
+            title: "Anchorman",
+            screened: true,
+            year: 2004,
+            director: 'Adam McKay',
+            cast: ["Will Ferrell","Christina Applegate","Fred Willard","Steve Carrell","Paul Rudd", "David Koechner", "Vince Vaughan", "Jack Black", "Danny Trejo", "Chris Parnell"],
+            origNominator: "Nathan",
+            allNominators: ["Nathan"],
+            nominations: [],
+            genre: ["Comedy"]
+        })
+    ])
+
+    setSelection(screening._id, movie)
+}
+
+// run()
+
+
+//TO DELETE TEST SCREENINGS
+// Screening.deleteMany({weekID: '0'}, (err, deletedScreenings) => {
+//     err ? console.log(err) : console.log(deletedScreenings);
+// })
+
+//TO DELETE TEST MOVIES
+// Movie.deleteMany({title: 'Anchorman'}, (err, deletedMovies) => {
+//     err ? console.log(err) : console.log(deletedMovies);
+// })
 
 // const screeningsSeed = screeningWeeksSeed.map((week, idx) => {
 //     return {
