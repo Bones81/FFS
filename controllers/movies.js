@@ -195,12 +195,12 @@ router.post('/sort', (req, res) => {
         })
         })
     } else if (req.body.sortChoice === 'most_recent') { 
-        Movie.find({}, (err, allMovies) => {
-        if(err) console.log(err.message);
+        Movie.find({}).populate("screening").exec((err, allMovies) => {
+        err ? console.log(err.message) : console.log('Sorting movies by most recent...');;
         const sortedMovies = allMovies.sort((a,b) => {
-            if (a.dateScreened < b.dateScreened) {
+            if (a.screening && b.screening && a.screening.date < b.screening.date) {
             return 1
-            } else if (a.dateScreened > b.dateScreened) {
+            } else if (a.screening && b.screening && a.screening.date > b.screening.date) {
             return -1 
             } else {
             return 0
@@ -212,12 +212,12 @@ router.post('/sort', (req, res) => {
         })
         })
     } else if (req.body.sortChoice === 'screening_order') { 
-        Movie.find({}, (err, allMovies) => {
+        Movie.find({}).populate("screening").exec((err, allMovies) => {
         if(err) console.log(err.message);
         const sortedMovies = allMovies.sort((a,b) => {
-            if (a.dateScreened > b.dateScreened) {
+            if (a.screening && b.screening && a.screening.date > b.screening.date) {
             return 1
-            } else if (a.dateScreened < b.dateScreened) {
+            } else if (a.screening && b.screening && a.screening.date < b.screening.date) {
             return -1 
             } else {
             return 0
