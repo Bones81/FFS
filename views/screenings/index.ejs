@@ -27,15 +27,14 @@
         </thead>
         <tbody>
             <% for (let screening of screenings) { %> 
-                <tr>
-                    <td><%=screening.weekID%></td>
-                    <td><%=screening.date.toString().slice(3,15)%></td>
-                    <td><img src="<%=screening.selection.poster%>" alt="pic of <%=screening.selection.title%>"></td>
-                    <td><%=screening.selection.title%></td>
-                    <td><%=screening.notes%></td>
-                    <td>Nominee List will go here</td>
-                </tr>
-            
+                <tr onclick="location.href = '/screenings/<%=screening._id%>'">
+                  <td><%=screening.weekID%></td>
+                  <td><%=screening.date.toString().slice(3,15)%></td>
+                  <td><img src="<%=screening.selection.poster%>" alt="pic of <%=screening.selection.title%>"></td>
+                  <td><%=screening.selection.title%></td>
+                  <td><%=screening.notes%></td>
+                  <td>Nominee List will go here</td>
+                </tr>  
             <% } %>
         </tbody>
     </table>

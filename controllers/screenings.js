@@ -191,4 +191,14 @@ router.post('/', (req, res) => {
     // res.json(req.body)
 })
 
+//SHOW
+router.get('/:id', (req, res) => {
+    Screening.findById(req.params.id).populate("selection").exec((err, foundScreening) => {
+        res.render('screenings/show.ejs', {
+            tabTitle: foundScreening.date.toString().slice(3,15) + " FFS Screening",
+            screening: foundScreening,
+        })
+    })
+})
+
 module.exports = router
