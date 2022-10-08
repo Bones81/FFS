@@ -47,6 +47,29 @@
           <td class="info-start-text"><label for="genre">Genres: </label></td>
           <td class="new-data-text"><textarea id="genre" name="genre" rows="2" cols="50"><%=movie.genre.join(', ')%></textarea></td>
         </tr>
+        <tr>
+          <td class="info-start-text"><label for="screening">Screened by FFS: </label></td>
+          <td class="new-data-text">
+            <select id="screening" 
+                    name="screening" 
+                    <% if(movie.screening) { %> 
+                      value="<%=movie.screening.weekID%>"
+                    <% } %>
+                    >
+              <option name="screening" value="">--Not yet screened--</option>
+              <% for (let screening of screenings.reverse()) { %> 
+              <option name="screening" 
+                      value="<%=screening.weekID%>"
+                      <% if(movie.screening && movie.screening.weekID === screening.weekID) { %> 
+                        selected
+                      <% } %>
+                      >
+                        #<%=screening.weekID%> | <%=screening.date.toString().slice(3,15)%>
+              </option>
+              <% } %>
+            </select>
+          </td>
+        </tr>
       </table>
       <input type="submit" class="submit-btn" value="SUBMIT CHANGES">
     </form>

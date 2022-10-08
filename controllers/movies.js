@@ -1,7 +1,9 @@
 const express = require('express')
+const res = require('express/lib/response')
 const router = express.Router()
 
 const Movie = require('../models/movies')
+const Screening = require('../models/screening')
 const movieSeed = require('../models/seed_movies')
 const seedMoviesNew = require('../models/seed_movies_new')
 
@@ -95,29 +97,6 @@ router.post('/', (req, res) => {
         res.json(createdMovie)
     })
 })
-
-//CREATE ROUTES
-//FOR SELECTED FILMS
-// router.post('/', (req, res) => {
-
-//     // let date = new Date(req.body.dateScreened)
-//     // console.log('original date: ' + date.toString())
-//     // formattedDate = new Date(
-//     //   date.getUTCFullYear(),
-//     //   date.getUTCMonth(),
-//     //   date.getUTCDate(),
-//     //   date.getUTCHours(),
-//     //   date.getUTCMinutes(),
-//     //   date.getUTCSeconds(),
-//     //   date.getUTCMilliseconds()
-//     // )
-//     // console.log('Date with UTC params: ' + formattedDate.toString());
-//     // req.body.dateScreened = formattedDate
-//     // Movie.create(req.body, (err, newMovie) => {
-//     //   if(err) {console.log(err.message);}
-//     //   else { res.redirect('/movies')}
-//     // })
-//   })
 
 //CONFIRM DELETE ROUTES
 router.get('/:id/confirm-delete', (req, res) => {
@@ -253,22 +232,54 @@ router.post('/sort', (req, res) => {
   
 //EDIT ROUTES
 router.get('/:id/edit', (req, res) => {
-    Movie.findById(req.params.id, (err, foundMovie) => {
-        res.render('movies/edit.ejs', {
-            tabTitle: foundMovie.title + " | Edit Page",
-            movie: foundMovie
+    Movie.findById(req.params.id).populate("screening").exec((err, foundMovie) => {
+        Screening.find({}, (err, allScreenings) => {
+            res.render('movies/edit.ejs', {
+                tabTitle: foundMovie.title + " | Edit Page",
+                movie: foundMovie,
+                screenings: allScreenings
+            })
         })
     })
 })
 
 //PUT ROUTES
 router.put('/:id', (req, res) => {
+    const updateMovie = () => {
+        console.log(req.params.id, req.body);
+        Movie.findByIdAndUpdate(req.params.id, {$unset: {screening: ""}}, {new: true}, (err, updatedMovie) => {  
+            console.log('After unset: ' + updatedMovie);
+            Movie.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, foundMovie) => {
+                console.log('Movie data updated: ' + foundMovie);
+                res.redirect('/movies')
+            })
+        })
+    }
+
+    // const updateMovieDeleteScreening = () => {
+    //     Movie.findByIdAndUpdate(req.params.id, req.body, {$set: {screening: undefined}}, {new: true}, (err, foundMovie) => {
+    //         console.log('Movie data updated: ' + foundMovie);
+    //         res.redirect('/movies')
+    //     })
+    // }
+
     req.body.cast = req.body.cast.split(', ')
     req.body.genre = req.body.genre.split(', ')
-    Movie.findByIdAndUpdate(req.params.id, req.body, (err, foundMovie) => {
-        res.redirect('/movies')
-    })
+    req.body.year = +req.body.year
+    if(req.body.screening) {
+        req.body.screening = +req.body.screening
+        req.body.screened = true
+        Screening.findOne({weekID: req.body.screening}, (err, foundScreening) => {
+            req.body.screening = foundScreening
+            updateMovie()
+        })
+    } else {
+        req.body.screened = false
+        req.body.screening = undefined
+        updateMovie()
+    }
 })
+
 
 //DROP COLLECTION -- CAUTION!!!!!!!!!
 // Movie.collection.drop()

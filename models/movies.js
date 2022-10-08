@@ -11,7 +11,8 @@ const movieSchema = new Schema({
   allNominators: [String],
   nominations: [{type: mongoose.Schema.Types.ObjectId, ref: 'Nomination'}],
   screened: Boolean,
-  genre: [String]
+  genre: [String],
+  screening: {type: mongoose.Schema.Types.ObjectId, ref: "Screening"}
 }, {timestamps: true}
 )
 
