@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <%- include ('./partials/head.ejs') %>
+  <%- include ('../partials/head.ejs') %>
 </head>
 <body>
   <header>
-    <%- include('./partials/header.ejs') %>
+    <%- include('../partials/header.ejs') %>
   </header>
   <div class="container">
     <h1 class="page-title" id="confirm-delete-title">Confirm Delete?</h1>
     <h2>ARE YOU SURE?</h2>
     <img src="<%=movie.poster%>"/>
-    <% let formattedDate = movie.dateScreened.toString().slice(3,15) %>
-    <h3>Clicking confirm will remove the record for the <%=formattedDate%> viewing of <%=movie.title%> from the database!</h3>
+    <h3>Clicking confirm will remove the entry for <%=movie.title%> from the database! If this movie is associated with any Nominations or Screenings, removing it could cause those Nominations or Screenings to break!</h3>
     <h3>
       <a href="/movies/<%=movie._id%>"><button class="btn">Go Back</button></a>
     </h3>

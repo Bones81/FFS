@@ -101,7 +101,7 @@ router.post('/', (req, res) => {
 //CONFIRM DELETE ROUTES
 router.get('/:id/confirm-delete', (req, res) => {
     Movie.findById(req.params.id, (err, foundMovie) => {
-        res.render('movies/confirmDelete.ejs', {
+        res.render('movies/confirm_delete.ejs', {
         tabTitle: 'Confirm delete?',
         movie: foundMovie
         })
@@ -110,8 +110,8 @@ router.get('/:id/confirm-delete', (req, res) => {
   
   //DELETE ROUTES
 router.delete('/:id', (req, res) => {
-    Movie.findByIdAndRemove(req.params.id, (err, foundMovie) => {
-        console.log('Deleted movie: ' + foundMovie);
+    Movie.findByIdAndRemove(req.params.id, (err, deletedMovie) => {
+        console.log('Deleted movie: ' + deletedMovie);
         res.redirect('/movies')
     })
 })
