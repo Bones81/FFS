@@ -4,15 +4,9 @@ const router = express.Router()
 
 const Movie = require('../models/movies')
 const Screening = require('../models/screening')
-const movieSeed = require('../models/seed_movies')
 const seedMoviesNew = require('../models/seed_movies_new')
 
-// router.get('/', (req, res) => {
-//     Movie.find({}, (err, allMovies) => {
-//         res.json(allMovies)
-//     })
-// })
-
+//JSON routes
 router.get('/json', (req, res) => {
     Movie.find({}, (err, movies) => {
       res.json(movies)
@@ -49,18 +43,17 @@ router.get('/json/seed_movies_new', (req, res) => {
 // })
 
 //SEED INITIAL MOVIE DATA
-// app.get('/seed', (req, res) => {
-//     // console.log(seedMovies)
-//     Movie.create(seedMovies, (err, data) => {
-//       console.log(data)
-//       if (err) console.log(err)
-//       console.log('added provided movie data')  
-//       res.redirect('/movies')
-//     })
-//   })
+router.get('/seed', (req, res) => {
+    // console.log(seedMoviesNew)
+    Movie.create(seedMoviesNew, (err, data) => {
+      console.log(data)
+      if (err) console.log(err)
+      console.log('added provided movie data')  
+      res.redirect('/movies')
+    })
+})
 
 //INDEX ROUTES
-//UNCOMMENT AFTER index.ejs written
 router.get('/', (req, res) => {
     Movie.find({}, (err, allMovies) => {  
         err ? console.log(err) : console.log('All movies found');
@@ -94,7 +87,7 @@ router.post('/', (req, res) => {
     console.log(movieObj)
     Movie.create(movieObj, (err, createdMovie) => {
         err ? console.log(err) : console.log('Movie created: ' + createdMovie);
-        res.json(createdMovie)
+        res.redirect('/movies')
     })
 })
 
@@ -118,7 +111,7 @@ router.delete('/:id', (req, res) => {
 
 //SHOW ROUTE
 router.get('/:id', (req, res) => {
-    Movie.findById(req.params.id, (err, foundMovie) => {
+    Movie.findById(req.params.id).populate("screening").exec((err, foundMovie) => {
         res.render('movies/show.ejs', {
             movie: foundMovie,
             tabTitle: foundMovie.title + ' | Show Page' 
@@ -255,13 +248,6 @@ router.put('/:id', (req, res) => {
             })
         })
     }
-
-    // const updateMovieDeleteScreening = () => {
-    //     Movie.findByIdAndUpdate(req.params.id, req.body, {$set: {screening: undefined}}, {new: true}, (err, foundMovie) => {
-    //         console.log('Movie data updated: ' + foundMovie);
-    //         res.redirect('/movies')
-    //     })
-    // }
 
     req.body.cast = req.body.cast.split(', ')
     req.body.genre = req.body.genre.split(', ')

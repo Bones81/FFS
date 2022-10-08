@@ -7,7 +7,6 @@ const screeningWeeks = require('../models/screening_weeks')
 const screeningWeeksSeed = require('../models/seed_screening_weeks')
 
 const Movie = require('../models/movies')
-const seedMovies = require('../models/seed_movies')
 const seedMoviesNew = require('../models/seed_movies_new')
 
 //REMOVE LAST SCREENING

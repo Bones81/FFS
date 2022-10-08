@@ -17,7 +17,6 @@ const mongoURI = process.env.MONGODB_URI
 const mongoLOC = 'mongodb://localhost:27017/'+'FFS'
 const PORT = process.env.PORT || 3003
 
-const seedMovies = require('./models/seed_movies.js')
 const Movie = require('./models/movies.js')
 const Nomination = require('./models/nominations.js')
 const Screening = require('./models/screening.js')
@@ -39,7 +38,7 @@ app.use('/nominations', nominationsController)
 
 //HOME ROUTE
 app.get('/', (req, res) => {
-  res.redirect('/movies')
+  res.redirect('/screenings')
 })
 
 //FIX DATES ROUTE
