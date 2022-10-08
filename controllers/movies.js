@@ -3,8 +3,23 @@ const res = require('express/lib/response')
 const router = express.Router()
 
 const Movie = require('../models/movies')
-const Screening = require('../models/screening')
 const seedMoviesNew = require('../models/seed_movies_new')
+
+const Screening = require('../models/screening')
+const screeningSeed = require('../models/seed_screenings')
+
+//ADD SCREENINGS TO EXISTING MOVIES IN MOVIES COLLECTION
+// router.get('/addscreenings', (req, res) => {
+//     for (let screening of screeningSeed) {
+//         // console.log(typeof screening.selection);
+//         if (typeof screening.selection === 'string') {
+//             Movie.findByIdAndUpdate(screening.selection, {$set: {screening: screening}}, {new: true}, (err, updatedMovie) => {
+//                 err ? console.log(err) : console.log('Movie updated with screening: ' + updatedMovie);
+//             })
+//         }
+//     }
+//     res.redirect('/movies')
+// })
 
 //JSON routes
 router.get('/json', (req, res) => {

@@ -6,8 +6,10 @@ const Screening = require('../models/screening')
 const screeningWeeks = require('../models/screening_weeks')
 const screeningWeeksSeed = require('../models/seed_screening_weeks')
 
+
 const Movie = require('../models/movies')
 const seedMoviesNew = require('../models/seed_movies_new')
+
 
 //REMOVE LAST SCREENING
 // Screening.findByIdAndRemove("633e8748e26cc37fe711d20f", (err, deletedScreen) => {
