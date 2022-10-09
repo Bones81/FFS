@@ -50,7 +50,12 @@ genre: [String] -->
         </tr>
         <tr>
             <td class="info-start-text">Genres: </td>
-            <td class="new-data-text"><textarea id="genre" name="genre" placeholder="(Optional) Genres of Movie, comma-separated" rows="2" cols="50"></textarea></td>
+            <td class="new-data-text genre-options">
+            <% for (let genre of genres) { %> 
+                <input type="checkbox" name="genre" value="<%=genre%>" class="genre-option" id="genre-option-<%=genre%>"/>
+                <label for="genre-option" class="genre-option-label"><%=genre%></label><br/>
+            <% } %>
+            </td>
         </tr>
     </table>
     <input type="submit" id="create-btn" value="Add new movie with this data">

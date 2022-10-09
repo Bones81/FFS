@@ -8,6 +8,28 @@ const seedMoviesNew = require('../models/seed_movies_new')
 const Screening = require('../models/screening')
 const screeningSeed = require('../models/seed_screenings')
 
+const genres = [
+    'Action',
+    'Adventure',
+    'Art Film',
+    'Comedy',
+    'Crime',
+    'Drama',
+    'Experimental',
+    'Fantasy',
+    'Historical',
+    'Musical',
+    'Mystery',
+    'Horror',
+    'Romance',
+    'Satire',
+    'Science Fiction',
+    'Thriller',
+    'Video Game',
+    'Western',
+    'Other'
+]
+
 //ADD SCREENINGS TO EXISTING MOVIES IN MOVIES COLLECTION
 // router.get('/addscreenings', (req, res) => {
 //     for (let screening of screeningSeed) {
@@ -84,7 +106,8 @@ router.get('/', (req, res) => {
 //NEW
 router.get('/new', (req, res) => {
     res.render('movies/new.ejs', {
-      tabTitle: 'Add Movie'
+      tabTitle: 'Add Movie',
+      genres: genres
     })
   })
 
@@ -98,7 +121,6 @@ router.post('/', (req, res) => {
     movieObj.allNominators = []
     movieObj.nominations = []
     movieObj.screened = false
-    movieObj.genre = req.body.genre.split(', ')
     console.log(movieObj)
     Movie.create(movieObj, (err, createdMovie) => {
         err ? console.log(err) : console.log('Movie created: ' + createdMovie);
@@ -245,7 +267,8 @@ router.get('/:id/edit', (req, res) => {
             res.render('movies/edit.ejs', {
                 tabTitle: foundMovie.title + " | Edit Page",
                 movie: foundMovie,
-                screenings: allScreenings
+                screenings: allScreenings,
+                genres: genres
             })
         })
     })
@@ -256,7 +279,7 @@ router.put('/:id', (req, res) => {
     const updateMovie = () => {
         console.log(req.params.id, req.body);
         Movie.findByIdAndUpdate(req.params.id, {$unset: {screening: ""}}, {new: true}, (err, updatedMovie) => {  
-            console.log('After unset: ' + updatedMovie);
+            // console.log('After unset: ' + updatedMovie);
             Movie.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, foundMovie) => {
                 console.log('Movie data updated: ' + foundMovie);
                 res.redirect('/movies')
@@ -265,8 +288,8 @@ router.put('/:id', (req, res) => {
     }
 
     req.body.cast = req.body.cast.split(', ')
-    req.body.genre = req.body.genre.split(', ')
     req.body.year = +req.body.year
+    console.log(req.body);
     if(req.body.screening) {
         req.body.screening = +req.body.screening
         req.body.screened = true
