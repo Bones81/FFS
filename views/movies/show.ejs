@@ -33,7 +33,7 @@
       <tr>
         <td class="info-start-text">Screened by FFS:</td>
         <% if(movie.screened) { %>
-        <td class="info-data-text">Yes, screening #<%=movie.screening.weekID%> | <%=movie.screening.date.toString().slice(3,15)%></td>
+        <td class="info-data-text">Yes, <a href="/screenings/<%=movie.screening._id%>">screening #<%=movie.screening.weekID%> | <%=movie.screening.date.toString().slice(3,15)%></a></td>
         <% } else { %>
         <td class="info-data-text">No</td>
         <% } %>

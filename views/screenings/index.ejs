@@ -13,7 +13,7 @@
   
 
   <h1>FFS Screenings</h1>
-  <div class="flex-container">
+  <div class="flex-container screenings-table">
     <table>
         <thead>
             <tr>
@@ -27,11 +27,11 @@
         </thead>
         <tbody>
             <% for (let screening of screenings) { %> 
-                <tr onclick="location.href = '/screenings/<%=screening._id%>'">
+                <tr>
                   <td><%=screening.weekID%></td>
-                  <td><%=screening.date.toString().slice(3,15)%></td>
+                  <td><a href="/screenings/<%=screening._id%>"><%=screening.date.toString().slice(3,15)%></a></td>
                   <td><img src="<%=screening.selection.poster%>" alt="pic of <%=screening.selection.title%>"></td>
-                  <td><%=screening.selection.title%></td>
+                  <td><a href="/movies/<%=screening.selection._id%>"><%=screening.selection.title%></a></td>
                   <td><%=screening.notes%></td>
                   <td>Nominee List will go here</td>
                 </tr>  

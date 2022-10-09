@@ -5,7 +5,8 @@ const nominationSchema = new Schema({
   screening: {type: mongoose.Schema.Types.ObjectId, ref: "Screening", required: true},
   nominator: {type: String, required: true},
   blurb: {type: String},
-  nominee: {type: mongoose.Schema.Types.ObjectId, ref: "Movie", required: true}
+  nominee: {type: mongoose.Schema.Types.ObjectId, ref: "Movie", required: true},
+  winner: Boolean
 }, {timestamps: true}
 )
 
