@@ -17,22 +17,22 @@
     <table>
         <thead>
             <tr>
-                <th>Screening #</th>
+                <th class="non-mobile">Screening #</th>
                 <th>Date</th>
                 <th>Poster</th>
                 <th>Selection</th>
-                <th>Comments</th>
+                <th class="non-mobile">Comments</th>
                 <th>Nominees</th>
             </tr>
         </thead>
         <tbody>
             <% for (let screening of screenings) { %> 
                 <tr>
-                  <td><%=screening.weekID%></td>
-                  <td><a href="/screenings/<%=screening._id%>"><%=screening.date.toString().slice(3,15)%></a></td>
+                  <td class="non-mobile"><%=screening.weekID%></td>
+                  <td class="screening-date"><a href="/screenings/<%=screening._id%>"><%=screening.date.toString().slice(3,15)%></a></td>
                   <td><img src="<%=screening.selection.poster%>" alt="pic of <%=screening.selection.title%>"></td>
-                  <td><a href="/movies/<%=screening.selection._id%>"><%=screening.selection.title%></a></td>
-                  <td><%=screening.notes%></td>
+                  <td class="selection-title"><a href="/movies/<%=screening.selection._id%>"><%=screening.selection.title%></a></td>
+                  <td class="non-mobile"><%=screening.notes%></td>
                   <td>Nominee List will go here</td>
                 </tr>  
             <% } %>

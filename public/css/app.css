@@ -106,6 +106,7 @@ button {
 
 .delete-btn {
   background: linear-gradient(to top, red, coral, red);
+  font-size: 0.5em;
   /* font-family: 'Cabin', sans-serif; */
 }
 
@@ -127,15 +128,35 @@ label {
 table {
   background-color: #bbc;
   text-align: left;
-  max-width: 90%;
+  /* max-width: 300px; */
   margin: 0 auto;
 }
 
 td {
   /* padding: 1px; */
   border: 1px solid grey;
-  font-size: 0.67em;
+  font-size: 0.5em;
   font-family: 'Raleway', sans-serif;
+}
+
+.non-mobile {
+  display: none;
+}
+
+.screening-date, .selection-title {
+  font-size: 0.67em;
+  text-align: center;
+}
+
+.screening-date a, .selection-title a {
+  text-decoration: none;
+}
+
+td img {
+  max-height: 100px;
+  max-width: 70px;
+  object-fit: contain;
+  object-position: center;
 }
 
 .info-start-text {
@@ -226,6 +247,48 @@ nav a:hover {
   color: red;
 }
 
+@media (min-width: 480px) {
+  td img {
+    max-height: 200px;
+    max-width: 150px;
+  }
+
+  .screening-date, .selection-title {
+    font-size: 0.83em;
+  }
+
+  .delete-btn {
+    font-size: 0.67em;
+  }
+
+  .genre-options {
+    display: flex;
+    flex-flow: column wrap;
+    align-items: flex-start;
+    justify-content: center;
+    max-height: 200px;
+  }
+}
+
+@media (min-width: 640px) {
+  td img {
+    max-height: 250px;
+    max-width: 180px;
+  }
+
+  .screening-date, .selection-title {
+    font-size: 1em;
+  }
+
+  .selection-title {
+    max-width: 200px;
+  }
+
+  .delete-btn, .edit-btn {
+    font-size: 0.83em;
+  }
+}
+
 @media (min-width: 840px) {
   header a, #search-form {
     font-size: 1em;
@@ -246,6 +309,21 @@ nav a:hover {
   td, label {
     font-size: 0.83em;
   }
+
+  td img {
+    max-height: 360px;
+    max-width: 240px;
+  }
+
+  .screening-date, .selection-title {
+    font-size: 2em;
+  }
+
+  .selection-title {
+    max-width: 300px;
+  }
+
+
 }
 
 @media (min-width: 1080px) {

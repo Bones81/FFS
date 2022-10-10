@@ -52,8 +52,10 @@ genre: [String] -->
             <td class="info-start-text">Genres: </td>
             <td class="new-data-text genre-options">
             <% for (let genre of genres) { %> 
-                <input type="checkbox" name="genre" value="<%=genre%>" class="genre-option" id="genre-option-<%=genre%>"/>
-                <label for="genre-option" class="genre-option-label"><%=genre%></label><br/>
+                <div class="genre-option">
+                    <input type="checkbox" name="genre" value="<%=genre%>" class="" id="genre-option-<%=genre%>"/>
+                    <label for="genre-option" class="genre-option-label"><%=genre%></label><br/>
+                </div>
             <% } %>
             </td>
         </tr>
