@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head.ejs')%>
+  </head>
+  <body>
+    <header><%- include('../partials/header.ejs')%></header>
+    <h1 class="page-title">
+      Edit Screening Info for <%=screening.date.toString().slice(3,15)%>
+    </h1>
+    <form
+      action="/screenings/<%=screening._id%>?_method=PUT"
+      method="POST"
+      id="new-form"
+    >
+      <table>
+        <tr>
+          <td class="info-start-text">Date of Screening:</td>
+          <td class="new-data-text">
+            <input type="date" name="date" id="date" value="<%=date%>" />
+            <input
+              type="number"
+              name="weekID"
+              hidden
+              value="<%=screening.weekID%>"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td class="info-start-text">Notes / Comments:</td>
+          <td class="new-data-text">
+            <textarea
+              name="notes"
+              rows="4"
+              cols="50"
+              placeholder="Anything noteworthy about the screening: Brain Trust-decreed themes, nomination trends, FFS developments"
+            >
+<%=screening.notes%></textarea
+            >
+          </td>
+        </tr>
+        <% if(screening.nominations.length) { %>
+        <tr>
+          <td class="info-start-text">⭐ FFS Selection ⭐</td>
+          <td>
+            <select name="selection">
+              <% for(let nomination of screening.nominations) { %>
+              <option value="<%=nomination._id%>">
+                <%=nomination.nominee.title%>
+              </option>
+              <% } %>
+            </select>
+          </td>
+        </tr>
+        <% } %>
+      </table>
+      <input
+        type="submit"
+        id="create-btn"
+        value="Update FFS Screening with Changes"
+      />
+    </form>
+  </body>
+</html>

@@ -8,19 +8,25 @@
     <div class="card show-card">
       <h1 class="page-title"><%=screening.date.toString().slice(3,15)%></h1>
       <h2>Screening #<%=screening.weekID%></h2>
-      <img
+      <% if(screening.selection) { %> 
+        <img
         src="<%=screening.selection.poster%>"
         alt="poster for <%=screening.selection.title%>"
-      /><br />
+        /><br />
+      <% } else { %>
+        <h3>Selection Not Yet Made</h3>
+      <% } %>
       <table>
-        <tr>
-          <td class="info-start-text">Selection:</td>
-          <td class="info-data-text">
-            <a href="/movies/<%=screening.selection._id%>"
-              ><%=screening.selection.title%></a
-            >
-          </td>
-        </tr>
+        <% if(screening.selection) { %> 
+          <tr>
+            <td class="info-start-text">Selection:</td>
+            <td class="info-data-text">
+              <a href="/movies/<%=screening.selection._id%>"
+                ><%=screening.selection.title%></a
+                >
+              </td>
+            </tr>
+        <% } %>
         <tr>
           <td class="info-start-text">Notes:</td>
           <td class="info-data-text"><%=screening.notes%></td>

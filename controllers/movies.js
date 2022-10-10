@@ -279,12 +279,23 @@ router.get('/:id/edit', (req, res) => {
 //PUT ROUTES
 router.put('/:id', (req, res) => {
     const updateMovie = () => {
-        console.log(req.params.id, req.body);
+        // console.log(req.params.id, req.body);
         Movie.findByIdAndUpdate(req.params.id, {$unset: {screening: ""}}, {new: true}, (err, updatedMovie) => {  
             // console.log('After unset: ' + updatedMovie);
             Movie.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, foundMovie) => {
-                console.log('Movie data updated: ' + foundMovie);
-                res.redirect('/movies')
+                // console.log('Movie data updated: ' + foundMovie);
+                if(req.body.screening) { 
+                    Screening.findByIdAndUpdate(foundMovie.screening._id, {$set: {selection: foundMovie}}, {new: true}, (err, updatedScreening) => {
+                        console.log('Also updated screening: ' + updatedScreening)
+                        res.redirect('/movies')
+                    })
+                } else {
+                    console.log('movie to unassociate with screening ' + foundMovie);
+                    Screening.findOneAndUpdate({selection: foundMovie}, {$unset: {selection: ""}}, {new: true}, (err, updatedScreening) => {
+                        console.log('Also removed movie from screening: ' + updatedScreening)
+                    })
+                    res.redirect('/movies')
+                }
             })
         })
     }

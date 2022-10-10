@@ -9,36 +9,15 @@
     <form action="/screenings" method="POST" id="new-form">
       <table>
         <tr>
-          <td class="info-start-text">Date:</td>
+          <td class="info-start-text">Date of Screening:</td>
           <td class="new-data-text">
-            <label for="date">Date of Screening: </label>
             <input type="date" name="date" id="date" />
-          </td>
-        </tr>
-        <tr>
-          <td class="info-start-text">Selection ⭐:</td>
-          <td class="new-data-text">
-            <select name="selection" id="selection">
-              <option value="">--No Selection Yet--</option>
-              <option value="TEST">Test Selection Value</option>
-            </select>
           </td>
         </tr>
         <tr>
           <td class="info-start-text">Notes / Comments:</td>
           <td class="new-data-text">
-            <textarea name="notes" rows="4" cols="50" placeholder=""></textarea>
-          </td>
-        </tr>
-        <tr>
-          <td class="info-start-text">Nominees:</td>
-          <td class="new-data-text">
-            <textarea
-              name="nominees"
-              rows="10"
-              cols="50"
-              placeholder="Enter titles of nominees, comma-separated."
-            ></textarea>
+            <textarea name="notes" rows="4" cols="50" placeholder="Anything noteworthy about the screening: Brain Trust-decreed themes, nomination trends, FFS developments"></textarea>
           </td>
         </tr>
       </table>

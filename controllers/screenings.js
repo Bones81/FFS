@@ -10,6 +10,8 @@ const screeningWeeksSeed = require('../models/seed_screening_weeks')
 const Movie = require('../models/movies')
 const seedMoviesNew = require('../models/seed_movies_new')
 
+const Nomination = require('../models/nominations')
+
 
 //REMOVE LAST SCREENING
 // Screening.findByIdAndRemove("633e8748e26cc37fe711d20f", (err, deletedScreen) => {
@@ -152,7 +154,7 @@ router.get('/', (req, res) => {
             screenings: allScreenings,
             screeningWeeks: screeningWeeks
         })
-    }).populate("selection")
+    }).populate("selection").populate("nominations")
 })
 
 //JSON
@@ -170,7 +172,7 @@ router.get('/json', (req, res) => {
     Screening.find({}, (err, allScreenings) => {
         err ? console.log(err) : console.log('All screenings found');;
         res.json(allScreenings)
-    }).populate("selection")
+    }).populate("selection").populate("nominations")
 })
 
 
@@ -184,11 +186,19 @@ router.get('/new', (req, res) => {
 
 //CREATE
 router.post('/', (req, res) => {
-    Screening.create(req.body, (err, createdScreening) => {
-        err ? console.log(err) : console.log(createdScreening)
-        res.json(createdScreening)
-    })
-    // res.json(req.body)
+    const screenObj = {...req.body}
+    Screening.findOne({}).sort({weekID: -1}).exec((err, foundScreening) => { //find screening w/ highest weekID, then +1 to create new weekID
+        screenObj.weekID = foundScreening.weekID + 1
+        //figure out date
+        let date = new Date(screenObj.date)
+        let dateTimeAt830 = date.getTime() + (1000*60*60*24.5)
+        date = new Date(dateTimeAt830)
+        screenObj.date = date
+        Screening.create(screenObj, (err, createdScreening) => {
+            err ? console.log(err) : console.log(createdScreening)
+            res.redirect('/screenings')
+        })
+    }) 
 })
 
 //SHOW
@@ -196,9 +206,39 @@ router.get('/:id', (req, res) => {
     Screening.findById(req.params.id).populate("selection").exec((err, foundScreening) => {
         res.render('screenings/show.ejs', {
             tabTitle: foundScreening.date.toString().slice(3,15) + " FFS Screening",
-            screening: foundScreening,
+            screening: foundScreening
         })
     })
+})
+
+//EDIT
+router.get('/:id/edit', (req, res) => {
+    Screening.findById(req.params.id).populate("selection").populate("nominations").exec((err, foundScreening) => {
+        let date = new Date(foundScreening.date)
+        let dateTime = date.getTime()
+        dateTime -=(1000 * 60 * 60 * 4)
+        date = new Date(dateTime)
+        date = date.toISOString().slice(0,10)
+        res.render('screenings/edit.ejs', {
+            tabTitle: "Edit " + foundScreening.date.toString().slice(3,15) + " Screening",
+            screening: foundScreening,
+            date: date
+        })
+    })
+})
+
+//UPDATE
+router.put('/:id', (req, res) => {
+    let date = new Date(req.body.date)
+    let dateTime = date.getTime() + (3600000 * 24.5)
+    date = new Date(dateTime)
+    req.body.date = date
+    req.body.weekID = Number(req.body.weekID)
+    Screening.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, updatedScreening) => {
+        res.redirect('/screenings')
+    })
+    // res.json(req.body)
+
 })
 
 module.exports = router
