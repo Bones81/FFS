@@ -146,6 +146,7 @@ td {
 .screening-date, .selection-title {
   font-size: 0.67em;
   text-align: center;
+  font-variant: small-caps;
 }
 
 .screening-date a, .selection-title a {
