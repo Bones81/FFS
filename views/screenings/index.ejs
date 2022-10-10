@@ -1,44 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <%- include('../partials/head.ejs')%>
-</head>
-<body>
-  <header>
-    <%- include('../partials/header.ejs')%>
-  </header>
-  <h1 class="page-title" id="home-title">Fortnightly Film Society Screenings</h1>
-  <h2>Click on a screening to see/edit its details</h2>
-  <h3 class="blurb">Major flops, sci-fi shlock, video game adaptations, high camp, oddball curiosities of cinema, or just plain "dumb" movies... The Fortnightly Film Society has screened them all!</h3>
-  
+  <head>
+    <%- include('../partials/head.ejs')%>
+  </head>
+  <body>
+    <header><%- include('../partials/header.ejs')%></header>
+    <h1 class="page-title" id="home-title">
+      Fortnightly Film Society Screenings
+    </h1>
+    <h2>Click on a screening to see/edit its details</h2>
+    <h3 class="blurb">
+      Major flops, sci-fi shlock, video game adaptations, high camp, oddball
+      curiosities of cinema, or just plain "dumb" movies... The Fortnightly Film
+      Society has screened them all!
+    </h3>
 
-  <h1>FFS Screenings</h1>
-  <div class="flex-container screenings-table">
-    <table>
+    <h1>FFS Screenings</h1>
+    <div class="flex-container screenings-table">
+      <table>
         <thead>
-            <tr>
-                <th class="non-mobile">Screening #</th>
-                <th>Date</th>
-                <th>Poster</th>
-                <th>Selection</th>
-                <th class="non-mobile">Comments</th>
-                <th>Nominees</th>
-            </tr>
+          <tr>
+            <th class="non-mobile">Screening #</th>
+            <th>Date</th>
+            <th>Poster</th>
+            <th>Selection</th>
+            <th class="non-mobile">Comments</th>
+            <th>Nominees</th>
+          </tr>
         </thead>
         <tbody>
-            <% for (let screening of screenings) { %> 
-                <tr>
-                  <td class="non-mobile"><%=screening.weekID%></td>
-                  <td class="screening-date"><a href="/screenings/<%=screening._id%>"><%=screening.date.toString().slice(3,15)%></a></td>
-                  <td><img src="<%=screening.selection.poster%>" alt="pic of <%=screening.selection.title%>"></td>
-                  <td class="selection-title"><a href="/movies/<%=screening.selection._id%>"><%=screening.selection.title%></a></td>
-                  <td class="non-mobile"><%=screening.notes%></td>
-                  <td>Nominee List will go here</td>
-                </tr>  
-            <% } %>
+          <% for (let screening of screenings) { %>
+          <tr>
+            <td class="non-mobile"><%=screening.weekID%></td>
+            <td class="screening-date">
+              <a href="/screenings/<%=screening._id%>"
+                ><%=screening.date.toString().slice(3,15)%></a
+              >
+            </td>
+            <td>
+              <img
+                src="<%=screening.selection.poster%>"
+                alt="pic of <%=screening.selection.title%>"
+              />
+            </td>
+            <td class="selection-title">
+              <a href="/movies/<%=screening.selection._id%>"
+                ><%=screening.selection.title%></a
+              >
+            </td>
+            <td class="non-mobile"><%=screening.notes%></td>
+            <td>Nominee List will go here</td>
+          </tr>
+          <% } %>
         </tbody>
-    </table>
-  </div>
-</body>
+      </table>
+    </div>
+  </body>
 </html>
-

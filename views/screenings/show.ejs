@@ -1,39 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <%- include('../partials/head.ejs')%>
-</head>
-<body>
-  <header>
-    <%- include('../partials/header.ejs')%>
-  </header>
-  <div class="card show-card">
-    <h1 class="page-title"><%=screening.date.toString().slice(3,15)%></h1>
-    <h2>Screening #<%=screening.weekID%></h2>
-    <img src="<%=screening.selection.poster%>" alt="poster for <%=screening.selection.title%>"><br/>
-    <table>
+  <head>
+    <%- include('../partials/head.ejs')%>
+  </head>
+  <body>
+    <header><%- include('../partials/header.ejs')%></header>
+    <div class="card show-card">
+      <h1 class="page-title"><%=screening.date.toString().slice(3,15)%></h1>
+      <h2>Screening #<%=screening.weekID%></h2>
+      <img
+        src="<%=screening.selection.poster%>"
+        alt="poster for <%=screening.selection.title%>"
+      /><br />
+      <table>
         <tr>
-            <td class="info-start-text">Selection:</td>
-            <td class="info-data-text"><a href="/movies/<%=screening.selection._id%>"><%=screening.selection.title%></a></td>
+          <td class="info-start-text">Selection:</td>
+          <td class="info-data-text">
+            <a href="/movies/<%=screening.selection._id%>"
+              ><%=screening.selection.title%></a
+            >
+          </td>
         </tr>
         <tr>
-            <td class="info-start-text">Notes:</td>
-            <td class="info-data-text"><%=screening.notes%></td>
+          <td class="info-start-text">Notes:</td>
+          <td class="info-data-text"><%=screening.notes%></td>
         </tr>
         <tr>
-            <td class="info-start-text">Nominations</td>
-            <td class="info-data-text">
-                List of Nominees with links to their nomination pages will go here.
-            </td>
+          <td class="info-start-text">Nominations</td>
+          <td class="info-data-text">
+            List of Nominees with links to their nomination pages will go here.
+          </td>
         </tr>
-    </table>
-    <h3>
-      <a href="/screenings/<%=screening._id%>/edit"><button class="btn edit-btn">Edit Screening Details</button></a>
-    </h3>
-    
-    <form action="/screenings/<%=screening._id%>/confirm-delete" class="show-form">
-      <input type="submit" class='btn delete-btn' value="DELETE FFS Screening from database (CAUTION)">
-    </form>
-  </div>
-</body>
+      </table>
+      <h3>
+        <a href="/screenings/<%=screening._id%>/edit"
+          ><button class="btn edit-btn">Edit Screening Details</button></a
+        >
+      </h3>
+
+      <form
+        action="/screenings/<%=screening._id%>/confirm-delete"
+        class="show-form"
+      >
+        <input
+          type="submit"
+          class="btn delete-btn"
+          value="DELETE FFS Screening from database (CAUTION)"
+        />
+      </form>
+    </div>
+  </body>
 </html>

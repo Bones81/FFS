@@ -1,47 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <%- include('../partials/head.ejs')%>
-</head>
-<body>
-  <header>
-    <%- include('../partials/header.ejs')%>
-  </header>
-  <h1 class="page-title">Enter New Screening Info</h1>
-  <form action="/screenings" method="POST" id="new-form">
-    <table>
-      <tr>
-        <td class="info-start-text">Screening # / Date: </td>
-        <td class="new-data-text">
-            <select name="screeningNumAndDate">
-                <% for (let i = weeks.length; i > 0; i--) { 
-                    let date = new Date(weeks[ i - 1 ])
-                    let month = date.getMonth()
-                    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-                    let year = date.getFullYear()
-                    let day = date.getDate()
-                    %>
-                    <option value=<%= i %> ><%= i %>. <%=months[month]%> <%=day%>, <%=year%></option>
-                <% } %>
-            </select>
-        </td>
-      </tr>
-      <tr>
-        <td class="info-start-text">Selection ⭐: </td>
-        <td class="new-data-text"><input type="selection" name="selection" placeholder="Enter title of selected film" size="50"></td>
-      </tr>
-      <tr>
-          <td class="info-start-text">Notes / Comments: </td>
-          <td class="new-data-text"><textarea name="notes" rows=4 cols=50 placeholder=""></textarea></td>
-        </tr>
+  <head>
+    <%- include('../partials/head.ejs')%>
+  </head>
+  <body>
+    <header><%- include('../partials/header.ejs')%></header>
+    <h1 class="page-title">Enter New Screening Info</h1>
+    <form action="/screenings" method="POST" id="new-form">
+      <table>
         <tr>
-          <td class="info-start-text">Nominees: </td>
+          <td class="info-start-text">Date:</td>
           <td class="new-data-text">
-            <textarea name="nominees" rows="10" cols="50" placeholder="Enter titles of nominees, comma-separated."></textarea>
+            <label for="date">Date of Screening: </label>
+            <input type="date" name="date" id="date" />
           </td>
         </tr>
-    </table>
-    <input type="submit" id="create-btn" value="Add new FFS Screening with this data">
-  </form>
-</body>
+        <tr>
+          <td class="info-start-text">Selection ⭐:</td>
+          <td class="new-data-text">
+            <select name="selection" id="selection">
+              <option value="">--No Selection Yet--</option>
+              <option value="TEST">Test Selection Value</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td class="info-start-text">Notes / Comments:</td>
+          <td class="new-data-text">
+            <textarea name="notes" rows="4" cols="50" placeholder=""></textarea>
+          </td>
+        </tr>
+        <tr>
+          <td class="info-start-text">Nominees:</td>
+          <td class="new-data-text">
+            <textarea
+              name="nominees"
+              rows="10"
+              cols="50"
+              placeholder="Enter titles of nominees, comma-separated."
+            ></textarea>
+          </td>
+        </tr>
+      </table>
+      <input
+        type="submit"
+        id="create-btn"
+        value="Add new FFS Screening with this data"
+      />
+    </form>
+  </body>
 </html>
