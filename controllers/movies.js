@@ -11,8 +11,10 @@ const screeningSeed = require('../models/seed_screenings')
 const genres = [
     'Action',
     'Adventure',
+    'Animated',
     'Art Film',
     'Comedy',
+    'Comic Book-Based',
     'Crime',
     'Drama',
     'Experimental',
@@ -25,7 +27,7 @@ const genres = [
     'Satire',
     'Science Fiction',
     'Thriller',
-    'Video Game',
+    'Video Game-Based',
     'Western',
     'Other'
 ]
