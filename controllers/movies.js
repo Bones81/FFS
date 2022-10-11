@@ -299,6 +299,7 @@ router.put('/:id', (req, res) => {
             })
         })
     }
+    //ABOVE EVENTUALLY NEEDS LOGIC TO HANDLE INSTANCE WHERE ANOTHER MOVIE IS ALREADY ASSIGNED TO A SCREENING.
 
     req.body.cast = req.body.cast.split(', ')
     req.body.year = +req.body.year
