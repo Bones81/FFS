@@ -36,7 +36,7 @@ genre: [String] -->
             <td class="new-data-text">
               <select name="screening" id="screening">
                 <% for (let screening of screenings.reverse()) { %> 
-                  <option value="<%=screening.weekID%>"><%=screening.weekID%> | <%=screening.date%></option>
+                  <option value="<%=screening.weekID%>"><%=screening.weekID%> | <%=screening.date.toString().slice(3,15)%></option>
                 <% } %>
               </select>
             </td>
