@@ -23,15 +23,90 @@ genre: [String] -->
     <table>
         <tr>
             <td class="info-start-text"><span class="red">* </span>Person Submitting Nomination: </td>
-            <td class="new-data-text"><input type="text" name="nominator" placeholder="your name here" size="30"></td>
+            <td class="new-data-text">
+              <select name="nominator">
+                <% for (let nominator of nominators) { %> 
+                  <option value="<%=nominator%>"><%=nominator%></option>
+                <% } %>
+              </select>
+            </td>
         </tr>
         <tr>
             <td class="info-start-text"><span class="red">* </span>Nominating for Screening Date: </td>
-            <td class="new-data-text"><input type="date" name="forWhatScreening"></td>
+            <td class="new-data-text">
+              <select name="screening" id="screening">
+                <% for (let screening of screenings.reverse()) { %> 
+                  <option value="<%=screening.weekID%>"><%=screening.weekID%> | <%=screening.date%></option>
+                <% } %>
+              </select>
+            </td>
         </tr>
         <tr>
             <td class="info-start-text"><span class="red">* </span>Film nominated: </td>
-            <td class="new-data-text"><input type="text" name="title" placeholder="Title of Nomination" size="50"></td>
+            <td class="new-data-text">
+              <input type="radio" name="prev-nomination" id="prev-nomination" checked/>
+              <label for="prev-nomination">Choose from previous nominations</label>
+              <input type="radio" name="new-nomination" id="new-nomination" />
+              <label for="new-nomination">Make a new nomination</label>
+            </td>
+        </tr>
+        <tr>
+          <td class="info-start-text">Choose a previous nomination</td>
+          <td class="new-data-text">
+            <select name="nominee" id="nominee">
+              <option value="">-Previous Nominees-</option>
+              <% for (let movie of movies) { %>
+                <% if (!movie.screened) { %> 
+                  <option value="<%=movie.title%>"><%=movie.title%></option>
+                <% } %>
+              <% } %>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td class="info-start-text">Make a new nomination</td>
+          <td class="new-data-text">
+            <table>
+              <tr>
+                  <td class="info-start-text"><span class="red">* </span>Title: </td>
+                  <td class="new-data-text"><input type="text" name="title" placeholder="(Required) Title of Movie" size="50" /></td>
+              </tr>
+              <tr>
+                  <td class="info-start-text">Poster Image: </td>
+                  <td class="new-data-text"><input type="url" name="poster" placeholder="(Optional, but encouraged) URL of poster image (Wikipedia is usually a good source for images that will work.)" size="80" /></td>
+              </tr>
+              <tr>
+                  <td class="info-start-text">Cast List: </td>
+                  <td class="new-data-text"><textarea id="cast" name="cast" rows="10" cols="50" placeholder="(Optional) List of cast members, comma-separated. e.g. 'Will Ferrell, Christina Applegate, Steve Carrell, Paul Rudd, David Koechner, Fred Willard, Vince Vaughan, Chris Parnell, etc.'"></textarea></td>
+              </tr>
+              <tr>
+                  <td class="info-start-text">Release Year: </td>
+                  <td class="new-data-text">
+                      <select id="year" name="year">
+                          <option value="">--none selected--</option>
+                          <% for (let i = new Date().getFullYear(); i >=1900; i--) { %>
+                              <option value=<%=i%>><%=i%></option>
+                          <% } %>
+                      </select>
+                  </td>
+              </tr>
+              <tr>
+                  <td class="info-start-text">Director: </td>
+                  <td class="new-data-text"><input type="text" name="director" placeholder="(Optional) Director of Movie" size="50" /></td>
+              </tr>
+              <tr>
+                  <td class="info-start-text">Genres: </td>
+                  <td class="new-data-text genre-options">
+                  <% for (let genre of genres) { %> 
+                      <div class="genre-option">
+                          <input type="checkbox" name="genre" value="<%=genre%>" class="" id="genre-option-<%=genre%>"/>
+                          <label for="genre-option" class="genre-option-label"><%=genre%></label><br/>
+                      </div>
+                  <% } %>
+                  </td>
+              </tr>
+          </table>
+          </td>
         </tr>
         <tr>
             <td class="info-start-text">Comments: </td>
