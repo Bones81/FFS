@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head.ejs')%>
+</head>
+<body>
+  <header>
+    <%- include('../partials/header.ejs')%>
+  </header>
+  <h1 class="page-title">Enter New Nomination</h1>
+  <form action="/nominations/initial-info" method="POST" id="new-form">
+    <table>
+        <tr>
+            <td class="info-start-text"><span class="red">* </span>Person Submitting Nomination: </td>
+            <td class="new-data-text">
+              <select name="nominator">
+                <% for (let nominator of nominators) { %> 
+                  <option value="<%=nominator%>"><%=nominator%></option>
+                <% } %>
+              </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="info-start-text"><span class="red">* </span>Nominating for Screening Date: </td>
+            <td class="new-data-text">
+              <select name="screening" id="screening">
+                <% for (let screening of screenings.reverse()) { %> 
+                  <option value="<%=screening.weekID%>"><%=screening.weekID%> | <%=screening.date.toString().slice(3,15)%></option>
+                <% } %>
+              </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="info-start-text"><span class="red">* </span>Film nominated: </td>
+            <td class="new-data-text">
+              <input type="radio" name="nomination-type" id="prev-nomination" value="prev-nomination" checked/>
+              <label for="prev-nomination">Choose from previous nominations</label>
+              <input type="radio" name="nomination-type" id="new-nomination"  value="new-nomination"/>
+              <label for="new-nomination">Make a new nomination</label>
+            </td>
+        </tr>
+    </table>
+    <input type="submit" id="create-btn" value="Next">
+    </form>
+</body>
+
+</html>

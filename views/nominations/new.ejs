@@ -24,33 +24,17 @@ genre: [String] -->
         <tr>
             <td class="info-start-text"><span class="red">* </span>Person Submitting Nomination: </td>
             <td class="new-data-text">
-              <select name="nominator">
-                <% for (let nominator of nominators) { %> 
-                  <option value="<%=nominator%>"><%=nominator%></option>
-                <% } %>
-              </select>
+              <%=nominator%>
             </td>
         </tr>
         <tr>
             <td class="info-start-text"><span class="red">* </span>Nominating for Screening Date: </td>
             <td class="new-data-text">
-              <select name="screening" id="screening">
-                <% for (let screening of screenings.reverse()) { %> 
-                  <option value="<%=screening.weekID%>"><%=screening.weekID%> | <%=screening.date.toString().slice(3,15)%></option>
-                <% } %>
-              </select>
+              <%=screening.weekID%> | <%=screening.date.toString().slice(3,15)%>
             </td>
         </tr>
-        <tr>
-            <td class="info-start-text"><span class="red">* </span>Film nominated: </td>
-            <td class="new-data-text">
-              <input type="radio" name="prev-nomination" id="prev-nomination" checked/>
-              <label for="prev-nomination">Choose from previous nominations</label>
-              <input type="radio" name="new-nomination" id="new-nomination" />
-              <label for="new-nomination">Make a new nomination</label>
-            </td>
-        </tr>
-        <tr>
+
+        <!-- <tr>
           <td class="info-start-text">Choose a previous nomination</td>
           <td class="new-data-text">
             <select name="nominee" id="nominee">
@@ -119,11 +103,12 @@ genre: [String] -->
         <tr>
             <td class="info-start-text">(for legacy nominations) Did it win for this screening date?: </td>
             <td class="new-data-text"><input type="checkbox" name="winner" /></td>
-        </tr>
+        </tr> -->
     </table>
     <input type="submit" id="create-btn" value="Add new nomination with this data">
   </form>
 </body>
+
 </html>
 
 <!-- Add ability to choose movie from previous nominees (filter out if already screened) -->

@@ -50,6 +50,16 @@ const nominators = [
   'Ziemba Household',
 ]
 
+let nominators_sorted = nominators.sort((a,b) => {
+  if(a > b) {
+    return 1;
+  } else {
+    return -1;
+  }
+})
+
+console.log(nominators_sorted);
+
 //JSON
 router.get('/json', (req, res) => {
   Nomination.find({}, (err, nominations) => {
@@ -78,12 +88,12 @@ router.get('/', (req, res) => {
 router.get('/new', (req, res) => {
   Screening.find({}, (err, screenings) => {
     Movie.find({}, (err, movies) => {
-      res.render('nominations/new.ejs', {
-        tabTitle: 'Add Nomination',
+      res.render('nominations/create_nomination.ejs', {
+        tabTitle: 'Create Nomination',
         screenings: screenings,
         movies: movies,
         genres: genres,
-        nominators: nominators
+        nominators: nominators_sorted
       })
     })
   })
@@ -110,6 +120,24 @@ router.post('/', (req, res) => {
       if(err) {console.log(err.message);}
       else { res.redirect('/nominations/index.ejs')}
     })
+})
+
+router.post('/initial-info', (req, res) => {
+  console.log('initial form submitted')
+  let nominator = req.body.nominator
+  let screeningID = req.body.screening
+  Screening.find({weekID: screeningID}, (err, screening) => {
+    screening = screening[0]
+    Movie.find({}, (err, movies) => {
+      res.render('nominations/new.ejs', {
+        tabTitle: 'Continue Nomination',
+        screening: screening,
+        movies: movies,
+        genres: genres,
+        nominator: nominator
+      })
+    })
+  })
 })
 
 //SHOW
