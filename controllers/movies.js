@@ -4,7 +4,7 @@ const router = express.Router()
 
 const Movie = require('../models/movies')
 const seedMoviesNew = require('../models/seed_movies_new')
-
+const Nomination = require('../models/nominations')
 const Screening = require('../models/screening')
 const screeningSeed = require('../models/seed_screenings')
 
@@ -101,7 +101,7 @@ router.get('/', (req, res) => {
         tabTitle: 'The Fortnightly Film Society Website',
         movies: allMovies
       })
-    })
+    }).populate("nominations").populate("screening")
   })
   
 
@@ -150,11 +150,17 @@ router.delete('/:id', (req, res) => {
 
 //SHOW ROUTE
 router.get('/:id', (req, res) => {
-    Movie.findById(req.params.id).populate("screening").exec((err, foundMovie) => {
-        res.render('movies/show.ejs', {
-            movie: foundMovie,
-            tabTitle: foundMovie.title + ' | Show Page' 
-        })
+    Movie.findById(req.params.id).populate("screening").populate("nominations").exec((err, foundMovie) => {
+        Nomination.find({nominee: foundMovie._id}, (err, foundNoms) => {
+            Screening.findOne({selection: foundMovie._id}, (err, foundScreening) => {    
+                res.render('movies/show.ejs', {
+                    movie: foundMovie,
+                    screening: foundScreening,
+                    nominations: foundNoms,
+                    tabTitle: foundMovie.title + ' | Show Page' 
+                })
+            })
+        }).populate("nominee").populate("screening")
     })
 })
 

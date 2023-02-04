@@ -138,7 +138,10 @@ router.post('/', (req, res) => {
     Movie.create(movieObj, (err, createdMovie) => {
         err ? console.log(err) : console.log('Movie created: ' + createdMovie);
         nomObj.nominee = createdMovie._id
-        res.json(nomObj)
+        Nomination.create(nomObj, (err, createdNomination) => {
+          if(err) console.log(err);
+          res.redirect('/nominations');
+        })
     })
   }
 
