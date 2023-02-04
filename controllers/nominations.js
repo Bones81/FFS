@@ -101,31 +101,52 @@ router.get('/new', (req, res) => {
 
 //CREATE
 router.post('/', (req, res) => {
-    let date = new Date(req.body.forWhatScreening)
-    console.log('original date: ' + date.toString())
-    formattedDate = new Date(
-      date.getUTCFullYear(),
-      date.getUTCMonth(),
-      date.getUTCDate(),
-      date.getUTCHours(),
-      date.getUTCMinutes(),
-      date.getUTCSeconds(),
-      date.getUTCMilliseconds()
-    )
-    console.log('Date with UTC params: ' + formattedDate.toString());
-    req.body.forWhatScreening = formattedDate
-    let checked = req.body.winner === "on" ? true : false
-    req.body.winner = checked
-    Nomination.create(req.body, (err, newNomination) => {
-      if(err) {console.log(err.message);}
-      else { res.redirect('/nominations/index.ejs')}
+  console.log(req.body)
+  let nomObj = {} // build a properly formatted nomination prior to calling Nomination.create
+  nomObj.nominator = req.body.nominator
+  nomObj.blurb = req.body.blurb
+  nomObj.winner = req.body.winner ? true : false
+  // nomObj.screening = // figure out how to assign proper screening Object ID to this value
+  Screening.findOne({weekID: req.body.screeningID}, (err, foundScreening) => {
+    nomObj.screening = foundScreening._id 
+  })
+  // nomObj.nominee = // figure out how to assign proper movie Object ID to this value
+
+  // res.json(req.body)
+  if (req.body.nominee) {
+    Movie.findOne({title: req.body.nominee}, (err, foundMovie) => {
+      console.log(foundMovie)
+      nomObj.nominee = foundMovie._id
+      res.json(nomObj)
     })
+  } else {
+    let movieObj = req.body
+    let castArray = req.body.cast.split(', ')
+    movieObj.cast = castArray
+    movieObj.year = +req.body.year // convert to number with unary operator (+)
+    movieObj.origNominator = ""
+    movieObj.allNominators = []
+    movieObj.nominations = []
+    movieObj.screened = false
+    console.log(movieObj)
+    Movie.create(movieObj, (err, createdMovie) => {
+        err ? console.log(err) : console.log('Movie created: ' + createdMovie);
+        nomObj.nominee = createdMovie._id
+        res.json(nomObj)
+    })
+  }
+
+    // Nomination.create(req.body, (err, newNomination) => {
+    //   if(err) {console.log(err.message);}
+    //   else { res.redirect('/nominations/index.ejs')}
+    // })
 })
 
 router.post('/initial-info', (req, res) => {
-  console.log('initial form submitted')
   let nominator = req.body.nominator
   let screeningID = req.body.screening
+  let nomination_type = req.body.nomination_type
+  // console.log(nomination_type)
   Screening.find({weekID: screeningID}, (err, screening) => {
     screening = screening[0]
     Movie.find({}, (err, movies) => {
@@ -134,7 +155,8 @@ router.post('/initial-info', (req, res) => {
         screening: screening,
         movies: movies,
         genres: genres,
-        nominator: nominator
+        nominator: nominator,
+        nomination_type: nomination_type
       })
     })
   })
