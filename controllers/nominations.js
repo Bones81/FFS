@@ -79,7 +79,7 @@ router.get('/', (req, res) => {
           screenings: screenings,
           movies: movies
         })
-      }) 
+      }).populate("screening").populate("nominee")
     })
   })
 })
@@ -114,18 +114,24 @@ router.post('/', (req, res) => {
 
   // res.json(req.body)
   if (req.body.nominee) {
-    Movie.findOne({title: req.body.nominee}, (err, foundMovie) => {
-      console.log(foundMovie)
-      nomObj.nominee = foundMovie._id
-      res.json(nomObj)
+    Screening.findOne({weekID: req.body.screeningID}, (err, foundScreening) => {
+      nomObj.screening = foundScreening._id 
+      Movie.findOne({title: req.body.nominee}, (err, foundMovie) => {
+        console.log(foundMovie)
+        nomObj.nominee = foundMovie._id
+        Nomination.create(nomObj, (err, createdNomination) => {
+          if(err) console.log(err);
+          res.redirect('/nominations');
+        })
+      })
     })
   } else {
     let movieObj = req.body
     let castArray = req.body.cast.split(', ')
     movieObj.cast = castArray
     movieObj.year = +req.body.year // convert to number with unary operator (+)
-    movieObj.origNominator = ""
-    movieObj.allNominators = []
+    movieObj.origNominator = req.body.nominator
+    movieObj.allNominators = [req.body.nominator]
     movieObj.nominations = []
     movieObj.screened = false
     console.log(movieObj)
@@ -169,7 +175,7 @@ router.get('/:id', (req, res) => {
         nomination: foundNomination,
         tabTitle: foundNomination.title + ' | Nomination' 
       })
-    })
+    }).populate("screening").populate("nominee")
 })
 
 
@@ -180,7 +186,7 @@ router.get('/:id/edit', (req, res) => {
         tabTitle: foundNom.title + " | Edit Nomination",
         nomination: foundNom
       })
-    })
+    }).populate("screening").populate("nominee")
 })
 
 //CONFIRM DELETE
@@ -190,13 +196,13 @@ router.get('/:id/confirm-delete', (req, res) => {
         tabTitle: 'Confirm delete?',
         nomination: foundNom
       })
-    })
+    }).populate("screening").populate("nominee")
 })
   
 //DELETE
 router.delete('/:id', (req, res) => {
     Nomination.findByIdAndRemove(req.params.id, (err, foundNomination) => {
-      res.redirect('/nominations/index.ejs')
+      res.redirect('/nominations')
     })
 })
 

@@ -8,17 +8,17 @@
     <%- include('../partials/header.ejs')%>
   </header>
   <div class="card show-card">
-    <h1 class="page-title"><%=nomination.title.toUpperCase()%></h1>
-    <img src="<%=nomination.poster%>" alt="poster for <%=nomination.title%>"><br/>
+    <h1 class="page-title"><%=nomination.nominee.title.toUpperCase()%></h1>
+    <img src="<%=nomination.nominee.poster%>" alt="poster for <%=nomination.nominee.title%>"><br/>
     <table>
       <tr>
         <td class="info-start-text">Nominated for Screening Date:</td>
-        <% let formattedDate = nomination.forWhatScreening.toString().slice(3,15) %> 
+        <% let formattedDate = nomination.screening.date.toString().slice(3,15) %> 
         <td class="info-data-text"><%=formattedDate%></td>
       </tr>
       <tr>
         <td class="info-start-text">Submitted By:</td>
-        <td class="info-data-text"><%=nomination.submittedBy%></td>
+        <td class="info-data-text"><%=nomination.nominator%></td>
       </tr>
       <tr>
         <td class="info-start-text">Comments:</td>

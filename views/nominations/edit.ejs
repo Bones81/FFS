@@ -1,32 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <%- include('./partials/head.ejs')%>
+  <%- include('../partials/head.ejs')%>
 </head>
 <body>
   <header>
-    <%- include('./partials/header.ejs')%>
+    <%- include('../partials/header.ejs')%>
   </header>
   <div id="edit-container">
-      <h1 class="page-title"><%=nomination.title.toUpperCase()%></h1>
+      <h1 class="page-title"><%=nomination.nominee.title.toUpperCase()%></h1>
       <h3>Edit Nomination Details</h3>
     <form action="/nominations/<%=nomination._id%>?_method=PUT" method="POST" id='edit-form'>
       <table>
         <tr>
           <td><label for="nomination-title">Title: </label></td>
-          <td><input type="text" id='nomination-title' name="title" value="<%=nomination.title%>" required size="50"></td>
+          <td><input type="text" id='nomination-title' name="title" value="<%=nomination.nominee.title%>" required size="50"></td>
         </tr>
         <tr>
-          <td><label for="forWhatScreening">Nominating for the following Screening Date: <br/><b>(Always re-enter this when updating nomination.)</b></label></td>
-          <td><input type="date" name="forWhatScreening" id="forWhatScreening" value="<%=nomination.forWhatScreening%>"></td>
+          <td><label for="forWhatScreening">Nominating for Screening Date: <br/></label></td>
+          <td><input hidden type="number" name="screeningID" id="screeningID" value=<%=nomination.screening.weekID%> />
+            <%=nomination.screening.weekID%> | <%=nomination.screening.date.toString().slice(3,15)%>
+          </td>
         </tr>
         <tr>
-          <td><label for="submittedBy">Submitted By: </label></td>
-          <td><input type="text" name="submittedBy" id="submittedBy" value="<%=nomination.submittedBy%>" size="30"></td>
+          <td><label for="nominator">Person Submitting Nomination: </label></td>
+          <td><input type="text" name="nominator" id="nominator" value="<%=nomination.nominator%>" size="30"></td>
         </tr>
         <tr>
           <td><label for="nomination-poster">Poster Image URL: </label></td>
-          <td><input type="url" name="poster" id="nomination-poster" value="<%=nomination.poster%>" size="50"></td>
+          <td><input type="url" name="poster" id="nomination-poster" value="<%=nomination.nominee.poster%>" size="50"></td>
         </tr>
         <tr>
           <td><label for="blurb">Comments: </label></td>
@@ -46,7 +48,7 @@
       <input type="submit" class="submit-btn" value="SUBMIT CHANGES">
     </form>
     <form action="/nominations/<%=nomination._id%>/confirm-delete" class="show-form">
-        <input type="submit" class='btn delete-btn' value="DELETE nomination from database">
+        <input type="submit" class='btn delete-btn' value="DELETE nomination record from database. (The movie info will remain available for future nominations.)">
       </form>
   </div>
 </body>

@@ -14,6 +14,7 @@
             <td class="info-start-text"><span class="red">* </span>Person Submitting Nomination: </td>
             <td class="new-data-text">
               <select name="nominator">
+                  <option value="" disabled selected>--Choose nominator--</option>
                 <% for (let nominator of nominators) { %> 
                   <option value="<%=nominator%>"><%=nominator%></option>
                 <% } %>
