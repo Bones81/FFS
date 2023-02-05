@@ -109,24 +109,29 @@ router.post('/', (req, res) => {
   if (req.body.nominee) { // if user chooses a previous nominee to resubmit
     Screening.findOne({weekID: req.body.screeningID}, (err, foundScreening) => { //assign the screeningID to the new nomination object
       nomObj.screening = foundScreening._id
-      console.log('screening found')
       Movie.findOne({title: req.body.nominee}, (err, foundMovie) => { // find the movie in the database and assign it to the nomination
         nomObj.nominee = foundMovie._id
-        console.log('movie found');
         // Create the new nomination
         Nomination.create(nomObj, (err, createdNomination) => {
           if(err) console.log(err);
-          console.log('nom created');
+          console.log('nomObj.winner: ' + nomObj.winner);
           // update movie with any new data for winner, screening, nominations, and nominators
-          Movie.findByIdAndUpdate(foundMovie._id, {$set: {screened: nomObj.winner, screening: foundScreening._id, nominations: [...foundMovie.nominations, createdNomination._id], allNominators: [...foundMovie.allNominators, nomObj.nominator]}}, (err, updatedMovie) => {
-            //finally, update the screening with the new data about the selection and nominations
-            console.log('movie updated: ' + updatedMovie);
-            Screening.findByIdAndUpdate(foundScreening._id, {$set: {selection: foundMovie._id, nominations: [...foundScreening.nominations, createdNomination._id]}}, {new: true}, (err, updatedScreening) => {
-              console.log('screening updated');
-              // and redirect to the nominations archive
-              res.redirect('/nominations');
+          if(nomObj.winner) { // if it's a winning movie, update appropriately
+            Movie.findByIdAndUpdate(foundMovie._id, {$set: {screened: nomObj.winner, screening: foundScreening._id, nominations: [...foundMovie.nominations, createdNomination._id], allNominators: [...foundMovie.allNominators, nomObj.nominator]}}, (err, updatedMovie) => {
+              //finally, update the screening with the new data about the selection and nominations
+              Screening.findByIdAndUpdate(foundScreening._id, {$set: {selection: foundMovie._id, nominations: [...foundScreening.nominations, createdNomination._id]}}, {new: true}, (err, updatedScreening) => {
+                // and redirect to the nominations archive
+                res.redirect('/nominations');
+              })
             })
-          })
+          } else { // if it's not a winner, update appropriately
+            Movie.findByIdAndUpdate(foundMovie._id, {$set: {screened: nomObj.winner, nominations: [...foundMovie.nominations, createdNomination._id], allNominators: [...foundMovie.allNominators, nomObj.nominator]}}, (err, updatedMovie) => {
+              Screening.findByIdAndUpdate(foundScreening._id, {$set: {nominations: [...foundScreening.nominations, createdNomination._id]}}, {new: true}, (err, updatedScreening) => {
+                // and redirect to the nominations archive
+                res.redirect('/nominations') 
+              })
+            })
+          }
         })
       }) 
     })
@@ -246,5 +251,7 @@ router.put('/:id', (req, res) => {
     })
 })
 
-
+Screening.findOneAndUpdate({weekID: 70}, {$unset: {selection: null}}, (err, updatedScreening) => {
+  console.log('it is done'); 
+})
 module.exports = router
