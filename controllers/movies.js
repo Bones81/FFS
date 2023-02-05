@@ -142,9 +142,20 @@ router.get('/:id/confirm-delete', (req, res) => {
   
   //DELETE ROUTES
 router.delete('/:id', (req, res) => {
+    // first find and delete all nominations associated with the movie
+    Movie.findById(req.params.id, (err, foundMovie) => {
+      if (foundMovie.nominations) {
+        for (let nom of foundMovie.nominations) {
+            Nomination.findByIdAndRemove(nom._id, (err, deletedNomination) => {
+                 console.log('deleted' + deletedNomination)
+            })
+        }
+      }
+      // then remove the movie itself
     Movie.findByIdAndRemove(req.params.id, (err, deletedMovie) => {
-        console.log('Deleted movie: ' + deletedMovie);
-        res.redirect('/movies')
+      console.log('Deleted movie: ' + deletedMovie);
+      res.redirect('/movies')
+    })
     })
 })
 

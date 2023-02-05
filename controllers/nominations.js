@@ -58,8 +58,6 @@ let nominators_sorted = nominators.sort((a,b) => {
   }
 })
 
-console.log(nominators_sorted);
-
 //JSON
 router.get('/json', (req, res) => {
   Nomination.find({}, (err, nominations) => {
@@ -103,22 +101,20 @@ router.get('/new', (req, res) => {
 router.post('/', (req, res) => {
   console.log(req.body)
   let nomObj = {} // build a properly formatted nomination prior to calling Nomination.create
+  // all Nominations conform to model with keys that include screening, nominee, nominator, blurb, and winner.
   nomObj.nominator = req.body.nominator
   nomObj.blurb = req.body.blurb
-  nomObj.winner = req.body.winner ? true : false
-  // nomObj.screening = // figure out how to assign proper screening Object ID to this value
-  Screening.findOne({weekID: req.body.screeningID}, (err, foundScreening) => {
-    nomObj.screening = foundScreening._id 
-  })
-  // nomObj.nominee = // figure out how to assign proper movie Object ID to this value
+  nomObj.winner = req.body.winner === "on" ? true : false
 
-  // res.json(req.body)
-  if (req.body.nominee) {
+  if (req.body.nominee) { // if user chooses a previous nominee to resubmit
     Screening.findOne({weekID: req.body.screeningID}, (err, foundScreening) => {
       nomObj.screening = foundScreening._id 
-      Movie.findOne({title: req.body.nominee}, (err, foundMovie) => {
-        console.log(foundMovie)
+      Movie.findOne({title: req.body.nominee}, (err, foundMovie) => { // find the movie in the database
         nomObj.nominee = foundMovie._id
+        if (nomObj.winner) {
+          Movie.findByIdAndUpdate(foundMovie._id, {$set: {screened: true}}, {$set: {screening: foundScreening._id}}, (err, updatedMovie) => {
+          }) // update movie to be an FFS selection, not merely a nomination
+        } 
         Nomination.create(nomObj, (err, createdNomination) => {
           if(err) console.log(err);
           res.redirect('/nominations');
@@ -126,6 +122,7 @@ router.post('/', (req, res) => {
       })
     })
   } else {
+    console.log('taking the else road')
     let movieObj = req.body
     let castArray = req.body.cast.split(', ')
     movieObj.cast = castArray
@@ -133,22 +130,31 @@ router.post('/', (req, res) => {
     movieObj.origNominator = req.body.nominator
     movieObj.allNominators = [req.body.nominator]
     movieObj.nominations = []
-    movieObj.screened = false
-    console.log(movieObj)
-    Movie.create(movieObj, (err, createdMovie) => {
-        err ? console.log(err) : console.log('Movie created: ' + createdMovie);
-        nomObj.nominee = createdMovie._id
-        Nomination.create(nomObj, (err, createdNomination) => {
-          if(err) console.log(err);
-          res.redirect('/nominations');
-        })
+
+    Screening.findOne({weekID: req.body.screeningID}, (err, foundScreening) => {
+      if (req.body.winner === "on") { // if the nomination includes a newly added movie that also was a winner, make sure the movie data reflects that when created
+        movieObj.screened = true
+        movieObj.screening = foundScreening._id
+      }
+      nomObj.screening = foundScreening._id // regardless, the nomination will be associated with the screening date indicated in the form
+      Movie.create(movieObj, (err, createdMovie) => { // finally, you can create the movie
+          err ? console.log(err) : console.log('Movie created: ' + createdMovie);
+          nomObj.nominee = createdMovie._id
+          Nomination.create(nomObj, (err, createdNomination) => { // and you can create the nomination
+            if(err) console.log(err);
+            // now update the movie and the screening to include the newly created info for both the nomination and the movie
+            Movie.findByIdAndUpdate(createdMovie._id, {$set: {nominations: [createdNomination._id]}}, {new: true}, (err, updatedMovie) => {
+              console.log('updated: ' + updatedMovie)
+              Screening.findByIdAndUpdate(foundScreening._id, {$set: {selection: updatedMovie._id, nominations: [...foundScreening.nominations, createdNomination._id]}}, {new: true}, (err, updatedScreening) => {
+                console.log(updatedScreening)
+                res.redirect('/nominations');
+              })
+            })
+          })
+      })
     })
   }
 
-    // Nomination.create(req.body, (err, newNomination) => {
-    //   if(err) {console.log(err.message);}
-    //   else { res.redirect('/nominations/index.ejs')}
-    // })
 })
 
 router.post('/initial-info', (req, res) => {
@@ -230,9 +236,7 @@ router.put('/:id', (req, res) => {
     Nomination.findByIdAndUpdate(req.params.id, req.body, (err, foundNomination) => {
       res.redirect('/nominations')
     })
-  })
-
-
+})
   
 
 module.exports = router
