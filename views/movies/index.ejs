@@ -43,7 +43,7 @@
             <% if (movie.screened) { %>
             <h3>⭐ FFS Selection ⭐</h3>
             <% } %>
-            <img src="<%=movie.poster%>" alt="<%=movie.title%> poster"></br>
+            <img src="<%=movie.poster%>" loading="lazy" alt="<%=movie.title%> poster"></br>
             <span><%=movies.indexOf(movie) + 1%></span>
             <h3><%=movie.title%></h3>
         </div>

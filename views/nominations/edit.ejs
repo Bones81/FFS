@@ -17,14 +17,27 @@
           <td><input type="text" id='nomination-title' name="title" value="<%=nomination.nominee.title%>" required size="50"></td>
         </tr>
         <tr>
-          <td><label for="forWhatScreening">Nominating for Screening Date: <br/></label></td>
-          <td><input hidden type="number" name="screeningID" id="screeningID" value=<%=nomination.screening.weekID%> />
-            <%=nomination.screening.weekID%> | <%=nomination.screening.date.toString().slice(3,15)%>
+          <td><label for="screeningID">Nominating for Screening Date: <br/></label></td>
+          <td>
+            <select name="screeningID">
+              <option selected value="<%=nomination.screening.weekID%>"><%=nomination.screening.weekID%> | <%=nomination.screening.date.toString().slice(3,15)%> (current)</option>
+              <% for (let screening of screenings.reverse()) { %> 
+                <option value="<%=screening.weekID%>"><%=screening.weekID%> | <%=screening.date.toString().slice(3, 15)%></option>
+              <% } %>
+            </select>
+            
           </td>
         </tr>
         <tr>
           <td><label for="nominator">Person Submitting Nomination: </label></td>
-          <td><input type="text" name="nominator" id="nominator" value="<%=nomination.nominator%>" size="30"></td>
+          <td>
+            <select name="nominator" id="nominator">
+              <option selected value="<%=nomination.nominator%>"><%=nomination.nominator%> (current)</option>
+              <% for (let nominator of nominators) { %> 
+                <option value="<%=nominator%>"><%=nominator%></option>
+              <% } %>
+            </select>
+          </td>
         </tr>
         <tr>
           <td><label for="nomination-poster">Poster Image URL: </label></td>

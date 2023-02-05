@@ -203,12 +203,16 @@ router.get('/:id', (req, res) => {
 
 //EDIT
 router.get('/:id/edit', (req, res) => {
+  Screening.find({}, (err, allScreenings) => { 
     Nomination.findById(req.params.id, (err, foundNom) => {
       res.render('nominations/edit.ejs', {
         tabTitle: foundNom.title + " | Edit Nomination",
-        nomination: foundNom
+        nomination: foundNom,
+        screenings: allScreenings,
+        nominators: nominators_sorted
       })
     }).populate("screening").populate("nominee")
+  })
 })
 
 //CONFIRM DELETE
@@ -230,20 +234,8 @@ router.delete('/:id', (req, res) => {
 
 //UPDATE
 router.put('/:id', (req, res) => {
-    let date = new Date(req.body.forWhatScreening)
-    console.log('original date: ' + date.toString())
-    formattedDate = new Date(
-      date.getUTCFullYear(),
-      date.getUTCMonth(),
-      date.getUTCDate(),
-      date.getUTCHours(),
-      date.getUTCMinutes(),
-      date.getUTCSeconds(),
-      date.getUTCMilliseconds()
-    )
-    console.log('Date with UTC params: ' + formattedDate.toString());
-    req.body.forWhatScreening = formattedDate
-    console.log(req.body.winner)
+    
+    console.log(req.body)
     let checked = req.body.winner === "on" ? true : false
     req.body.winner = checked
     Nomination.findByIdAndUpdate(req.params.id, req.body, (err, foundNomination) => {
@@ -251,7 +243,4 @@ router.put('/:id', (req, res) => {
     })
 })
 
-Screening.findOneAndUpdate({weekID: 70}, {$unset: {selection: null}}, (err, updatedScreening) => {
-  console.log('it is done'); 
-})
 module.exports = router
