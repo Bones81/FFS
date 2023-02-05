@@ -107,19 +107,28 @@ router.post('/', (req, res) => {
   nomObj.winner = req.body.winner === "on" ? true : false
 
   if (req.body.nominee) { // if user chooses a previous nominee to resubmit
-    Screening.findOne({weekID: req.body.screeningID}, (err, foundScreening) => {
-      nomObj.screening = foundScreening._id 
-      Movie.findOne({title: req.body.nominee}, (err, foundMovie) => { // find the movie in the database
+    Screening.findOne({weekID: req.body.screeningID}, (err, foundScreening) => { //assign the screeningID to the new nomination object
+      nomObj.screening = foundScreening._id
+      console.log('screening found')
+      Movie.findOne({title: req.body.nominee}, (err, foundMovie) => { // find the movie in the database and assign it to the nomination
         nomObj.nominee = foundMovie._id
-        if (nomObj.winner) {
-          Movie.findByIdAndUpdate(foundMovie._id, {$set: {screened: true}}, {$set: {screening: foundScreening._id}}, (err, updatedMovie) => {
-          }) // update movie to be an FFS selection, not merely a nomination
-        } 
+        console.log('movie found');
+        // Create the new nomination
         Nomination.create(nomObj, (err, createdNomination) => {
           if(err) console.log(err);
-          res.redirect('/nominations');
+          console.log('nom created');
+          // update movie with any new data for winner, screening, nominations, and nominators
+          Movie.findByIdAndUpdate(foundMovie._id, {$set: {screened: nomObj.winner, screening: foundScreening._id, nominations: [...foundMovie.nominations, createdNomination._id], allNominators: [...foundMovie.allNominators, nomObj.nominator]}}, (err, updatedMovie) => {
+            //finally, update the screening with the new data about the selection and nominations
+            console.log('movie updated: ' + updatedMovie);
+            Screening.findByIdAndUpdate(foundScreening._id, {$set: {selection: foundMovie._id, nominations: [...foundScreening.nominations, createdNomination._id]}}, {new: true}, (err, updatedScreening) => {
+              console.log('screening updated');
+              // and redirect to the nominations archive
+              res.redirect('/nominations');
+            })
+          })
         })
-      })
+      }) 
     })
   } else {
     console.log('taking the else road')
@@ -138,13 +147,12 @@ router.post('/', (req, res) => {
       }
       nomObj.screening = foundScreening._id // regardless, the nomination will be associated with the screening date indicated in the form
       Movie.create(movieObj, (err, createdMovie) => { // finally, you can create the movie
-          err ? console.log(err) : console.log('Movie created: ' + createdMovie);
+          if(err) console.log(err);
           nomObj.nominee = createdMovie._id
           Nomination.create(nomObj, (err, createdNomination) => { // and you can create the nomination
             if(err) console.log(err);
             // now update the movie and the screening to include the newly created info for both the nomination and the movie
             Movie.findByIdAndUpdate(createdMovie._id, {$set: {nominations: [createdNomination._id]}}, {new: true}, (err, updatedMovie) => {
-              console.log('updated: ' + updatedMovie)
               Screening.findByIdAndUpdate(foundScreening._id, {$set: {selection: updatedMovie._id, nominations: [...foundScreening.nominations, createdNomination._id]}}, {new: true}, (err, updatedScreening) => {
                 console.log(updatedScreening)
                 res.redirect('/nominations');
@@ -237,6 +245,6 @@ router.put('/:id', (req, res) => {
       res.redirect('/nominations')
     })
 })
-  
+
 
 module.exports = router
