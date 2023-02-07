@@ -253,8 +253,15 @@ router.get('/:id/confirm-delete', (req, res) => {
 
 //DELETE
 router.delete('/:id', (req, res) => {
-    console.log(req.params.id);
+    console.log('screening id: ' + req.params.id);
     Screening.findByIdAndRemove(req.params.id, (err, deletedScreening) => {
+        // find and delete any related nominations with this screening
+        for (let nomination of deletedScreening.nominations) {
+            Nomination.findByIdAndRemove(nomination._id, (err, deletedNom) => {
+                if (err) console.log(err);
+                console.log('Deleted nomination associated with screening: ' + deletedNom);
+            })
+        }
         if (err) console.log(err);
         console.log('Deleted screening: ' + deletedScreening);
         res.redirect('/screenings')
