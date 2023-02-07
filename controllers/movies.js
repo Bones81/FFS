@@ -152,10 +152,10 @@ router.delete('/:id', (req, res) => {
         }
       }
       // then remove the movie itself
-    Movie.findByIdAndRemove(req.params.id, (err, deletedMovie) => {
-      console.log('Deleted movie: ' + deletedMovie);
-      res.redirect('/movies')
-    })
+        Movie.findByIdAndRemove(req.params.id, (err, deletedMovie) => {
+        console.log('Deleted movie: ' + deletedMovie);
+        res.redirect('/movies')
+        })
     })
 })
 

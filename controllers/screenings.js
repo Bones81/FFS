@@ -241,4 +241,25 @@ router.put('/:id', (req, res) => {
 
 })
 
+//CONFIRM DELETE
+router.get('/:id/confirm-delete', (req, res) => {
+    Screening.findById(req.params.id, (err, foundScreening) => {
+        res.render('screenings/confirm_delete.ejs', {
+        tabTitle: 'Confirm delete of Screening?',
+        screening: foundScreening
+        })
+    })
+})
+
+//DELETE
+router.delete('/:id', (req, res) => {
+    console.log(req.params.id);
+    Screening.findByIdAndRemove(req.params.id, (err, deletedScreening) => {
+        if (err) console.log(err);
+        console.log('Deleted screening: ' + deletedScreening);
+        res.redirect('/screenings')
+    })
+})
+
+
 module.exports = router

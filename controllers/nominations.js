@@ -243,4 +243,9 @@ router.put('/:id', (req, res) => {
     })
 })
 
+// DELETE APP-BREAKING NOMS BY ID, USE WITH CAUTION
+// Nomination.findByIdAndRemove('63df3d39c96c3160fcf15c1b', (err, dNom) => {
+//   console.log(dNom); 
+// })
+
 module.exports = router
