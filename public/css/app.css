@@ -141,6 +141,10 @@ td {
 
 .non-mobile {
   display: none;
+  font-size: 1em;
+  text-align: center;
+  margin: 0;
+  padding: 0;
 }
 
 .screening-date, .selection-title {
@@ -267,6 +271,10 @@ nav a:hover {
 
   .delete-btn {
     font-size: 0.67em;
+  }
+
+  .non-mobile {
+    display: table-cell;
   }
 
   .genre-options {

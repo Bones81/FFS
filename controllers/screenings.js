@@ -148,13 +148,32 @@ const Nomination = require('../models/nominations')
 
 //INDEX
 router.get('/', (req, res) => {
-    Screening.find({}, (err, allScreenings) => {  
+    Screening.find({}).populate(
+        [
+            {
+                path: 'selection', model: 'Movie'
+            }, 
+            {
+                path: 'nominations', 
+                model: 'Nomination', 
+                populate: {
+                    path: 'nominee', 
+                    model: 'Movie'
+                }
+            }
+        ]).exec((err, allScreenings) => { //populate the selection and nominations fields
+        // for (let screen of allScreenings) { // for each screening, populate the titles of each nomination
+        //     for (let nom of screen.nominations) {
+                
+        //     }
+        // }
         res.render('screenings/index.ejs', {
             tabTitle: 'FFS Screenings',
             screenings: allScreenings,
-            screeningWeeks: screeningWeeks
+            screeningWeeks: screeningWeeks,
+            
         })
-    }).populate("selection").populate("nominations")
+    })
 })
 
 //JSON

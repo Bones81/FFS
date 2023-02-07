@@ -54,7 +54,11 @@
               <td>Selection not yet made</td>
             <% } %>
             <td class="non-mobile"><%=screening.notes%></td>
-            <td>Nominee List will go here</td>
+            <td>
+              <% for (let nom of screening.nominations) { %> 
+                <a class="nom-link" href="/nominations/<%=nom._id%>"><%=nom.nominee.title%></a><br/>
+              <% } %>
+            </td>
           </tr>
           <% } %>
         </tbody>
