@@ -34,7 +34,16 @@
         <tr>
           <td class="info-start-text">Nominations</td>
           <td class="info-data-text">
-            List of Nominees with links to their nomination pages will go here.
+            <ol>
+              <% for (let nom of screening.nominations) { %> 
+                <li class="nominee-li">
+                  <% if (nom.winner) { %> 
+                    ⭐️
+                  <% } %>
+                  <a class="nom-link" href="/nominations/<%=nom._id%>"><%=nom.nominee.title%></a><br/>
+                </li>
+              <% } %>
+            </ol>
           </td>
         </tr>
       </table>

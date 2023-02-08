@@ -24,8 +24,8 @@
             <th>Date</th>
             <th>Poster</th>
             <th>Selection</th>
-            <th class="non-mobile">Comments</th>
             <th>Nominees</th>
+            <th class="non-mobile">Comments</th>
           </tr>
         </thead>
         <tbody>
@@ -46,20 +46,24 @@
               </td>
               <td class="selection-title">
                 <a href="/movies/<%=screening.selection._id%>"
-                  ><%=screening.selection.title%></a
-                  >
+                  ><%=screening.selection.title%>
+                </a>
               </td>
             <% } else { %>
               <td>Selection not yet made</td>
               <td>Selection not yet made</td>
             <% } %>
             <td>
-              <% for (let nom of screening.nominations) { %> 
-                <% if (nom.winner) { %> 
-                  ⭐️
+              <ol>
+                <% for (let nom of screening.nominations) { %> 
+                  <li class="nominee-li">
+                    <% if (nom.winner) { %> 
+                      ⭐️
+                    <% } %>
+                    <a class="nom-link" href="/nominations/<%=nom._id%>"><%=nom.nominee.title%></a><br/>
+                  </li>
                 <% } %>
-                <a class="nom-link" href="/nominations/<%=nom._id%>"><%=nom.nominee.title%></a><br/>
-              <% } %>
+              </ol>
             </td>
             <td class="non-mobile"><%=screening.notes%></td>
           </tr>

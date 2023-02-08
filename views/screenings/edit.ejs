@@ -52,7 +52,12 @@
             </select>
           </td>
         </tr>
-        <% } %>
+        <% } else { %>
+          <tr>
+            <td class="info-start-text">⭐ FFS Selection ⭐</td>
+            <td class="info-data-text">Nominations not yet entered</td>
+          </tr>
+        <% } %>  
       </table>
       <input
         type="submit"

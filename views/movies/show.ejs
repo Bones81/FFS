@@ -43,7 +43,9 @@
         <td class="info-data-text">
         <% if(nominations) { %> 
             <% for(let nom of nominations) { %> 
-              <%=nom.screening.weekID%> | <%=nom.screening.date.toString().slice(3,15)%> <br/>
+              <a href="/screenings/<%=nom.screening._id%>">
+                <%=nom.screening.weekID%> | <%=nom.screening.date.toString().slice(3,15)%> <br/>
+              </a>
             <% } %>
         <% } else { %>
             Not yet nominated

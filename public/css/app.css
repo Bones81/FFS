@@ -177,6 +177,10 @@ td img {
   text-align: right;
 }
 
+.screenings-table ol {
+  padding-left: 1em;
+}
+
 #create-btn, .submit-btn {
   font-family: 'Raleway', sans-serif;
   font-size: 1.5em;

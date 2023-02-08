@@ -161,12 +161,8 @@ router.get('/', (req, res) => {
                     model: 'Movie'
                 }
             }
-        ]).exec((err, allScreenings) => { //populate the selection and nominations fields
-        // for (let screen of allScreenings) { // for each screening, populate the titles of each nomination
-        //     for (let nom of screen.nominations) {
-                
-        //     }
-        // }
+        ]
+    ).exec((err, allScreenings) => { //populate the selection and nominations fields
         res.render('screenings/index.ejs', {
             tabTitle: 'FFS Screenings',
             screenings: allScreenings,
@@ -222,7 +218,21 @@ router.post('/', (req, res) => {
 
 //SHOW
 router.get('/:id', (req, res) => {
-    Screening.findById(req.params.id).populate("selection").exec((err, foundScreening) => {
+    Screening.findById(req.params.id).populate(
+        [
+            {
+                path: 'selection',
+                model: 'Movie'
+            },
+            {
+                path: 'nominations',
+                model: 'Nomination',
+                populate: {
+                    path: 'nominee',
+                    model: 'Movie'
+                }
+            }
+        ]).exec((err, foundScreening) => {
         res.render('screenings/show.ejs', {
             tabTitle: foundScreening.date.toString().slice(3,15) + " FFS Screening",
             screening: foundScreening
@@ -232,7 +242,23 @@ router.get('/:id', (req, res) => {
 
 //EDIT
 router.get('/:id/edit', (req, res) => {
-    Screening.findById(req.params.id).populate("selection").populate("nominations").exec((err, foundScreening) => {
+    Screening.findById(req.params.id).populate(
+        [
+            {
+                path: 'selection',
+                model: 'Movie'
+            },
+            {
+                path: 'nominations',
+                model: 'Nomination',
+                populate: {
+                    path: 'nominee',
+                    model: 'Movie'
+                }
+            }
+        ]
+    ).exec((err, foundScreening) => {
+        //The logic below generates the date in the correct format to preset it in the Date of Screening field in edit.ejs
         let date = new Date(foundScreening.date)
         let dateTime = date.getTime()
         dateTime -=(1000 * 60 * 60 * 4)
@@ -253,10 +279,10 @@ router.put('/:id', (req, res) => {
     date = new Date(dateTime)
     req.body.date = date
     req.body.weekID = Number(req.body.weekID)
-    Screening.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, updatedScreening) => {
-        res.redirect('/screenings')
-    })
-    // res.json(req.body)
+    // Screening.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, updatedScreening) => {
+    //     res.redirect('/screenings')
+    // })
+    res.json(req.body)
 
 })
 
@@ -278,7 +304,18 @@ router.delete('/:id', (req, res) => {
         for (let nomination of deletedScreening.nominations) {
             Nomination.findByIdAndRemove(nomination._id, (err, deletedNom) => {
                 if (err) console.log(err);
-                console.log('Deleted nomination associated with screening: ' + deletedNom);
+                console.log('Deleted nomination associated with deleted screening: ' + deletedNom);
+                if (deletedNom.winner) {
+                    Movie.findByIdAndUpdate(deletedNom.nominee, {$set: {screened: false}}, {$unset: {screening: ""}}, {$pull: {nominations: deletedNom.nominee}}, (err, updatedMovie) => {
+                        if (err) console.log(err);
+                        console.log('Nomination removed for movie: ' + updatedMovie);
+                    })
+                } else {
+                    Movie.findByIdAndUpdate(deletedNom.nominee, {$pull: {nominations: deletedNom.nominee}}, (err, updatedMovie) => {
+                        if (err) console.log(err);
+                        console.log('Nomination removed for movie: ' + updatedMovie);
+                    })
+                }
             })
         }
         if (err) console.log(err);
@@ -287,5 +324,14 @@ router.delete('/:id', (req, res) => {
     })
 })
 
+
+// Movie.findByIdAndUpdate('63decff8a0d90f533efbf60e', {$set: {screened: false, screening: null, nominations: [], allNominators: []}}, {new: true}, (err, updatedM) => {
+//     if(err) console.log(err);
+//     console.log(updatedM); 
+// })
+
+// Screening.findByIdAndUpdate('635f7359c03aa0b2c571a9b9', {$set: {nominations: ['63dee0e5ffb06827183ed616']}}, (err, foundScreening) => {
+//     console.log(foundScreening);
+// })
 
 module.exports = router
