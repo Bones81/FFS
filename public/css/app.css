@@ -1,3 +1,9 @@
+:root {
+  --screening-bg: linear-gradient(35deg, rgba(192,192,192,0.2), green 40%, green 60%, rgba(192,192,192,0.2) 100%);
+  --nomination-bg: linear-gradient(35deg, rgba(192,192,192,0.2), orange 40%, orange 60%, rgba(192,192,192,0.2) 100%);
+  --movie-bg: linear-gradient(35deg, rgba(192,192,192,0.2), blue 40%, blue 60%, rgba(192,192,192,0.2) 100%);
+}
+
 body {
   text-align: center;
   background: radial-gradient(lime, green, olive, lime, green, olive, lime, green, olive);
@@ -42,6 +48,7 @@ body {
 .card img {
   object-fit: cover;
   max-width: 90%;
+  max-height: 350px;
 }
 
 .card h3 {
@@ -61,25 +68,35 @@ h1 {
   text-shadow: 1px 1px 5px black;
 }
 
-.movie-data-title, .movie-data-link {
-  background: linear-gradient(35deg, rgba(192,192,192,0.2), blue 40%, blue 60%, rgba(192,192,192,0.2) 100%);
+.data-span {
+  border-radius: 50px;
+
 }
 
-.nomination-data-title, .nomination-data-link {
-  background: linear-gradient(35deg, rgba(192,192,192,0.2), orange 40%, orange 60%, rgba(192,192,192,0.2) 100%);
+.movie-data-title, .movie-data-link, .movie-data-span, .movie-bgcolor {
+  background: var(--movie-bg);
 }
 
-.screening-data-title, .screening-data-link {
-  background: linear-gradient(35deg, rgba(192,192,192,0.2), green 40%, green 60%, rgba(192,192,192,0.2) 100%);
+.nomination-data-title, .nomination-data-link, .nomination-data-span, .nomination-bgcolor {
+  background: var(--nomination-bg);
+}
+
+.screening-data-title, .screening-data-link, .screening-data-span, .screening-bgcolor {
+  background: var(--screening-bg);
 }
 
 .data-title {
-  color: whitesmoke;
-  font-size: 1em;
   width: 70%;
   margin: 0em auto;
   transform: skewX(-10deg) rotate(-5deg);
   text-shadow: 2px 2px 5px black;
+}
+
+.data-span, .data-title {
+  text-shadow: 1px 1px 5px black;
+  color: whitesmoke;
+  font-size: 1em;
+  padding: 0.25em 0.5em;
 }
 
 .blurb {

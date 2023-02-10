@@ -8,12 +8,14 @@
     <h1 class="page-title" id="home-title">
       Fortnightly Film Society Screenings
     </h1>
-    <h2>Click on a screening to see/edit its details</h2>
     <h3 class="blurb">
       Major flops, sci-fi shlock, video game adaptations, high camp, oddball
       curiosities of cinema, or just plain "dumb" movies... The Fortnightly Film
       Society has screened them all!
     </h3>
+    <h2>Click on a screening date to see/edit <span class="screening-bgcolor data-span">screening</span> details</h2>
+    <h2>Click on a nominee to see/edit <span class="nomination-bgcolor data-span">nomination</span> details</h2>
+    <h2>Click on a selection to see/edit <span class="movie-bgcolor data-span">movie</span> details</h2>
 
     <h1>FFS Screenings</h1>
     <div class="flex-container screenings-table">
@@ -29,7 +31,7 @@
           </tr>
         </thead>
         <tbody>
-          <% for (let screening of screenings) { %>
+          <% for (let screening of screenings.reverse()) { %>
           <tr>
             <td class="non-mobile"><%=screening.weekID%></td>
             <td class="screening-date">

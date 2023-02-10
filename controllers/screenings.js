@@ -305,15 +305,22 @@ router.delete('/:id', (req, res) => {
             Nomination.findByIdAndRemove(nomination._id, (err, deletedNom) => {
                 if (err) console.log(err);
                 console.log('Deleted nomination associated with deleted screening: ' + deletedNom);
-                if (deletedNom.winner) {
-                    Movie.findByIdAndUpdate(deletedNom.nominee, {$set: {screened: false}}, {$unset: {screening: ""}}, {$pull: {nominations: deletedNom.nominee}}, (err, updatedMovie) => {
+                if (deletedNom.winner) { //if nominee was a winner, reset the movie to not be a winner; also remove nominee and nominator from respective arrays.
+                    Movie.findByIdAndUpdate(deletedNom.nominee, {$set: {screened: false}}, {$unset: {screening: null}}, {$pull: {nominations: deletedNom._id}}, {$pull: {allNominators: deletedNom.nominator}}, {new: true}, (err, updatedMovie) => {
                         if (err) console.log(err);
                         console.log('Nomination removed for movie: ' + updatedMovie);
                     })
-                } else {
-                    Movie.findByIdAndUpdate(deletedNom.nominee, {$pull: {nominations: deletedNom.nominee}}, (err, updatedMovie) => {
+                } else { //remove nomination and nominator from respective lists, and check if any noms/nominators remain
+                    console.log(deletedNom.nominee);
+                    Movie.findByIdAndUpdate(deletedNom.nominee, {$pull: {nominations: deletedNom._id}}, {$pull: {allNominators: deletedNom.nominator}}, {new: true}, (err, updatedMovie) => {
                         if (err) console.log(err);
-                        console.log('Nomination removed for movie: ' + updatedMovie);
+                        if(!updatedMovie.allNominators) { // if this update removed the last remaining nomination, remove the origNominator as well
+                            Movie.findByIdAndUpdate(deletedNom.nominee, {$set: {origNominator: ""}}, {new: true}, (err, updatedMovie2) => {
+                                console.log('Nomination removed for movie: ' + updatedMovie2);
+                            })
+                        } else {
+                            console.log('Nomination removed for movie: ' + updatedMovie);
+                        }
                     })
                 }
             })
