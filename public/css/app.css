@@ -154,7 +154,7 @@ table {
 }
 
 td {
-  /* padding: 1px; */
+  padding: 0 0.5em;
   border: 1px solid grey;
   font-size: 0.5em;
   font-family: 'Raleway', sans-serif;
@@ -198,6 +198,10 @@ td img {
   text-align: right;
 }
 
+.nominator, .nominee {
+  font-size: 1.5em;
+}
+
 .screenings-table ol {
   padding-left: 1em;
 }
@@ -215,6 +219,10 @@ td img {
   transform: scale(1.2);
   color: white;
   box-shadow: -2px 2px 5px green;
+}
+
+#nominations-list {
+  margin: 0.5em;
 }
 
 #nominations-list td {
