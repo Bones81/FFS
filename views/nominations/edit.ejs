@@ -10,11 +10,17 @@
   <div id="edit-container">
       <h1 class="page-title"><%=nomination.nominee.title.toUpperCase()%></h1>
       <h3>Edit Nomination Details</h3>
+      <img src="<%=nomination.nominee.poster%>" alt="<%=nomination.nominee.title%> poster" />
+      <h2><%=nomination.nominee.title%></h2>
     <form action="/nominations/<%=nomination._id%>?_method=PUT" method="POST" id='edit-form'>
       <table>
+        <input hidden type="text" id='nomination-title' name="title" value="<%=nomination.nominee.title%>" />
+        <input hidden type="url" name="poster" id="nomination-poster" value="<%=nomination.nominee.poster%>" />
         <tr>
-          <td><label for="nomination-title">Title: </label></td>
-          <td><input type="text" id='nomination-title' name="title" value="<%=nomination.nominee.title%>" required size="50"></td>
+          <td class="no-border" colspan="2">To edit movie title or poster url, <a href="/movies/<%=nomination.nominee._id%>/edit">click here</a></td>
+        </tr>
+        <tr>
+          <td class="table-spacer no-border"></td>
         </tr>
         <tr>
           <td><label for="screeningID">Nominating for Screening Date: <br/></label></td>
@@ -40,15 +46,11 @@
           </td>
         </tr>
         <tr>
-          <td><label for="nomination-poster">Poster Image URL: </label></td>
-          <td><input type="url" name="poster" id="nomination-poster" value="<%=nomination.nominee.poster%>" size="50"></td>
-        </tr>
-        <tr>
           <td><label for="blurb">Comments: </label></td>
           <td><textarea name="blurb" id='blurb' rows=4 cols=50><%=nomination.blurb%></textarea></td>
         </tr>
         <tr>
-          <td><label for="winner">Did it win?: </label></td>
+          <td><label for="winner">Did it win? &#127942;: </label></td>
           <td>
             <% if (nomination.winner) { %> 
                 <input type="checkbox" name="winner" id='winner' checked />

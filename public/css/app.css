@@ -53,15 +53,23 @@ h1 {
   font-size: 1.5em;
 }
 
-.movie-data-title {
+.data-link {
+  padding: 0.25em 0.5em;
+  border-radius: 50px;
+  box-shadow: 1px 1px 5px black;  
+  color: whitesmoke;
+  text-shadow: 1px 1px 5px black;
+}
+
+.movie-data-title, .movie-data-link {
   background: linear-gradient(35deg, rgba(192,192,192,0.2), blue 40%, blue 60%, rgba(192,192,192,0.2) 100%);
 }
 
-.nomination-data-title {
+.nomination-data-title, .nomination-data-link {
   background: linear-gradient(35deg, rgba(192,192,192,0.2), orange 40%, orange 60%, rgba(192,192,192,0.2) 100%);
 }
 
-.screening-data-title {
+.screening-data-title, .screening-data-link {
   background: linear-gradient(35deg, rgba(192,192,192,0.2), green 40%, green 60%, rgba(192,192,192,0.2) 100%);
 }
 
@@ -206,6 +214,16 @@ td img {
   font-size: 0.83em;
 }
 
+.table-spacer {
+  height: 0.25em;
+}
+
+.no-border {
+
+  border: none;
+  text-align: center;
+}
+
 .screenings-table ol {
   padding-left: 1em;
 }
@@ -266,7 +284,7 @@ nav a {
 
 nav a:hover {
   transform: scale(1.1);
-  color: blue;
+  /* color: blue; */
 }
 #search-form {
   flex-basis: 100%;
