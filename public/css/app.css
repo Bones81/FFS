@@ -1,7 +1,9 @@
 :root {
-  --screening-bg: linear-gradient(35deg, rgba(192,192,192,0.2), green 40%, green 60%, rgba(192,192,192,0.2) 100%);
-  --nomination-bg: linear-gradient(35deg, rgba(192,192,192,0.2), orange 40%, orange 60%, rgba(192,192,192,0.2) 100%);
-  --movie-bg: linear-gradient(35deg, rgba(192,192,192,0.2), blue 40%, blue 60%, rgba(192,192,192,0.2) 100%);
+  --screening-bg: linear-gradient(35deg, rgba(192,192,192,0.2) 0%, green 40%, green 60%, rgba(192,192,192,0.2) 100%);
+  --nomination-bg: linear-gradient(35deg, rgba(192,192,192,0.2) 0%, orange 40%, orange 60%, rgba(192,192,192,0.2) 100%);
+  --movie-bg: linear-gradient(35deg, rgba(192,192,192,0.2) 0%, blue 40%, blue 60%, rgba(192,192,192,0.2) 100%);
+  --table-row1: linear-gradient(35deg, rgba(192,192,192,0.2) 0%, lightgray 25%, lightgray 75%, rgba(192,192,192,0.2) 100%);
+  --table-row2: linear-gradient(35deg, rgba(192,192,192, 1) 0%, #bbc 25%, #bbc 75%, rgba(192,192,192,1) 100%);
 }
 
 body {
@@ -172,17 +174,33 @@ label {
 }
 
 table {
-  background-color: #bbc;
+  background: var(--table-row2);
   text-align: left;
   /* max-width: 300px; */
   margin: 0 auto;
+  border-collapse: collapse;
+  padding: 1em;
+}
+
+thead {
+  text-align: center;
+}
+
+th {
+  background-color: var(--table-row2);
+  padding-left: 0.25em;
 }
 
 td {
   padding: 0.25em 0.5em;
-  border: 1px solid grey;
+  /* border: 1px solid grey; */
   font-size: 0.5em;
   font-family: 'Raleway', sans-serif;
+  text-align: center;
+}
+
+#nominations-list tr:nth-of-type(2n+1), .screenings-table tr:nth-of-type(2n+1) {
+  background: var(--table-row1);
 }
 
 .non-mobile, .x-large {
@@ -246,6 +264,7 @@ td img {
 ol {
   padding-left: 1em;
   margin: 0;
+  list-style: none;
 }
 
 .screenings-table ol {
