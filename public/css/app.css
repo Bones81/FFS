@@ -72,7 +72,6 @@ h1 {
 
 .data-span {
   border-radius: 50px;
-
 }
 
 .movie-data-title, .movie-data-link, .movie-data-span, .movie-bgcolor {
@@ -209,6 +208,10 @@ td {
   text-align: center;
   margin: 0;
   padding: 0;
+}
+
+.card .winning-nom-text {
+  font-size: 0.75em;
 }
 
 .screening-date, .selection-title {
@@ -450,6 +453,10 @@ nav a:hover {
     font-size: 1em;
   }
 
+  .card .winning-nom-text {
+    font-size: 0.75em;
+  }
+
   td, label {
     font-size: 0.83em;
   }
@@ -485,6 +492,10 @@ nav a:hover {
 
   .card h3, h3 {
     font-size: 1.25em;;
+  }
+
+  .card .winning-nom-text {
+    font-size: 1em;
   }
 
   td, label {
