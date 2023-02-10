@@ -43,7 +43,8 @@
         <td class="info-data-text">
         <% if(nominations) { %> 
             <% for(let nom of nominations) { %> 
-              <a href="/screenings/<%=nom.screening._id%>">
+              <!-- link to nomination, but show screening info -->
+              <a href="/nominations/<%=nom._id%>">
                 <%=nom.screening.weekID%> | <%=nom.screening.date.toString().slice(3,15)%> <br/>
               </a>
             <% } %>
