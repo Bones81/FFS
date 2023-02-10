@@ -10,11 +10,12 @@
   <div class="card show-card">
     <h1 class="page-title"><%=nomination.nominee.title.toUpperCase()%></h1>
     <img src="<%=nomination.nominee.poster%>" alt="poster for <%=nomination.nominee.title%>"><br/>
+    <h1 class="data-title nomination-data-title">Nomination Info</h1>
     <table>
       <tr>
         <td class="info-start-text">Nominated for Screening Date:</td>
         <% let formattedDate = nomination.screening.date.toString().slice(3,15) %> 
-        <td class="info-data-text"><%=formattedDate%></td>
+        <td class="info-data-text"><a href="/screenings/<%=nomination.screening._id%>"><%=nomination.screening.weekID%> | <%=formattedDate%></a></td>
       </tr>
       <tr>
         <td class="info-start-text">Submitted By:</td>
