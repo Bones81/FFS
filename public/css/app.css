@@ -168,7 +168,7 @@ td {
   font-family: 'Raleway', sans-serif;
 }
 
-.non-mobile {
+.non-mobile, .x-large {
   display: none;
   font-size: 1em;
   text-align: center;
@@ -251,7 +251,7 @@ ol {
 }
 
 #nominations-list {
-  margin: 0.5em;
+  margin: 0.5em auto;
 }
 
 #nominations-list td {
@@ -323,8 +323,8 @@ nav a:hover {
 
 @media (min-width: 480px) {
   td img {
-    max-height: 200px;
-    max-width: 150px;
+    max-height: 120px;
+    max-width: 80px;
   }
 
   .screening-date, .selection-title {
@@ -337,6 +337,10 @@ nav a:hover {
 
   .non-mobile {
     display: table-cell;
+  }
+
+  .x-large {
+    display: none;
   }
 
   .genre-options {
@@ -360,8 +364,8 @@ nav a:hover {
 
 @media (min-width: 640px) {
   td img {
-    max-height: 250px;
-    max-width: 180px;
+    max-height: 120px;
+    max-width: 80px;
   }
 
   .screening-date, .selection-title {
@@ -415,8 +419,8 @@ nav a:hover {
   }
 
   td img {
-    max-height: 360px;
-    max-width: 240px;
+    max-height: 120px;
+    max-width: 80px;
   }
 
   .screening-date, .selection-title {

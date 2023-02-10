@@ -35,8 +35,8 @@
               cols="50"
               placeholder="Anything noteworthy about the screening: Brain Trust-decreed themes, nomination trends, FFS developments"
             >
-<%=screening.notes%></textarea
-            >
+              <%=screening.notes%>
+            </textarea>
           </td>
         </tr>
         <% if(screening.nominations.length) { %>
@@ -44,6 +44,7 @@
           <td class="info-start-text">⭐ FFS Selection ⭐</td>
           <td>
             <select name="selection">
+              <option value="">--Selection not yet made--</option>
               <% for(let nomination of screening.nominations) { %>
               <option value="<%=nomination._id%>">
                 <%=nomination.nominee.title%>

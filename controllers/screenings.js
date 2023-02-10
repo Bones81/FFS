@@ -330,7 +330,7 @@ router.delete('/:id', (req, res) => {
 //     console.log(updatedM); 
 // })
 
-// Screening.findByIdAndUpdate('635f7359c03aa0b2c571a9b9', {$set: {nominations: ['63dee0e5ffb06827183ed616']}}, (err, foundScreening) => {
+// Screening.findOneAndUpdate({weekID: 70}, {$unset: {selection: null}}, {new: true}, (err, foundScreening) => {
 //     console.log(foundScreening);
 // })
 

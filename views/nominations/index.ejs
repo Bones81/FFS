@@ -9,27 +9,27 @@
     </header>
     <h1 class="page-title nominations-title">Nominations Archive</h1>
     <h3 class="blurb">Notes: Screenings from prior to the 'Voting Era' are included, with the nominator listed as 'Brain Trust.' 'Brain Trust' may also apply to a film that was chosen (or nominated) unilaterally by the FFS Brain Trust, in lieu of a formal or informal nomination or voting process for that screening week. Additional nominations by specific members from prior to the Voting Era are included. The Voting Era is regarded as beginning with the nominations and votes for the FFS's 6/20/2020 screening, won by <em>Cutthroat Island</em> via a Brain-Trust-formalized ranked choice voting process.</h3>
+
     <table id="nominations-list">
       <thead>
         <th>Screening</th>
         <th>Nominator</th>
         <th>Nominee</th>
-        <th>Comments</th>
+        <th>View Nom</th>
       </thead>
       <tbody>
         <% for (let nomination of nominations) { %>
           <tr>
-            <td><%=nomination.screening.date.toString().slice(3,15)%></td>
-            <td><%=nomination.nominator%></td>
-            <td><%=nomination.nominee.title%></td>
-            <td><%=nomination.blurb%></td>
+              <td><%=nomination.screening.date.toString().slice(3,15)%></td>
+              <td><%=nomination.nominator%></td>
+              <td><%=nomination.nominee.title%></td>
+              <td class="text-center no-border"><button><a href="/nominations/<%=nomination._id%>">View</a></button></td>
           </tr>
         <% } %>
       </tbody>
     </table>
     <div class="flex-container">
         <% for (let nomination of nominations) { %>
-          
           <a href="/nominations/<%=nomination.id%>" class="card-link">
             <div class="card">             
               <img src="<%=nomination.nominee.poster%>" alt="pic of <%=nomination.nominee.title%>"></br>
