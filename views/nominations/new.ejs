@@ -22,14 +22,14 @@ genre: [String] -->
   <form action="/nominations" method="POST" id="new-form">
     <table>
         <tr>
-            <td class="info-start-text">Person Submitting Nomination: </td>
-            <td class="new-data-text">
+            <td class="info-start-text no-border">Person Submitting Nomination: </td>
+            <td class="new-data-text no-border">
               <%=nominator%> <input hidden type="text" name="nominator" value="<%=nominator%>" />
             </td>
         </tr>
         <tr>
-            <td class="info-start-text">Nominating for Screening Date: </td>
-            <td class="new-data-text">
+            <td class="info-start-text no-border">Nominating for Screening Date: </td>
+            <td class="new-data-text no-border">
               <%=screening.weekID%> | <%=screening.date.toString().slice(3,15)%>
               <input hidden name="screeningID" value=<%=screening.weekID%> />
             </td>

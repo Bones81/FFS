@@ -203,12 +203,12 @@ td img {
 }
 
 .info-data-text {
-  text-align: right;
-}
-
-.nomination-show-table .info-data-text {
   text-align: center;
 }
+
+/* .nomination-show-table .info-data-text {
+  text-align: center;
+} */
 
 .nominator, .nominee {
   font-size: 0.83em;
@@ -219,9 +219,16 @@ td img {
 }
 
 .no-border {
-
   border: none;
+}
+
+.text-center {
   text-align: center;
+}
+
+ol {
+  padding-left: 1em;
+  margin: 0;
 }
 
 .screenings-table ol {

@@ -57,7 +57,17 @@
             <td class="info-start-text">⭐ FFS Selection ⭐</td>
             <td class="info-data-text">Nominations not yet entered</td>
           </tr>
-        <% } %>  
+        <% } %>
+        <tr>
+          <td class="info-start-text">Edit Nominations:</td>
+          <td class="info-data-text">Click a nomination to edit its details: <br/>
+            <ol class="nominee-list">
+              <% for (let nomination of screening.nominations) { %> 
+                <li class="nominee-li"><a href="/nominations/<%=nomination._id%>/edit"><%=nomination.nominee.title%></a></li><br/>
+              <% } %>
+            </ol>
+          </td>
+        </tr>
       </table>
       <input
         type="submit"
