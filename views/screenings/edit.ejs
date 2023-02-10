@@ -44,9 +44,17 @@
           <td class="info-start-text">⭐ FFS Selection ⭐</td>
           <td>
             <select name="selection">
-              <option value="">--Selection not yet made--</option>
+              <option value=""
+                <% if(!screening.selection) { %>
+                selected
+              <% } %>
+              >--Selection not yet made--</option>
               <% for(let nomination of screening.nominations) { %>
-              <option value="<%=nomination._id%>">
+              <option value="<%=nomination._id%>"
+                <% if(screening.selection === nomination.nominee) { %> 
+                  selected
+                <% } %>
+                >
                 <%=nomination.nominee.title%>
               </option>
               <% } %>

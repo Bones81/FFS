@@ -158,8 +158,13 @@ router.post('/', (req, res) => {
             if(err) console.log(err);
             // now update the movie and the screening to include the newly created info for both the nomination and the movie
             Movie.findByIdAndUpdate(createdMovie._id, {$set: {nominations: [createdNomination._id]}}, {new: true}, (err, updatedMovie) => {
-              Screening.findByIdAndUpdate(foundScreening._id, {$set: {selection: updatedMovie._id, nominations: [...foundScreening.nominations, createdNomination._id]}}, {new: true}, (err, updatedScreening) => {
+              Screening.findByIdAndUpdate(foundScreening._id, {$set: {nominations: [...foundScreening.nominations, createdNomination._id]}}, {new: true}, (err, updatedScreening) => {
                 console.log(updatedScreening)
+                if(movieObj.screened === true) { //only if movie was a winning nom, set the screening selection to reflect that
+                  Screening.findByIdAndUpdate(foundScreening._id, {$set: {selection: updatedMovie._id}}, {new: true}, (err, updatedScreening2) => {
+                    console.log('Set screening selection for screening: ' + updatedScreening2);
+                  })
+                }
                 res.redirect('/nominations');
               })
             })
