@@ -154,7 +154,7 @@ table {
 }
 
 td {
-  padding: 0 0.5em;
+  padding: 0.25em 0.5em;
   border: 1px solid grey;
   font-size: 0.5em;
   font-family: 'Raleway', sans-serif;
@@ -198,8 +198,12 @@ td img {
   text-align: right;
 }
 
+.nomination-show-table .info-data-text {
+  text-align: center;
+}
+
 .nominator, .nominee {
-  font-size: 1.5em;
+  font-size: 0.83em;
 }
 
 .screenings-table ol {
@@ -275,7 +279,7 @@ nav a:hover {
 
 .page-title {
   background-image: url(/img/film-negative-brown.jpeg);
-  background-size: contain;
+  background-size: cover;
   background-position: center;
   /* background-repeat: no-repeat; */
   color: white;
@@ -347,8 +351,16 @@ nav a:hover {
     font-size: 0.83em;
   }
 
+  .page-title {
+    background-size: contain;
+  }
+
   .page-title, .data-title {
     font-size: 1.5em;
+  }
+
+  .nominator, .nominee {
+    font-size: 1em;
   }
 }
 
@@ -412,5 +424,9 @@ nav a:hover {
 
   td, label {
     font-size: 1em;
+  }
+
+  .nominator, .nominee {
+    font-size: 1.25em;
   }
 }
