@@ -326,6 +326,8 @@ router.get('/:id/edit', (req, res) => {
         dateTime -=(1000 * 60 * 60 * 4)
         date = new Date(dateTime)
         date = date.toISOString().slice(0,10)
+        console.log('screening.selection = ' + foundScreening.selection);
+        console.log('screening.nominations = ' + foundScreening.nominations);
         res.render('screenings/edit.ejs', {
             tabTitle: "Edit " + foundScreening.date.toString().slice(3,15) + " Screening",
             screening: foundScreening,
