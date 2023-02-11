@@ -12,7 +12,28 @@ const seedMoviesNew = require('../models/seed_movies_new')
 
 const Nomination = require('../models/nominations')
 
+const updateWeekIDs = () => {
+    Screening.find({}, (err, allScreenings) => { 
+        const dates = []
+        for(let screening of allScreenings) { // for each screening, add its date to a list of all screening dates
+            dates.push(screening.date)
+        }
+        // sort the dates chronologically
+        dates.sort((a, b) => {
+            if (a>b) {
+                return 1
+            } else {
+                return -1
+            }
+        })
 
+        for (let screening of allScreenings) { //assign weekIDs using order from sorted dates array
+            Screening.findByIdAndUpdate(screening._id, {$set: {weekID: dates.indexOf(screening.date) + 1}}, {new: true}, (err, updatedScreening) => {
+            })
+        }
+        console.log('weekIDs updated') ;
+    })
+}
 //REMOVE LAST SCREENING
 // Screening.findByIdAndRemove("633e8748e26cc37fe711d20f", (err, deletedScreen) => {
 //     console.log(deletedScreen);
@@ -194,6 +215,12 @@ router.get('/json', (req, res) => {
     }).populate("selection").populate("nominations")
 })
 
+router.get('/:id/json', (req, res) => {
+    Screening.findById(req.params.id, (err, foundScreening) => {
+        res.json(foundScreening);
+    })
+})
+
 
 //NEW
 router.get('/new', (req, res) => {
@@ -232,8 +259,9 @@ router.post('/', (req, res) => {
             })
         }
 
+        // assign the correct weekID to the new screening object
         screenObj.weekID = dates.indexOf(screenObj.date) + 1
-
+        //finally, create the new screening
         Screening.create(screenObj, (err, createdScreening) => {
             err ? console.log(err) : console.log(createdScreening)
             res.redirect('/screenings')
@@ -313,10 +341,22 @@ router.put('/:id', (req, res) => {
     date = new Date(dateTime)
     req.body.date = date
     req.body.weekID = Number(req.body.weekID)
+    if (req.body.selection === "") {
+        req.body.selection = null
+    }
+    Screening.findById(req.params.id, (err, foundScreening) => {
+        req.body.nominations = foundScreening.nominations;
+        // res.json(req.body)
+        Screening.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, updatedScreening) => {
+            console.log('Screening updated: ' + updatedScreening);
+            //now adjust weekIDs to reflect any updated dates
+            updateWeekIDs();
+            res.redirect('/screenings')
+        })
+    })
     // Screening.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, updatedScreening) => {
     //     res.redirect('/screenings')
     // })
-    res.json(req.body)
 
 })
 

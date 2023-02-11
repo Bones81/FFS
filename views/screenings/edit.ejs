@@ -34,9 +34,8 @@
               rows="4"
               cols="50"
               placeholder="Anything noteworthy about the screening: Brain Trust-decreed themes, nomination trends, FFS developments"
-            >
-              <%=screening.notes%>
-            </textarea>
+            ><%=screening.notes%></textarea> 
+            <!-- Adding space inside previous textarea element causes \r\n to be added to text box. Leave no spaces to avoid this. -->
           </td>
         </tr>
         <% if(screening.nominations.length) { %>
@@ -64,6 +63,7 @@
         <% } else { %>
           <tr>
             <td class="info-start-text">⭐ FFS Selection ⭐</td>
+            <input hidden type="text" value="" name="selection" />
             <td class="info-data-text">Nominations not yet entered</td>
           </tr>
         <% } %>
