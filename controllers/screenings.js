@@ -148,7 +148,7 @@ const Nomination = require('../models/nominations')
 
 //INDEX
 router.get('/', (req, res) => {
-    Screening.find({}).populate(
+    Screening.find({}).populate(//populate the selection and nominations fields
         [
             {
                 path: 'selection', model: 'Movie'
@@ -162,7 +162,11 @@ router.get('/', (req, res) => {
                 }
             }
         ]
-    ).exec((err, allScreenings) => { //populate the selection and nominations fields
+    ).exec((err, allScreenings) => { 
+        //put the screenings in chronological order
+        allScreenings.sort( (a,b) => {
+            if (a.weekID > b.weekID) { return 1 } else { return -1 }
+        })
         res.render('screenings/index.ejs', {
             tabTitle: 'FFS Screenings',
             screenings: allScreenings,
@@ -202,18 +206,48 @@ router.get('/new', (req, res) => {
 //CREATE
 router.post('/', (req, res) => {
     const screenObj = {...req.body}
-    Screening.findOne({}).sort({weekID: -1}).exec((err, foundScreening) => { //find screening w/ highest weekID, then +1 to create new weekID
-        screenObj.weekID = foundScreening.weekID + 1
-        //figure out date
-        let date = new Date(screenObj.date)
-        let dateTimeAt830 = date.getTime() + (1000*60*60*24.5)
-        date = new Date(dateTimeAt830)
-        screenObj.date = date
+    //figure out date
+    let date = new Date(screenObj.date)
+    let dateTimeAt830 = date.getTime() + (1000*60*60*24.5)
+    date = new Date(dateTimeAt830)
+    screenObj.date = date
+    Screening.find({}, (err, allScreenings) => {
+        const dates = [screenObj.date]
+        for(let screening of allScreenings) { // for each screening, add its date to a list of all screening dates
+            dates.push(screening.date)
+        }
+        // sort the dates chronologically
+        dates.sort((a, b) => {
+            if (a>b) {
+                return 1
+            } else {
+                return -1
+            }
+        })
+
+        // console.log(dates.indexOf(screenObj.date) + 1);
+        for (let screening of allScreenings) {
+            Screening.findByIdAndUpdate(screening._id, {$set: {weekID: dates.indexOf(screening.date) + 1}}, {new: true}, (err, updatedScreening) => {
+                console.log('weekID ' + updatedScreening.weekID + ' assigned to ' + screening.date) ;
+            })
+        }
+
+        screenObj.weekID = dates.indexOf(screenObj.date) + 1
+
         Screening.create(screenObj, (err, createdScreening) => {
             err ? console.log(err) : console.log(createdScreening)
             res.redirect('/screenings')
         })
-    }) 
+    })
+
+    // Screening.findOne({}).sort({weekID: -1}).exec((err, foundScreening) => { //find screening w/ highest weekID, then +1 to create new weekID; this assumes user is only adding new screenings in chronological order
+    //     // need to change to dynamically assign weekID based on when new screening falls. If it falls before any existing screening, reassign weekIDs to all screenings that come after the new screening chronologically.
+    //     screenObj.weekID = foundScreening.weekID + 1
+    //     Screening.create(screenObj, (err, createdScreening) => {
+    //         err ? console.log(err) : console.log(createdScreening)
+    //         res.redirect('/screenings')
+    //     })
+    // }) 
 })
 
 //SHOW
@@ -325,6 +359,27 @@ router.delete('/:id', (req, res) => {
                 }
             })
         }
+        //adjust weekIDs of remaining screenings as necessary using below code
+        Screening.find({}, (err, allScreenings) => { 
+            const dates = []
+            for(let screening of allScreenings) { // for each screening, add its date to a list of all screening dates
+                dates.push(screening.date)
+            }
+            // sort the dates chronologically
+            dates.sort((a, b) => {
+                if (a>b) {
+                    return 1
+                } else {
+                    return -1
+                }
+            })
+    
+            for (let screening of allScreenings) { //assign weekIDs using order from sorted dates array
+                Screening.findByIdAndUpdate(screening._id, {$set: {weekID: dates.indexOf(screening.date) + 1}}, {new: true}, (err, updatedScreening) => {
+                    console.log('weekID ' + updatedScreening.weekID + ' assigned to ' + screening.date) ;
+                })
+            }
+        })
         if (err) console.log(err);
         console.log('Deleted screening: ' + deletedScreening);
         res.redirect('/screenings')
