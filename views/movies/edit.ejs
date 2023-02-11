@@ -13,8 +13,8 @@
     <form action="/movies/<%=movie._id%>?_method=PUT" method="POST" id='edit-form'>
       <table>
         <tr>
-          <td><label for="title"><span class="red">* </span>Title: </label></td>
-          <td><input type="text" id='title' name="title" value="<%=movie.title%>" required size="50"></td>
+          <td class="info-start-text"><label for="title"><span class="red">* </span>Title: </label></td>
+          <td class="new-data-text"><input type="text" id='title' name="title" value="<%=movie.title%>" required size="50"></td>
         </tr>
         <tr>
           <td class="info-start-text"><label for="poster">Poster Image: </label></td>

@@ -109,7 +109,7 @@ router.post('/', (req, res) => {
   if (req.body.nominee) { // if user chooses a previous nominee to resubmit
     Screening.findOne({weekID: req.body.screeningID}, (err, foundScreening) => { //assign the screeningID to the new nomination object
       nomObj.screening = foundScreening._id
-      Movie.findOne({title: req.body.nominee}, (err, foundMovie) => { // find the movie in the database and assign it to the nomination
+      Movie.findOne({title: req.body.nominee}, (err, foundMovie) => { // find the movie in the database and assign it to the nomination object
         nomObj.nominee = foundMovie._id
         // Create the new nomination
         Nomination.create(nomObj, (err, createdNomination) => {
@@ -153,8 +153,9 @@ router.post('/', (req, res) => {
       nomObj.screening = foundScreening._id // regardless, the nomination will be associated with the screening date indicated in the form
       Movie.create(movieObj, (err, createdMovie) => { // finally, you can create the movie
           if(err) console.log(err);
+          //assign the newly created movie to the nomination object
           nomObj.nominee = createdMovie._id
-          Nomination.create(nomObj, (err, createdNomination) => { // and you can create the nomination
+          Nomination.create(nomObj, (err, createdNomination) => { // and then you can create the nomination
             if(err) console.log(err);
             // now update the movie and the screening to include the newly created info for both the nomination and the movie
             Movie.findByIdAndUpdate(createdMovie._id, {$set: {nominations: [createdNomination._id]}}, {new: true}, (err, updatedMovie) => {
@@ -162,7 +163,7 @@ router.post('/', (req, res) => {
                 console.log(updatedScreening)
                 if(movieObj.screened === true) { //only if movie was a winning nom, set the screening selection to reflect that
                   Screening.findByIdAndUpdate(foundScreening._id, {$set: {selection: updatedMovie._id}}, {new: true}, (err, updatedScreening2) => {
-                    console.log('Set screening selection for screening: ' + updatedScreening2);
+                    console.log('Set selection for screening: ' + updatedScreening2);
                   })
                 }
                 res.redirect('/nominations');
