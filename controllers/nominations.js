@@ -91,6 +91,9 @@ router.get('/', (req, res) => {
 //NEW
 router.get('/new', (req, res) => {
   Screening.find({}, (err, screenings) => {
+    screenings.sort((a,b) => {
+      if (a.date > b.date) { return 1 } else { return -1 };
+    })
     Movie.find({}, (err, movies) => {
       res.render('nominations/create_nomination.ejs', {
         tabTitle: 'Create Nomination',

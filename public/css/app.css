@@ -1,7 +1,7 @@
 :root {
-  --screening-bg: linear-gradient(35deg, rgba(192,192,192,0.2) 0%, green 40%, green 60%, rgba(192,192,192,0.2) 100%);
-  --nomination-bg: linear-gradient(35deg, rgba(192,192,192,0.2) 0%, orange 40%, orange 60%, rgba(192,192,192,0.2) 100%);
-  --movie-bg: linear-gradient(35deg, rgba(192,192,192,0.2) 0%, blue 40%, blue 60%, rgba(192,192,192,0.2) 100%);
+  --screening-bg: linear-gradient(35deg, rgba(192,192,192,0.2) 0%, green 50%, green 50%, rgba(192,192,192,0.2) 100%);
+  --nomination-bg: linear-gradient(35deg, rgba(192,192,192,0.2) 0%, orange 50%, orange 50%, rgba(192,192,192,0.2) 100%);
+  --movie-bg: linear-gradient(35deg, rgba(192,192,192,0.2) 0%, blue 50%, blue 50%, rgba(192,192,192,0.2) 100%);
   --table-row1: linear-gradient(35deg, rgba(192,192,192,0.2) 0%, lightgray 25%, lightgray 75%, rgba(192,192,192,0.2) 100%);
   --table-row2: linear-gradient(35deg, rgba(192,192,192, 1) 0%, #bbc 25%, #bbc 75%, rgba(192,192,192,1) 100%);
 }
@@ -25,6 +25,10 @@ body {
   margin: 1em auto;
 }
 
+.movies-container {
+  gap: 1em;
+}
+
 .card-link {
   text-decoration: none;
   color: black;
@@ -40,6 +44,19 @@ body {
   text-align: center;
   padding: 1em;
   background: linear-gradient(225deg, whitesmoke, silver, whitesmoke);
+}
+
+.movie-card {
+  height: 360px;
+  display: grid;
+  place-items: center;
+  gap: 0;
+  padding: 0.25em;
+  margin: 0;
+}
+
+.movie-card img {
+  height: 250px;
 }
 
 .show-card {
@@ -212,6 +229,10 @@ td {
 
 .card .winning-nom-text {
   font-size: 0.75em;
+}
+
+.card .winner-text, .card .movie-title {
+  font-size: 1em;
 }
 
 .screening-date, .selection-title {

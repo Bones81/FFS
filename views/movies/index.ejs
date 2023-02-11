@@ -36,16 +36,16 @@
     <input type="submit" name="sortDatabase" id="sort-database-btn" value="Sort">
   </form>
 
-  <div class="flex-container">
+  <div class="flex-container movies-container">
     <% for (let movie of movies) { %>
       <a href="/movies/<%=movie._id%>" class="card-link">
-        <div class="card">
-            <% if (movie.screened) { %>
-            <h3>⭐ FFS Selection ⭐</h3>
-            <% } %>
-            <img src="<%=movie.poster%>" loading="lazy" alt="<%=movie.title%> poster"></br>
-            <span><%=movies.indexOf(movie) + 1%></span>
-            <h3><%=movie.title%></h3>
+        <div class="card movie-card">
+          <span><%=movies.indexOf(movie) + 1%></span>
+          <% if (movie.screened) { %>
+          <h3 class="winner-text">⭐ FFS Selection ⭐</h3>
+          <% } %>
+          <img src="<%=movie.poster%>" loading="lazy" alt="<%=movie.title%> poster">
+          <h3 class="movie-title"><%=movie.title%></h3>
         </div>
       </a>
     <% } %>
