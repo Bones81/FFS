@@ -399,27 +399,8 @@ router.delete('/:id', (req, res) => {
                 }
             })
         }
-        //adjust weekIDs of remaining screenings as necessary using below code
-        Screening.find({}, (err, allScreenings) => { 
-            const dates = []
-            for(let screening of allScreenings) { // for each screening, add its date to a list of all screening dates
-                dates.push(screening.date)
-            }
-            // sort the dates chronologically
-            dates.sort((a, b) => {
-                if (a>b) {
-                    return 1
-                } else {
-                    return -1
-                }
-            })
-    
-            for (let screening of allScreenings) { //assign weekIDs using order from sorted dates array
-                Screening.findByIdAndUpdate(screening._id, {$set: {weekID: dates.indexOf(screening.date) + 1}}, {new: true}, (err, updatedScreening) => {
-                    console.log('weekID ' + updatedScreening.weekID + ' assigned to ' + screening.date) ;
-                })
-            }
-        })
+        //adjust weekIDs of remaining screenings as necessary using updateWeekIDs
+        updateWeekIDs();
         if (err) console.log(err);
         console.log('Deleted screening: ' + deletedScreening);
         res.redirect('/screenings')
