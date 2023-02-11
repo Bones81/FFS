@@ -65,6 +65,12 @@ router.get('/json', (req, res) => {
   })
 })
 
+router.get('/:id/json', (req, res) => {
+  Nomination.findById(req.params.id, (err, foundNom) => {
+    res.json(foundNom)
+  })
+})
+
 
 //INDEX
 router.get('/', (req, res) => {

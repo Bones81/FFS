@@ -57,6 +57,12 @@ router.get('/json/seed_movies_new', (req, res) => {
     res.json(seedMoviesNew)
 })
 
+router.get('/:id/json', (req, res) => {
+    Movie.findById(req.params.id, (err, foundMovie) => {
+        res.json(foundMovie)
+    }) 
+})
+
 // MAP OVER OLD DATA TO NEW MOVIE SCHEMA
 // const winningMovies = movieSeed
 // // console.log(winningMovies)
@@ -148,10 +154,11 @@ router.delete('/:id', (req, res) => {
       if (foundMovie.nominations) {
         for (let nom of foundMovie.nominations) {
             Nomination.findByIdAndRemove(nom._id, (err, deletedNomination) => {
-                 console.log('deleted' + deletedNomination)
+                 console.log('deleted ' + deletedNomination)
             })
         }
       }
+      //include code to update any screening that might have been associated with the movie? - very edge case
       // then remove the movie itself
         Movie.findByIdAndRemove(req.params.id, (err, deletedMovie) => {
         console.log('Deleted movie: ' + deletedMovie);
@@ -336,6 +343,10 @@ router.put('/:id', (req, res) => {
     }
 })
 
+// remove nominations/nominators from movie
+// Movie.findByIdAndUpdate('6341124db86cd74b233755c0', {$set: {nominations: [], allNominators: [], origNominator: '', screening: null}}, {new: true}, (err, updatedMovie) => {
+//     console.log(updatedMovie)
+// })
 
 //DROP COLLECTION -- CAUTION!!!!!!!!!
 // Movie.collection.drop()

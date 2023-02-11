@@ -50,7 +50,7 @@
               >--Selection not yet made--</option>
               <% for(let nomination of screening.nominations) { %>
               <option value="<%=nomination._id%>"
-                <% if(screening.selection === nomination.nominee) { %> 
+                <% if(screening.selection.title === nomination.nominee.title) { %> 
                   selected
                 <% } %>
                 >
