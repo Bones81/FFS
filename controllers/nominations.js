@@ -18,6 +18,7 @@ const genres = [
   'Experimental',
   'Fantasy',
   'Historical',
+  'Holiday',
   'Musical',
   'Mystery',
   'Horror',
@@ -77,6 +78,13 @@ router.get('/', (req, res) => {
   Screening.find({}, (err, screenings) => {
     Movie.find({}, (err, movies) => {
       Nomination.find({}, (err, nominations) => {
+        nominations.sort((a,b) => {
+          if (a.screening.date < b.screening.date) {
+            return 1
+          } else {
+            return -1
+          }
+        })
         res.render('nominations/index.ejs', {
           tabTitle: 'FFS Nominations',
           nominations: nominations,
