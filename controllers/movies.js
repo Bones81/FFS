@@ -151,18 +151,23 @@ router.get('/:id/confirm-delete', (req, res) => {
 router.delete('/:id', (req, res) => {
     // first find and delete all nominations associated with the movie
     Movie.findById(req.params.id, (err, foundMovie) => {
-      if (foundMovie.nominations) {
-        for (let nom of foundMovie.nominations) {
-            Nomination.findByIdAndRemove(nom._id, (err, deletedNomination) => {
-                 console.log('deleted ' + deletedNomination)
+        if (foundMovie.nominations) {
+            for (let nom of foundMovie.nominations) {
+                Nomination.findByIdAndRemove(nom._id, (err, deletedNomination) => {
+                    console.log('deleted ' + deletedNomination)
+                })
+            }
+        }
+        //include code to update any screening that might have been associated with the movie? - very edge case
+        if(foundMovie.screened) {
+            Screening.findOneAndUpdate({selection: foundMovie._id}, {$set: {selection: null}}, {new: true}, (err, updatedScreening) => {
+                console.log('reset selection for screening ' + updatedScreening.weekID); 
             })
         }
-      }
-      //include code to update any screening that might have been associated with the movie? - very edge case
-      // then remove the movie itself
+        // then remove the movie itself
         Movie.findByIdAndRemove(req.params.id, (err, deletedMovie) => {
-        console.log('Deleted movie: ' + deletedMovie);
-        res.redirect('/movies')
+            console.log('Deleted movie: ' + deletedMovie);
+            res.redirect('/movies')
         })
     })
 })
@@ -351,17 +356,37 @@ router.put('/:id', (req, res) => {
 //DROP COLLECTION -- CAUTION!!!!!!!!!
 // Movie.collection.drop()
 
-const checkCastForActor = (actor) => {
-    Movie.find({cast: actor, screened: true}, (err, foundMovies) => {
-        for (let movie of foundMovies) {
-            console.log(actor + ' is in ' + movie.title);
+// const checkCastForActor = (actor) => {
+//     Movie.find({cast: actor, screened: true}, (err, foundMovies) => {
+//         for (let movie of foundMovies) {
+//             console.log(actor + ' is in ' + movie.title);
+//         }
+//     })
+// }
+
+// let wf = "William Fichtner"
+// let arnold = "Arnold Schwarzenegger"
+
+// checkCastForActor(arnold)
+
+
+const findWinningMoviesNoms = () => {
+    Movie.find({screened: true}, (err, screenedMovies) => {
+        for (let movie of screenedMovies) {
+            if(movie.nominations.length) {
+                console.log(movie.title, movie.origNominator);
+            }
         }
     })
 }
 
-let wf = "William Fichtner"
-let arnold = "Arnold Schwarzenegger"
+// findWinningMoviesNoms()
 
-checkCastForActor(arnold)
 
+const fixSanta = () => {
+    Movie.findOneAndUpdate({title: "Santa Claus Conquers the Martians"}, {$set: {allNominators: ["Ben Beckley-Chayes"]}}, {new: true}, (err, updatedMovie) => {
+        console.log(updatedMovie);
+    })
+}
+// fixSanta()
 module.exports = router

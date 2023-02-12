@@ -98,7 +98,7 @@ router.get('/', (req, res) => {
 
 //NEW
 router.get('/new', (req, res) => {
-  Screening.find({}, (err, screenings) => {
+  Screening.find({}, (err, screenings) => { //show screenings in reverse date order
     screenings.sort((a,b) => {
       if (a.date > b.date) { return 1 } else { return -1 };
     })
@@ -141,7 +141,7 @@ router.post('/', (req, res) => {
                 res.redirect('/nominations');
               })
             })
-          } else { // if it's not a winner, update appropriately
+          } else { // if it's not a winner, update appropriately.
             Movie.findByIdAndUpdate(foundMovie._id, {$set: {screened: nomObj.winner, nominations: [...foundMovie.nominations, createdNomination._id], allNominators: [...foundMovie.allNominators, nomObj.nominator]}}, (err, updatedMovie) => {
               Screening.findByIdAndUpdate(foundScreening._id, {$set: {nominations: [...foundScreening.nominations, createdNomination._id]}}, {new: true}, (err, updatedScreening) => {
                 // and redirect to the nominations archive
@@ -152,7 +152,7 @@ router.post('/', (req, res) => {
         })
       }) 
     })
-  } else {
+  } else { //if it's a first-time nominee
     console.log('taking the else road')
     let movieObj = req.body
     let castArray = req.body.cast.split(', ')
@@ -175,11 +175,12 @@ router.post('/', (req, res) => {
           Nomination.create(nomObj, (err, createdNomination) => { // and then you can create the nomination
             if(err) console.log(err);
             // now update the movie and the screening to include the newly created info for both the nomination and the movie
-            Movie.findByIdAndUpdate(createdMovie._id, {$set: {nominations: [createdNomination._id]}}, {new: true}, (err, updatedMovie) => {
-              Screening.findByIdAndUpdate(foundScreening._id, {$set: {nominations: [...foundScreening.nominations, createdNomination._id]}}, {new: true}, (err, updatedScreening) => {
-                console.log(updatedScreening)
+            Movie.findByIdAndUpdate(createdMovie._id, {$set: {nominations: [createdNomination._id]}}, {new: true}, (err, updatedMovie) => { //associate nomination with movie
+              Screening.findByIdAndUpdate(foundScreening._id, {$set: {nominations: [...foundScreening.nominations, createdNomination._id]}}, {new: true}, (err, updatedScreening) => { //associate nomination with screening
+                err ? console.log(err) : console.log(updatedScreening)
                 if(movieObj.screened === true) { //only if movie was a winning nom, set the screening selection to reflect that
                   Screening.findByIdAndUpdate(foundScreening._id, {$set: {selection: updatedMovie._id}}, {new: true}, (err, updatedScreening2) => {
+                    err ? console.log(err) : console.log(updatedScreening2);
                     console.log('Set selection for screening: ' + updatedScreening2);
                   })
                 }
@@ -251,7 +252,30 @@ router.get('/:id/confirm-delete', (req, res) => {
 //DELETE
 router.delete('/:id', (req, res) => {
     Nomination.findByIdAndRemove(req.params.id, (err, foundNomination) => {
-      res.redirect('/nominations')
+      Movie.findById(foundNomination.nominee, (err, relatedMovie) => { //find the related movie, which becomes the template for a movie update object
+        console.log('movie data prior to update: ' + relatedMovie);
+        if (relatedMovie.nominations.length === 1) { // if this is the only remaining nomination for that movie, remove the origNominator value
+          relatedMovie.origNominator = ""
+        }
+        if (relatedMovie.screened) { // edge case hypothetical handling: if deleted nomination was a winning nom/movie, change movie's data to make it an unscreened movie
+          relatedMovie.screened = false
+          relatedMovie.screening = null
+          Screening.findOneAndUpdate({selection: relatedMovie._id}, {$set: {selection: null}}, {new: true}, (err, updatedScreening) => { //would have to update screening as well
+            console.log('reset selection for screening ' + updatedScreening.weekID); 
+          })
+        }
+        //then find any one instance of the nominator to remove from the movie's nominators list
+        let nominatorIndex = relatedMovie.allNominators.indexOf(foundNomination.nominator)
+        relatedMovie.allNominators.splice(nominatorIndex, 1)
+        //remove nomination from movie's nominations list
+        let nominationIndex = relatedMovie.nominations.indexOf(foundNomination._id)
+        relatedMovie.nominations.splice(nominationIndex, 1)
+        //then, update the movie's nominations, origNominator (if necessary), and allNominators fields
+        Movie.findByIdAndUpdate(foundNomination.nominee, relatedMovie, {new: true}, (err, updatedMovie) => {
+          console.log('nomination removed from ' + updatedMovie);
+          res.redirect('/nominations')
+        })
+      })
     })
 })
 
