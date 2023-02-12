@@ -230,7 +230,7 @@ router.get('/:id/edit', (req, res) => {
   Screening.find({}, (err, allScreenings) => { 
     Nomination.findById(req.params.id, (err, foundNom) => {
       res.render('nominations/edit.ejs', {
-        tabTitle: foundNom.title + " | Edit Nomination",
+        tabTitle: foundNom.nominee.title + " | Edit Nomination",
         nomination: foundNom,
         screenings: allScreenings,
         nominators: nominators_sorted
@@ -286,6 +286,23 @@ router.put('/:id', (req, res) => {
     let checked = req.body.winner === "on" ? true : false
     req.body.winner = checked
     Nomination.findByIdAndUpdate(req.params.id, req.body, (err, foundNomination) => {
+      //if changing nomination.winner status, update movie and screening
+      if(checked !== foundNomination.nominee.screened && checked === true) { // if changing from non-winner to winner
+        Movie.findByIdAndUpdate(foundNomination.nominee._id, {$set: {screened: checked, screening: foundNomination.screening._id}}, {new: true}, (err, updatedMovie) => {
+          err ? console.log(err) : console.log('Associated screening with nominated movie: ' + updatedMovie);
+          Screening.findByIdAndUpdate(foundNomination.screening._id, {$set: {selection: foundNomination.nominee._id}}, {new: true}, (err, updatedScreening) => {
+            // update associated screening with the nominated movie (selection)
+            err ? console.log(err) : console.log('Updated selection for screening: ' + updatedScreening); 
+          }) 
+        })
+      } else if (checked !== foundNomination.nominee.screened && checked === false) { // if changing from winner to non-winner
+        Movie.findByIdAndUpdate(foundNomination.nominee._id, {$set: {screened: checked, screening: null}}, {new: true}, (err, updatedMovie) => {
+          err ? console.log(err) : console.log('Unassociated screening with nominated movie: ' + updatedMovie);
+          Screening.findByIdAndUpdate(foundNomination.screening._id, {$set: {selection: null}}, {new: true}, (err, updatedScreening) => {
+            err ? console.log(err) : console.log('Reset selection data for screening: ' + updatedScreening);
+          }) 
+        })
+      }
       res.redirect('/nominations')
     })
 })

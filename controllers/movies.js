@@ -154,7 +154,11 @@ router.delete('/:id', (req, res) => {
         if (foundMovie.nominations) {
             for (let nom of foundMovie.nominations) {
                 Nomination.findByIdAndRemove(nom._id, (err, deletedNomination) => {
-                    console.log('deleted ' + deletedNomination)
+                    // update Screening nomination data as well
+                    Screening.findByIdAndUpdate(deletedNomination.screening._id, {$pull: {nominations: deletedNomination._id}}, {new: true}, (err, updatedScreening) => {
+                        console.log('Removed nomination from screening: ' + updatedScreening); 
+                    })
+                    console.log('deleted associated nomination: ' + deletedNomination)
                 })
             }
         }
