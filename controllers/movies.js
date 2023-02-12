@@ -351,4 +351,17 @@ router.put('/:id', (req, res) => {
 //DROP COLLECTION -- CAUTION!!!!!!!!!
 // Movie.collection.drop()
 
+const checkCastForActor = (actor) => {
+    Movie.find({cast: actor, screened: true}, (err, foundMovies) => {
+        for (let movie of foundMovies) {
+            console.log(actor + ' is in ' + movie.title);
+        }
+    })
+}
+
+let wf = "William Fichtner"
+let arnold = "Arnold Schwarzenegger"
+
+checkCastForActor(arnold)
+
 module.exports = router

@@ -228,7 +228,7 @@ td {
 }
 
 .card .winning-nom-text {
-  font-size: 0.75em;
+  font-size: 0.67em;
 }
 
 .card .winner-text, .card .movie-title {
@@ -516,7 +516,7 @@ nav a:hover {
   }
 
   .card .winning-nom-text {
-    font-size: 1em;
+    font-size: 0.9em;
   }
 
   td, label {
