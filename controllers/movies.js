@@ -314,18 +314,34 @@ router.get('/:id/edit', (req, res) => {
 router.put('/:id', (req, res) => {
     const updateMovie = () => {
         // console.log(req.params.id, req.body);
-        Movie.findByIdAndUpdate(req.params.id, {$unset: {screening: ""}}, {new: true}, (err, updatedMovie) => {  
+        Movie.findByIdAndUpdate(req.params.id, {$set: {screening: null}}, {new: true}, (err, updatedMovie) => {  
             // console.log('After unset: ' + updatedMovie);
             Movie.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, foundMovie) => {
                 // console.log('Movie data updated: ' + foundMovie);
-                if(req.body.screening) { 
+                if(req.body.screening) {  // if movie is being updated to have an associated screening
                     Screening.findByIdAndUpdate(foundMovie.screening._id, {$set: {selection: foundMovie}}, {new: true}, (err, updatedScreening) => {
+                        // find nomination associated with that screening and make it a winning nom
+                        Nomination.findOneAndUpdate({screening: foundMovie.screening._id}, {winner: true}, {new: true}, (err, updatedNomination) => {
+                            if (!updatedNomination) {
+                                console.log('Associated nomination not found.');
+                            } else {
+                                console.log('Changed winner status of associated nomination - now true: ' + updatedNomination);
+                            }
+                        })
                         console.log('Also updated screening: ' + updatedScreening)
                         res.redirect('/movies')
                     })
-                } else {
-                    console.log('movie to unassociate with screening ' + foundMovie);
-                    Screening.findOneAndUpdate({selection: foundMovie}, {$unset: {selection: ""}}, {new: true}, (err, updatedScreening) => {
+                } else { // if movie is being updated to unassociate with any screening
+                    // console.log('movie to unassociate with screening ' + foundMovie);
+                    Screening.findOneAndUpdate({selection: foundMovie}, {$set: {selection: null}}, {new: true}, (err, updatedScreening) => {
+                        //find nomination associated with screening and make it a non-winner
+                        Nomination.findOneAndUpdate({nominee: foundMovie._id, screening: updatedScreening._id}, {winner: false}, {new: true}, (err, updatedNomination) => {
+                            if(!updatedNomination) {
+                                console.log('Associated nomination not found.');
+                            } else {
+                                console.log('Changed winner status of associated nomination - now false: ' + updatedNomination);
+                            }
+                        })
                         console.log('Also removed movie from screening: ' + updatedScreening)
                     })
                     res.redirect('/movies')
