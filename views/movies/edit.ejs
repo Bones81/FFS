@@ -11,6 +11,8 @@
       <h1 class="page-title"><%=movie.title.toUpperCase()%></h1>
       <h3>Edit Movie Details</h3>
     <form action="/movies/<%=movie._id%>?_method=PUT" method="POST" id='edit-form'>
+      <input hidden type="text" name="id" value="<%=movie._id%>"/>
+      
       <table>
         <tr>
           <td class="info-start-text"><label for="title"><span class="red">* </span>Title: </label></td>
@@ -61,6 +63,14 @@
         <tr>
           <td class="info-start-text"><label for="screening">Screened by FFS: </label></td>
           <td class="new-data-text">
+            <input hidden type="number" 
+              name="origWeekID" 
+              <% if(movie.screening) { %> 
+                value="<%=movie.screening.weekID%>"
+              <% } else { %>
+                value=""
+              <% } %>
+            />
             <select id="screening" 
                     name="screening" 
                     <% if(movie.screening) { %> 

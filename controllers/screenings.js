@@ -350,6 +350,9 @@ router.put('/:id', (req, res) => {
         req.body.nominations = foundScreening.nominations;
         // res.json(req.body)
         Screening.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, updatedScreening) => {
+            // if there is a new selection value, update the related nominations and movies
+
+            
             console.log('Screening updated: ' + updatedScreening);
             //now adjust weekIDs to reflect any updated dates
             updateWeekIDs();
