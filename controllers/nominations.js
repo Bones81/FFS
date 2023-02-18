@@ -123,7 +123,7 @@ router.post('/', (req, res) => {
   nomObj.blurb = req.body.blurb
   nomObj.winner = req.body.winner === "on" ? true : false
 
-  if (req.body.nominee) { // if user chooses a previous nominee to resubmit
+  if (req.body.nominee) { // if user chooses an unwatched movie from the database to submit
     Screening.findOne({weekID: req.body.screeningID}, (err, foundScreening) => { //assign the screeningID to the new nomination object
       nomObj.screening = foundScreening._id
       Movie.findOne({title: req.body.nominee}, (err, foundMovie) => { // find the movie in the database and assign it to the nomination object
@@ -131,20 +131,24 @@ router.post('/', (req, res) => {
         // Create the new nomination
         Nomination.create(nomObj, (err, createdNomination) => {
           if(err) console.log(err);
-          console.log('nomObj.winner: ' + nomObj.winner);
+          if (!foundMovie.nominations.length) { // if there are no previous nominations for this movie, assign the original nominator
+            foundMovie.origNominator = createdNomination.nominator
+          }
           // update movie with any new data for winner, screening, nominations, and nominators
           if(nomObj.winner) { // if it's a winning movie, update appropriately
-            Movie.findByIdAndUpdate(foundMovie._id, {$set: {screened: nomObj.winner, screening: foundScreening._id, nominations: [...foundMovie.nominations, createdNomination._id], allNominators: [...foundMovie.allNominators, nomObj.nominator]}}, (err, updatedMovie) => {
+            Movie.findByIdAndUpdate(foundMovie._id, {$set: {screened: nomObj.winner, screening: foundScreening._id, nominations: [...foundMovie.nominations, createdNomination._id], allNominators: [...foundMovie.allNominators, nomObj.nominator], origNominator: foundMovie.origNominator}}, {new: true}, (err, updatedMovie) => {
               //finally, update the screening with the new data about the selection and nominations
               Screening.findByIdAndUpdate(foundScreening._id, {$set: {selection: foundMovie._id, nominations: [...foundScreening.nominations, createdNomination._id]}}, {new: true}, (err, updatedScreening) => {
                 // and redirect to the nominations archive
+                console.log("Nominated movie-winner: " + updatedMovie);
                 res.redirect('/nominations');
               })
             })
           } else { // if it's not a winner, update appropriately.
-            Movie.findByIdAndUpdate(foundMovie._id, {$set: {screened: nomObj.winner, nominations: [...foundMovie.nominations, createdNomination._id], allNominators: [...foundMovie.allNominators, nomObj.nominator]}}, (err, updatedMovie) => {
+            Movie.findByIdAndUpdate(foundMovie._id, {$set: {screened: nomObj.winner, nominations: [...foundMovie.nominations, createdNomination._id], allNominators: [...foundMovie.allNominators, nomObj.nominator], origNominator: foundMovie.origNominator}}, {new: true}, (err, updatedMovie) => {
               Screening.findByIdAndUpdate(foundScreening._id, {$set: {nominations: [...foundScreening.nominations, createdNomination._id]}}, {new: true}, (err, updatedScreening) => {
                 // and redirect to the nominations archive
+                console.log("Nominated movie-non-winner: " + updatedMovie);
                 res.redirect('/nominations') 
               })
             })
@@ -184,6 +188,8 @@ router.post('/', (req, res) => {
                     console.log('Set selection for screening: ' + updatedScreening2);
                   })
                 }
+                console.log("Movie created: " + updatedMovie);
+                console.log("Nomination created: " + createdNomination);
                 res.redirect('/nominations');
               })
             })
@@ -254,27 +260,56 @@ router.delete('/:id', (req, res) => {
     Nomination.findByIdAndRemove(req.params.id, (err, foundNomination) => {
       Movie.findById(foundNomination.nominee, (err, relatedMovie) => { //find the related movie, which becomes the template for a movie update object
         console.log('movie data prior to update: ' + relatedMovie);
-        if (relatedMovie.nominations.length === 1) { // if this is the only remaining nomination for that movie, remove the origNominator value
-          relatedMovie.origNominator = ""
-        }
-        if (relatedMovie.screened) { // edge case hypothetical handling: if deleted nomination was a winning nom/movie, change movie's data to make it an unscreened movie
-          relatedMovie.screened = false
-          relatedMovie.screening = null
-          Screening.findOneAndUpdate({selection: relatedMovie._id}, {$set: {selection: null}}, {new: true}, (err, updatedScreening) => { //would have to update screening as well
-            console.log('reset selection for screening ' + updatedScreening.weekID); 
+
+        // SETTING ORIGNOMINATOR FIELD: Find all remaining noms for this movie. If they exist, check whether the nom being deleted is the earliest (Set up an earliestNom variable and loop through the noms, checking the screening date for each, and assigning earliestNom appropriately). 
+        Nomination.find({title: relatedMovie.title}, (err, remainingNoms) => {
+          if (err) console.log(err.message);
+          if (remainingNoms) {
+            let isEarliestNom = true// boolean representing whether the deleted Nom was the first one for this movie
+            let earliestRemainingNomDate = remainingNoms[0].screening
+            let earliestNominator = remainingNoms[0].earliestNominator
+            for (let nom of remainingNoms) { // check the screening number to see which nomination was earlier, against both the deleted Nom and the other remaining Noms
+              if(foundNomination.screening > nom.screening) { // if any remaining nomination is earlier than the deleted Nom, isEarliestNom becomes false
+                isEarliestNom = false
+                break
+              }
+              if (nom.screening < earliestRemainingNomDate) { //progressively assign the earliest nominator
+                earliestRemainingNomDate = nom.screening
+                earliestNominator = nom.nominator
+              }
+            }
+            if (isEarliestNom) { // if it was the earliest nomination, ensure that relatedMovie.origNominator is the nominator of the earliestRemainingNomDate before updating movie
+                relatedMovie.origNominator = earliestNominator
+                updateMovie(relatedMovie, foundNomination)
+            } else { // if it wasn't the earliest nomination, no change to the origNominator should be necessary.
+                updateMovie(relatedMovie, foundNomination)
+            }
+          } else { // If no other nominations exist, reset relatedMovie.origNominator to be an empty string. 
+            relatedMovie.origNominator = ""
+            updateMovie(relatedMovie, foundNomination)
+          }
+        })
+
+        const updateMovie = (relatedMovie, foundNomination) => {
+          if (relatedMovie.screened) { // edge case hypothetical handling: if deleted nomination was a winning nom/movie, change movie's data to make it an unscreened movie
+            relatedMovie.screened = false
+            relatedMovie.screening = null
+            Screening.findOneAndUpdate({selection: relatedMovie._id}, {$set: {selection: null}}, {new: true}, (err, updatedScreening) => { //would have to update screening as well
+              console.log('reset selection for screening ' + updatedScreening.weekID); 
+            })
+          }
+          //then find any one instance of the nominator to remove from the movie's nominators list
+          let nominatorIndex = relatedMovie.allNominators.indexOf(foundNomination.nominator)
+          relatedMovie.allNominators.splice(nominatorIndex, 1)
+          //remove nomination from movie's nominations list
+          let nominationIndex = relatedMovie.nominations.indexOf(foundNomination._id)
+          relatedMovie.nominations.splice(nominationIndex, 1)
+          //then, update the movie's nominations, origNominator (if necessary), and allNominators fields
+          Movie.findByIdAndUpdate(foundNomination.nominee, relatedMovie, {new: true}, (err, updatedMovie) => {
+            console.log('nomination removed from ' + updatedMovie);
+            res.redirect('/nominations')
           })
         }
-        //then find any one instance of the nominator to remove from the movie's nominators list
-        let nominatorIndex = relatedMovie.allNominators.indexOf(foundNomination.nominator)
-        relatedMovie.allNominators.splice(nominatorIndex, 1)
-        //remove nomination from movie's nominations list
-        let nominationIndex = relatedMovie.nominations.indexOf(foundNomination._id)
-        relatedMovie.nominations.splice(nominationIndex, 1)
-        //then, update the movie's nominations, origNominator (if necessary), and allNominators fields
-        Movie.findByIdAndUpdate(foundNomination.nominee, relatedMovie, {new: true}, (err, updatedMovie) => {
-          console.log('nomination removed from ' + updatedMovie);
-          res.redirect('/nominations')
-        })
       })
     })
 })

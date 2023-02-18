@@ -431,10 +431,10 @@ const findWinningMoviesNoms = () => {
 // findWinningMoviesNoms()
 
 
-const fixSanta = () => {
-    Movie.findOneAndUpdate({title: "test"}, {$set: {origNominator: "Katharine Croke"}}, {new: true}, (err, updatedMovie) => {
+const fixTroll2 = () => {
+    Movie.findOneAndUpdate({title: "Troll 2"}, {$set: {nominations: [], origNominator: "", allNominators: []}}, {new: true}, (err, updatedMovie) => {
         console.log(updatedMovie);
     })
 }
-// fixSanta()
+// fixTroll2()
 module.exports = router
