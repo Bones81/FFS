@@ -315,10 +315,7 @@ router.get('/:id/edit', (req, res) => {
 
 //PUT ROUTES
 router.put('/:id', (req, res) => {
-
     const updateMovie = () => {
-        // console.log('req.body when starting update movie function: ');
-        // console.log(req.body);
         Movie.findByIdAndUpdate(req.body.id, req.body, {new: true}, (err, updatedMovie) => {
             err ? console.log(err) : null;
             //find the nomination associated with the screening/movie combination
@@ -368,84 +365,10 @@ router.put('/:id', (req, res) => {
                 res.redirect('/movies')
             }
         })
-        // Movie.findById(req.params.id, (err, foundMovie) => { 
-        //     console.log('line 318: ' + foundMovie);
-        //     if (req.body.screening) { // if updating movie to associate with an existing screening, first update associated Screening and Nomination
-        //         Screening.findByIdAndUpdate(foundMovie.screening._id, {$set: {selection: foundMovie._id}}, {new: true}, (err, updatedScreening) => {
-        //             // find nomination associated with that screening and make it a winning nom
-        //             Nomination.findOneAndUpdate({screening: foundMovie.screening._id}, {winner: true}, {new: true}, (err, updatedNomination) => {
-        //                 if (!updatedNomination) {
-        //                     console.log('Associated nomination not found.');
-        //                 } else {
-        //                     console.log('Changed winner status of associated nomination - now true: ' + updatedNomination);
-        //                     Movie.findByIdAndUpdate(req.params.id, req.body, (err, updatedMovie) => {
-        //                         console.log('Finally updated movie: ' + updatedMovie); 
-        //                     })
-        //                 }
-        //             })
-        //             console.log('Updated screening: ' + updatedScreening)
-        //             res.redirect('/movies')
-        //         })
-        //     } else { // if disassociating movie from any screening, update appropriate screening and change associated nomination to non-winner
-        //         Screening.findOneAndUpdate({weekID: req.body.origWeekID}, {$set: {selection: null}}, {new: true}, (err, updatedScreening) => {
-        //             !updatedScreening ? console.log('Screening not found') : console.log('Screening found! ' + updatedScreening.weekID);
-        //             err ? console.log(err) : console.log('screening updating: ' + updatedScreening);
-        //             Nomination.findOneAndUpdate({screening: updatedScreening._id}, {winner: false}, {new: true}, (err, updatedNomination) => {
-        //                 err ? console.log(err) : console.log('related nomination updating...');
-        //                 if (!updatedNomination) {
-        //                     console.log('Associated nomination not found.');
-        //                 } else {
-        //                     console.log('Changed winner status of associated nomination - now false: ' + updatedNomination);
-        //                     Movie.findByIdAndUpdate(req.params.id, req.body, (err, updatedMovie) => {
-        //                         console.log('Finally updated movie: ' + updatedMovie); 
-        //                     })
-        //                 }
-        //             })
-        //         })
-        //     }
-        // })
-
-        // Movie.findByIdAndUpdate(req.params.id, {$unset: {screening: ""}}, {new: true}, (err, updatedMovie) => {  
-        //     // console.log('After unset: ' + updatedMovie);
-        //     // console.log(req.body);
-        //     Movie.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, foundMovie) => {
-        //         // console.log('Movie data updated: ' + foundMovie);
-        //         if(req.body.screening) {  // if movie is being updated to have an associated screening
-        //             Screening.findByIdAndUpdate(foundMovie.screening._id, {$set: {selection: foundMovie}}, {new: true}, (err, updatedScreening) => {
-        //                 // find nomination associated with that screening and make it a winning nom
-        //                 Nomination.findOneAndUpdate({screening: foundMovie.screening._id}, {winner: true}, {new: true}, (err, updatedNomination) => {
-        //                     if (!updatedNomination) {
-        //                         console.log('Associated nomination not found.');
-        //                     } else {
-        //                         console.log('Changed winner status of associated nomination - now true: ' + updatedNomination);
-        //                     }
-        //                 })
-        //                 console.log('Also updated screening: ' + updatedScreening)
-        //                 res.redirect('/movies')
-        //             })
-        //         } else { // if movie is being updated to unassociate with any screening
-        //             console.log('movie to unassociate with screening ' + foundMovie, foundMovie.screening);
-        //             Screening.findOneAndUpdate({selection: foundMovie}, {$unset: {selection: ""}}, {new: true}, (err, updatedScreening) => {
-        //                 //find nomination associated with screening and make it a non-winner
-        //                 console.log(updatedScreening._id);
-        //                 Nomination.findOneAndUpdate({nominee: foundMovie._id, screening: updatedScreening._id}, {winner: false}, {new: true}, (err, updatedNomination) => {
-        //                     if(!updatedNomination) {
-        //                         console.log('Associated nomination not found.');
-        //                     } else {
-        //                         console.log('Changed winner status of associated nomination - now false: ' + updatedNomination);
-        //                     }
-        //                 })
-        //                 console.log('Also removed movie from screening: ' + updatedScreening)
-        //             })
-        //             res.redirect('/movies')
-        //         }
-        //     })
-        // })
     }
-    //ABOVE EVENTUALLY NEEDS LOGIC TO HANDLE INSTANCE WHERE ANOTHER MOVIE IS ALREADY ASSIGNED TO A SCREENING.
+    //ABOVE MAY EVENTUALLY NEED LOGIC TO HANDLE INSTANCE WHERE ANOTHER MOVIE IS ALREADY ASSIGNED TO A SCREENING.
     req.body.cast = req.body.cast.split(', ')
     req.body.year = +req.body.year
-    // req.body.origWeekID !== req.body.screening ? req.body.changed = true : req.body.changed = false;
     if(req.body.screening) { // if the update involves a screening to associate the movie with
         req.body.screening = +req.body.screening
         req.body.screened = true
@@ -509,7 +432,7 @@ const findWinningMoviesNoms = () => {
 
 
 const fixSanta = () => {
-    Movie.findOneAndUpdate({title: "Santa Claus Conquers the Martians"}, {$set: {allNominators: ["Ben Beckley-Chayes"]}}, {new: true}, (err, updatedMovie) => {
+    Movie.findOneAndUpdate({title: "test"}, {$set: {origNominator: "Katharine Croke"}}, {new: true}, (err, updatedMovie) => {
         console.log(updatedMovie);
     })
 }

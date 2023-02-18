@@ -418,7 +418,7 @@ router.delete('/:id', (req, res) => {
 //     console.log(updatedM); 
 // })
 
-// Screening.findOneAndUpdate({weekID: 70}, {$unset: {selection: null}}, {new: true}, (err, foundScreening) => {
+// Screening.findOneAndUpdate({weekID: 72}, {nominations: ["63e91aa8b420431ccea0042a"]}, {new: true}, (err, foundScreening) => {
 //     console.log(foundScreening);
 // })
 
