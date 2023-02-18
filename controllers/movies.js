@@ -207,27 +207,27 @@ router.post('/sort', (req, res) => {
     if (req.body.sortChoice === 'cast') {
         Movie.find({}, (err, allMovies) => {
         //
-        const sortedMovies = allMovies.sort( (a, b) => {
-            // console.log(a.cast[0].split(' ')[1])
-            const namesOfA = a.cast[0].split(' ')
-            const namesOfB = b.cast[0].split(' ')
-            const lastNameA = namesOfA[namesOfA.length - 1]
-            const lastNameB = namesOfB[namesOfB.length - 1]
+            const sortedMovies = allMovies.sort( (a, b) => {
+                // console.log(a.cast[0].split(' ')[1])
+                const namesOfA = a.cast[0].split(' ')
+                const namesOfB = b.cast[0].split(' ')
+                const lastNameA = namesOfA[namesOfA.length - 1]
+                const lastNameB = namesOfB[namesOfB.length - 1]
 
-            //below is the compare function that orders the list of movies by main actor's last name
-            if(lastNameA > lastNameB) {
-            return 1
-            } else if (lastNameA < lastNameB) {
-            return -1
-            } else {
-            return 0
-            }
-        })
-        // res.send(sortedMovies)
-        res.render('movies/index.ejs', {
-            tabTitle: 'Sorted By ' + req.body.sortChoice,
-            movies: sortedMovies
-        })
+                //below is the compare function that orders the list of movies by main actor's last name
+                if(lastNameA > lastNameB) {
+                return 1
+                } else if (lastNameA < lastNameB) {
+                return -1
+                } else {
+                return 0
+                }
+            })
+            // res.send(sortedMovies)
+            res.render('movies/index.ejs', {
+                tabTitle: 'Sorted By ' + req.body.sortChoice,
+                movies: sortedMovies
+            })
         })
     } else if (req.body.sortChoice === 'director') {
         Movie.find({}, (err, allMovies) => {
@@ -271,22 +271,22 @@ router.post('/sort', (req, res) => {
         })
     } else if (req.body.sortChoice === 'screening_order') { 
         Movie.find({}).populate("screening").exec((err, allMovies) => {
-        if(err) console.log(err.message);
-        const sortedMovies = allMovies.sort((a,b) => {
-            if (a.screening && b.screening && a.screening.date > b.screening.date) {
-            return 1
-            } else if (a.screening && b.screening && a.screening.date < b.screening.date) {
-            return -1 
-            } else {
-            return 0
-            }
+            if(err) console.log(err.message);
+            const sortedMovies = allMovies.sort((a,b) => {
+                if (a.screening && b.screening && a.screening.date > b.screening.date) {
+                return 1
+                } else if (a.screening && b.screening && a.screening.date < b.screening.date) {
+                return -1 
+                } else {
+                return 0
+                }
+            })
+            res.render('movies/index.ejs', {
+                tabTitle: 'Sorted By ' + req.body.sortChoice,
+                movies: sortedMovies
+            })
         })
-        res.render('movies/index.ejs', {
-            tabTitle: 'Sorted By ' + req.body.sortChoice,
-            movies: sortedMovies
-        })
-        })
-    }else {
+    } else {
         Movie.find({}, null, {sort: req.body.sortChoice}, (err, sortedMovies) => {
             res.render('movies/index.ejs', {
                 tabTitle: 'Sorted By ' + req.body.sortChoice,
@@ -317,8 +317,8 @@ router.get('/:id/edit', (req, res) => {
 router.put('/:id', (req, res) => {
 
     const updateMovie = () => {
-        console.log('req.body when starting update movie function: ');
-        console.log(req.body);
+        // console.log('req.body when starting update movie function: ');
+        // console.log(req.body);
         Movie.findByIdAndUpdate(req.body.id, req.body, {new: true}, (err, updatedMovie) => {
             err ? console.log(err) : null;
             //find the nomination associated with the screening/movie combination
@@ -353,9 +353,9 @@ router.put('/:id', (req, res) => {
                 })
             } else { // the movie is not to be associated with a screening. Either it was associated with one prior to the update, or it wasn't ever associated with a screening.
                 if (req.body.origScreening) { //if it was originally associated with a screening and now is not...
-                    Screening.findByIdAndUpdate(req.body.origScreening._id, {$set: {selection: null}}, {new: true}, (err, updatedOrigScreening) => { //find the screening and unset its selection
+                    Screening.findByIdAndUpdate(req.body.origScreening._id, {$set: {selection: null}}, {new: true}, (err, updatedOrigScreening) => { //find the screening and nullify its selection
                         console.log('Original Screening updated to remove selection: ' + updatedOrigScreening);
-                        //additionally, update the related nomination for this movie and that screening
+                        //additionally, update the related nomination for this movie and that screening combination
                         Nomination.findOneAndUpdate({nominee: updatedMovie._id, screening: updatedOrigScreening._id}, {winner: false}, {new: true}, (err, updatedOrigNomination) => { 
                             console.log('Original Nomination changed to non-winner: ' + updatedOrigNomination);
                         })
@@ -364,7 +364,7 @@ router.put('/:id', (req, res) => {
                     console.log('Movie remains unassociated with any screening. No additional updating of screenings or nominations necessary.');
                     console.log('req.body.origScreening = ' + req.body.origScreening);
                 }
-                console.log('Finally, the updated movie: ' + updatedMovie);
+                console.log('The updated movie: ' + updatedMovie);
                 res.redirect('/movies')
             }
         })
@@ -443,8 +443,6 @@ router.put('/:id', (req, res) => {
         // })
     }
     //ABOVE EVENTUALLY NEEDS LOGIC TO HANDLE INSTANCE WHERE ANOTHER MOVIE IS ALREADY ASSIGNED TO A SCREENING.
-    console.log('Initial req.body: '); 
-    console.log(req.body);
     req.body.cast = req.body.cast.split(', ')
     req.body.year = +req.body.year
     // req.body.origWeekID !== req.body.screening ? req.body.changed = true : req.body.changed = false;
@@ -458,7 +456,7 @@ router.put('/:id', (req, res) => {
                 updateMovie()
             })
         })
-    } else {
+    } else { // if the update does not involve associating with a screening
         req.body.screened = false
         //req.body.screening is an empty string in this conditional, so reset it to null
         req.body.screening = null //remember this corresponds to the screening's weekID
