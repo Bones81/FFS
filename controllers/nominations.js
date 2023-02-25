@@ -318,8 +318,8 @@ router.get('/:id/confirm-delete', (req, res) => {
   
 //DELETE
 router.delete('/:id', (req, res) => {
-    Nomination.findByIdAndRemove(req.params.id, (err, foundNomination) => {
-      Movie.findById(foundNomination.nominee, (err, relatedMovie) => { //find the related movie, which becomes the template for a movie update object
+    Nomination.findByIdAndRemove(req.params.id, (err, deletedNomination) => {
+      Movie.findById(deletedNomination.nominee, (err, relatedMovie) => { //find the related movie, which becomes the template for a movie update object
         console.log('movie data prior to update: ' + relatedMovie);
 
         // SETTING ORIGNOMINATOR FIELD: Find all remaining noms for this movie. If they exist, check whether the nom being deleted is the earliest (Set up an earliestNom variable and loop through the noms, checking the screening date for each, and assigning earliestNom appropriately). 
@@ -331,28 +331,28 @@ router.delete('/:id', (req, res) => {
             let earliestRemainingNomDate = remainingNoms[0].screening
             let earliestNominator = remainingNoms[0].earliestNominator
             for (let nom of remainingNoms) { // check the screening number to see which nomination was earlier, against both the deleted Nom and the other remaining Noms
-              if(foundNomination.screening > nom.screening) { // if any remaining nomination is earlier than the deleted Nom, isEarliestNom becomes false
+              if(deletedNomination.screening > nom.screening) { // if any remaining nomination is earlier than the deleted Nom, isEarliestNom becomes false
                 isEarliestNom = false
                 break
               }
-              if (nom.screening < earliestRemainingNomDate) { //progressively assign the earliest nominator
+              if (nom.screening <= earliestRemainingNomDate) { //progressively assign the earliest nominator
                 earliestRemainingNomDate = nom.screening
                 earliestNominator = nom.nominator
               }
             }
             if (isEarliestNom) { // if it was the earliest nomination, ensure that relatedMovie.origNominator is the nominator of the earliestRemainingNomDate before updating movie
                 relatedMovie.origNominator = earliestNominator
-                updateMovie(relatedMovie, foundNomination)
+                updateMovie(relatedMovie, deletedNomination)
             } else { // if it wasn't the earliest nomination, no change to the origNominator should be necessary.
-                updateMovie(relatedMovie, foundNomination)
+                updateMovie(relatedMovie, deletedNomination)
             }
           } else { // If no other nominations exist, reset relatedMovie.origNominator to be an empty string. 
             relatedMovie.origNominator = ""
-            updateMovie(relatedMovie, foundNomination)
+            updateMovie(relatedMovie, deletedNomination)
           }
         })
 
-        const updateMovie = (relatedMovie, foundNomination) => {
+        const updateMovie = (relatedMovie, deletedNomination) => {
           if (relatedMovie.screened) { // edge case hypothetical handling: if deleted nomination was a winning nom/movie, change movie's data to make it an unscreened movie
             relatedMovie.screened = false
             relatedMovie.screening = null
@@ -361,13 +361,13 @@ router.delete('/:id', (req, res) => {
             })
           }
           //then find any one instance of the nominator to remove from the movie's nominators list
-          let nominatorIndex = relatedMovie.allNominators.indexOf(foundNomination.nominator)
+          let nominatorIndex = relatedMovie.allNominators.indexOf(deletedNomination.nominator)
           relatedMovie.allNominators.splice(nominatorIndex, 1)
           //remove nomination from movie's nominations list
-          let nominationIndex = relatedMovie.nominations.indexOf(foundNomination._id)
+          let nominationIndex = relatedMovie.nominations.indexOf(deletedNomination._id)
           relatedMovie.nominations.splice(nominationIndex, 1)
           //then, update the movie's nominations, origNominator (if necessary), and allNominators fields
-          Movie.findByIdAndUpdate(foundNomination.nominee, relatedMovie, {new: true}, (err, updatedMovie) => {
+          Movie.findByIdAndUpdate(deletedNomination.nominee, relatedMovie, {new: true}, (err, updatedMovie) => {
             console.log('nomination removed from ' + updatedMovie);
             res.redirect('/nominations')
           })
