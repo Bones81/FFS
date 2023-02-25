@@ -23,9 +23,9 @@
           <td class="table-spacer no-border"></td>
         </tr>
         <tr>
-          <td><label for="screeningID">Nominating for Screening Date: <br/></label></td>
+          <td><label for="screening">Nominating for Screening Date: <br/></label></td>
           <td>
-            <select name="screeningID">
+            <select name="screening">
               <option selected value="<%=nomination.screening.weekID%>"><%=nomination.screening.weekID%> | <%=nomination.screening.date.toString().slice(3,15)%> (current)</option>
               <% for (let screening of screenings.reverse()) { %> 
                 <option value="<%=screening.weekID%>"><%=screening.weekID%> | <%=screening.date.toString().slice(3, 15)%></option>

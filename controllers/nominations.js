@@ -379,30 +379,95 @@ router.delete('/:id', (req, res) => {
 //UPDATE
 router.put('/:id', (req, res) => {
     
-    console.log(req.body)
+    // console.log(req.body)
     let checked = req.body.winner === "on" ? true : false
     req.body.winner = checked
-    Nomination.findByIdAndUpdate(req.params.id, req.body, (err, foundNomination) => {
-      //if changing nomination.winner status, update movie and screening
-      if(checked !== foundNomination.nominee.screened && checked === true) { // if changing from non-winner to winner
-        Movie.findByIdAndUpdate(foundNomination.nominee._id, {$set: {screened: checked, screening: foundNomination.screening._id}}, {new: true}, (err, updatedMovie) => {
-          err ? console.log(err) : console.log('Associated screening with nominated movie: ' + updatedMovie);
-          Screening.findByIdAndUpdate(foundNomination.screening._id, {$set: {selection: foundNomination.nominee._id}}, {new: true}, (err, updatedScreening) => {
-            // update associated screening with the nominated movie (selection)
-            err ? console.log(err) : console.log('Updated selection for screening: ' + updatedScreening); 
-          }) 
-        })
-      } else if (checked !== foundNomination.nominee.screened && checked === false) { // if changing from winner to non-winner
-        Movie.findByIdAndUpdate(foundNomination.nominee._id, {$set: {screened: checked, screening: null}}, {new: true}, (err, updatedMovie) => {
-          err ? console.log(err) : console.log('Unassociated screening with nominated movie: ' + updatedMovie);
-          Screening.findByIdAndUpdate(foundNomination.screening._id, {$set: {selection: null}}, {new: true}, (err, updatedScreening) => {
-            err ? console.log(err) : console.log('Reset selection data for screening: ' + updatedScreening);
-          }) 
+
+    Nomination.findById(req.params.id).populate("screening").populate("nominee").exec((err, preUpdateNom) => {
+      if(err) console.log(err.message);
+      if(req.body.screening !== preUpdateNom.screening) { //if the nomination is now to be associated with a different screening, we need to determine what is now the earliest nomination for this movie. It may be changing as a result of this update. If it is, we need to reassign the origNominator for the movie. Yuck.
+        Nomination.find({nominee: preUpdateNom.nominee._id}).populate("screening").exec((err, movieNominations) => { // find all Nominations for the preUpdateNom's movie
+          if(err) console.log(err.message);
+          // then compare the screening date of each nom, figuring out which is the earliest
+          
+          movieNominations.sort((a,b) => { //sort the existing nominations
+            if (a.screening > b.screening) {
+              return 1
+            } else {
+              return -1
+            }
+          })
+          let earliestNom = movieNominations[0]
+
+          if (earliestNom.screening.weekID === preUpdateNom.screening.weekID) { 
+            earliestNom = movieNominations[1] // if the nomination we are updating the screening date for is the earliest current nomination, we now need to find the next earliest nomination, i.e. movieNominations[1]. Otherwise, we will be including the old screening date in the comparison that follows.
+          }
+          let isEarliestNom = true //assume our updating nom is the earliest
+          if (earliestNom.screening.weekID < req.body.screening) { // Check whether the updating nom is in fact earliest.
+              isEarliestNom = false
+          }
+
+          if (isEarliestNom) { //if the updating nom is the earliest nom, update the origNominator field in the movie with the nominator provided in the edit form
+            Movie.findByIdAndUpdate(preUpdateNom.nominee._id, {$set: {origNominator: req.body.nominator}}, {new: true}, (err, updatedMovie) => {
+              console.log('New earliest nomination for movie, origNominator updated: ' + updatedMovie);
+            })
+          } else if (preUpdateNom.nominee.origNominator !== earliestNom.nominator) { //if our updating nom is not the earliest nom, reset the movie's origNominator with the earliestNom's nominator, if it is different from the existing origNominator
+            Movie.findByIdAndUpdate(preUpdateNom.nominee._id, {$set: {origNominator: earliestNom.nominator}}, {new: true}, (err, updatedMovie) => {
+              console.log('Earliest nomination for nominated movie changing as a result of this update. Updated movie: ' + updatedMovie)
+            })
+          }
+          // 
         })
       }
-      res.redirect('/nominations')
+
+      
+      Nomination.findById(req.params.id, (err, preUpdateNomination) => {
+        
+        //what to do if updated nom is for different nominator. must splice nominator name into allNominators of the movie, removing oldNominator in the process.
+        if(preUpdateNomination.nominator !== req.body.nominator) {
+          Movie.findById(preUpdateNomination.nominee._id, (err, foundMovie) => {
+            let indexOfOldNominator = foundMovie.allNominators.indexOf(preUpdateNomination.nominator)
+            foundMovie.allNominators.splice(indexOfOldNominator, 1, req.body.nominator)
+            Movie.findByIdAndUpdate(preUpdateNomination.nominee._id, {$set: {allNominators: foundMovie.allNominators}}, {new: true}, (err, updatedMovie) => {
+              console.log('Updated nominators list for nominated movie: ' + updatedMovie);
+            }) 
+          })
+        }
+
+        if(preUpdateNomination.winner !== req.body.winner) { //if winner status has changed, update appropriately based on which way it changed
+          Nomination.findByIdAndUpdate(req.params.id, req.body, (err, updatedNomination) => { //
+            if (err) console.log(err);
+            //if changing nomination.winner status, update movie and screening
+            if(checked !== updatedNomination.nominee.screened && checked === true) { // if changing from non-winner to winner
+              Movie.findByIdAndUpdate(updatedNomination.nominee._id, {$set: {screened: checked, screening: updatedNomination.screening._id}}, {new: true}, (err, updatedMovie) => {
+                err ? console.log(err) : console.log('Associated screening with nominated movie: ' + updatedMovie);
+                Screening.findByIdAndUpdate(updatedNomination.screening._id, {$set: {selection: updatedNomination.nominee._id}}, {new: true}, (err, updatedScreening) => {
+                  // update associated screening with the nominated movie (selection)
+                  err ? console.log(err) : console.log('Updated selection for screening: ' + updatedScreening); 
+                }) 
+              })
+            } else if (checked !== updatedNomination.nominee.screened && checked === false) { // if changing from winner to non-winner or if remaining a non-winner
+              Movie.findByIdAndUpdate(updatedNomination.nominee._id, {$set: {screened: checked, screening: null}}, {new: true}, (err, updatedMovie) => {
+                err ? console.log(err) : console.log('Unassociated screening with nominated movie: ' + updatedMovie);
+                Screening.findByIdAndUpdate(updatedNomination.screening._id, {$set: {selection: null}}, {new: true}, (err, updatedScreening) => {
+                  err ? console.log(err) : console.log('Reset selection data for screening: ' + updatedScreening);
+                }) 
+              })
+            }
+            res.redirect('/nominations')
+          })
+        } else { //the different screenings and nominated movie don't need their winner status changed, so the nomination update can go on as planned
+          Screening.findOne({weekID: req.body.screening}, (err, nominatedScreening) => { //associate any new screening with nomination before update
+            req.body.screening = nominatedScreening._id
+            Nomination.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, updatedNomination) => {
+              err ? console.log(err.message) : console.log('Updated nomination: ' + updatedNomination);
+              res.redirect('/nominations')
+            })
+          })
+        }
+      })
     })
-})
+  })
 
 // DELETE APP-BREAKING NOMS BY ID, USE WITH CAUTION
 // Nomination.findByIdAndRemove('63df3d39c96c3160fcf15c1b', (err, dNom) => {
