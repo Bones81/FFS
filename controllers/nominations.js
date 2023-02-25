@@ -219,21 +219,29 @@ router.post('/', (req, res) => {
     })
   } else { //if it's a first-time nominee
     console.log('taking the else road')
-    let movieObj = req.body
-    let castArray = req.body.cast.split(', ')
-    movieObj.cast = castArray
-    movieObj.year = +req.body.year // convert to number with unary operator (+)
-    movieObj.origNominator = req.body.nominator
-    movieObj.allNominators = [req.body.nominator]
-    movieObj.nominations = []
-
-    Screening.findOne({weekID: req.body.screeningID}, (err, foundScreening) => {
-      if (req.body.winner === "on") { // if the nomination includes a newly added movie that also was a winner, make sure the movie data reflects that when created
-        movieObj.screened = true
-        movieObj.screening = foundScreening._id
+    //check that it's not a duplicate
+    Movie.find({}, (err, allMovies) => {
+      for (let movie of allMovies) {
+          if (movie.title === req.body.title) {
+              res.send("<h1>Cannot create movie. Movie's title already exists in database. Check existing movie list.<h1>")
+              return
+          }
       }
-      nomObj.screening = foundScreening._id // regardless, the nomination will be associated with the screening date indicated in the form
-      Movie.create(movieObj, (err, createdMovie) => { // finally, you can create the movie
+      let movieObj = req.body
+      let castArray = req.body.cast.split(', ')
+      movieObj.cast = castArray
+      movieObj.year = +req.body.year // convert to number with unary operator (+)
+      movieObj.origNominator = req.body.nominator
+      movieObj.allNominators = [req.body.nominator]
+      movieObj.nominations = []
+      
+      Screening.findOne({weekID: req.body.screeningID}, (err, foundScreening) => {
+        if (req.body.winner === "on") { // if the nomination includes a newly added movie that also was a winner, make sure the movie data reflects that when created
+          movieObj.screened = true
+          movieObj.screening = foundScreening._id
+        }
+        nomObj.screening = foundScreening._id // regardless, the nomination will be associated with the screening date indicated in the form
+        Movie.create(movieObj, (err, createdMovie) => { // finally, you can create the movie
           if(err) console.log(err);
           //assign the newly created movie to the nomination object
           nomObj.nominee = createdMovie._id
@@ -255,10 +263,11 @@ router.post('/', (req, res) => {
               })
             })
           })
+        })
       })
     })
   }
-
+    
 })
 
 router.post('/initial-info', (req, res) => {

@@ -131,9 +131,18 @@ router.post('/', (req, res) => {
     movieObj.nominations = []
     movieObj.screened = false
     console.log(movieObj)
-    Movie.create(movieObj, (err, createdMovie) => {
-        err ? console.log(err) : console.log('Movie created: ' + createdMovie);
-        res.redirect('/movies')
+    Movie.find({}, (err, allMovies) => {
+        for (let movie of allMovies) {
+            if (movie.title === req.body.title) {
+                res.send("<h1>Cannot create movie. Movie's title already exists in database. Check existing movie list.<h1>")
+                return
+            }
+        }
+        //assuming the user submitted a unique title
+            Movie.create(movieObj, (err, createdMovie) => {
+                err ? console.log(err) : console.log('Movie created: ' + createdMovie);
+                res.redirect('/movies')
+            })
     })
 })
 
