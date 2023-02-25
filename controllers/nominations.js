@@ -328,6 +328,10 @@ router.get('/:id/confirm-delete', (req, res) => {
 //DELETE
 router.delete('/:id', (req, res) => {
     Nomination.findByIdAndRemove(req.params.id, (err, deletedNomination) => {
+      //Find and remove that nomination from its related screening
+      Screening.findOneAndUpdate({weekID: deletedNomination.screening}, {$pull: {nominations: deletedNomination}}, {new: true}, (err, updatedScreening) => {
+        console.log('Removed nom from associated screening: ' + updatedScreening);
+      })
       Movie.findById(deletedNomination.nominee, (err, relatedMovie) => { //find the related movie, which becomes the template for a movie update object
         console.log('movie data prior to update: ' + relatedMovie);
 
@@ -388,14 +392,14 @@ router.delete('/:id', (req, res) => {
 //UPDATE
 router.put('/:id', (req, res) => {
     
-    // console.log(req.body)
+    console.log(req.body)
     let checked = req.body.winner === "on" ? true : false
     req.body.winner = checked
 
     Nomination.findById(req.params.id).populate("screening").populate("nominee").exec((err, preUpdateNom) => {
       if(err) console.log(err.message);
       if(req.body.screening !== preUpdateNom.screening) { //if the nomination is now to be associated with a different screening, we need to determine what is now the earliest nomination for this movie. It may be changing as a result of this update. If it is, we need to reassign the origNominator for the movie. Yuck.
-        Nomination.find({nominee: preUpdateNom.nominee._id}).populate("screening").exec((err, movieNominations) => { // find all Nominations for the preUpdateNom's movie
+        Nomination.find({nominee: preUpdateNom.nominee._id}).populate("nominee").exec((err, movieNominations) => { // find all Nominations for the preUpdateNom's movie
           if(err) console.log(err.message);
           // then compare the screening date of each nom, figuring out which is the earliest
           
@@ -412,6 +416,7 @@ router.put('/:id', (req, res) => {
             earliestNom = movieNominations[1] // if the nomination we are updating the screening date for is the earliest current nomination, we now need to find the next earliest nomination, i.e. movieNominations[1]. Otherwise, we will be including the old screening date in the comparison that follows.
           }
           let isEarliestNom = true //assume our updating nom is the earliest
+          console.log('line 419: ' + earliestNom.screening.weekID, req.body.screening);
           if (earliestNom.screening.weekID < req.body.screening) { // Check whether the updating nom is in fact earliest.
               isEarliestNom = false
           }
@@ -444,8 +449,9 @@ router.put('/:id', (req, res) => {
         }
 
         if(preUpdateNomination.winner !== req.body.winner) { //if winner status has changed, update appropriately based on which way it changed
+          console.log(req.body)
           Nomination.findByIdAndUpdate(req.params.id, req.body, (err, updatedNomination) => { //
-            if (err) console.log(err);
+            if (err) console.log(err.message);
             //if changing nomination.winner status, update movie and screening
             if(checked !== updatedNomination.nominee.screened && checked === true) { // if changing from non-winner to winner
               Movie.findByIdAndUpdate(updatedNomination.nominee._id, {$set: {screened: checked, screening: updatedNomination.screening._id}}, {new: true}, (err, updatedMovie) => {
