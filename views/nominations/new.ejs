@@ -36,10 +36,10 @@ genre: [String] -->
         </tr>
       <% if(nomination_type === "prev_nomination") { %>      
         <tr>
-          <td class="info-start-text"><span class="red">* </span>Choose a previous nomination</td>
+          <td class="info-start-text"><span class="red">* </span>Choose an unscreened movie from our movies database</td>
           <td class="new-data-text">
             <select name="nominee" id="nominee" required>
-              <option value="">-Previous Nominees-</option>
+              <option value="">-Unscreened Movies in FFS database-</option>
               <% for (let movie of movies) { %>
                 <% if (!movie.screened) { %> 
                   <option value="<%=movie.title%>"><%=movie.title%></option>

@@ -265,6 +265,11 @@ td img {
   text-align: center;
 }
 
+.new-nomination-note {
+  padding: 1em 25%;
+  border-top: 1px dotted black;
+}
+
 /* .nomination-show-table .info-data-text {
   text-align: center;
 } */
