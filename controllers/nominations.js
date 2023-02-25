@@ -117,31 +117,7 @@ router.get('/new', (req, res) => {
 //FIND ORIGINAL NOMINATOR
 //findOrigNominator needs to return the nominator string of the earliest nomination for the movie parameter and a given nomination
 const findOrigNominator = (movie, nomination) => {
-  Nomination.find({nominee: movie._id}, (err, foundNoms) => {
-    if (err) console.log(err.message)
-    let origNom = null
-    let origNominator = ""
-    if (!foundNoms.length) { // if there are no found noms, this means the movie has never been nominated.
-      return origNominator
-    }
-    // loop through existing noms and set the earliest one as origNom
-    for (let nom of foundNoms) {
-      if(!origNom) {
-        origNom = nom
-      }
-      if (origNom.screening > nom.screening) { // if nom.screening (weekID) is earlier than current origNom, replace it
-        origNom = nom
-      }
-    }
-    //check if newest nom is earlier
-    if (origNom.screening > nomination.screening) {
-      origNom = nomination
-    }
 
-    origNominator = origNom.nominator // set the origNominator with the earliest nom's nominator value
-    console.log("findOrigNominator returned: " + origNominator)
-    return origNominator // return the string
-  })
 }
 
 
@@ -151,7 +127,7 @@ const updateWinningMovieAndScreening = (nomObj, movie, screening, nomination, re
     //finally, update the screening with the new data about the selection and nominations
     Screening.findByIdAndUpdate(screening._id, {$set: {selection: movie._id, nominations: [...screening.nominations, nomination._id]}}, {new: true}, (err, updatedScreening) => {
       // and redirect to the nominations archive
-      console.log("Nominated movie-winner: " + updatedMovie);
+      console.log("Nominated movie (winner): " + updatedMovie);
       res.redirect('/nominations');
     })
   })
@@ -163,36 +139,68 @@ const updateNonWinningMovieAndScreening = (nomObj, movie, screening, nomination,
   Movie.findByIdAndUpdate(movie._id, {$set: {screened: nomObj.winner, nominations: [...movie.nominations, nomination._id], allNominators: [...movie.allNominators, nomObj.nominator], origNominator: movie.origNominator}}, {new: true}, (err, updatedMovie) => {
     Screening.findByIdAndUpdate(screening._id, {$set: {nominations: [...screening.nominations, nomination._id]}}, {new: true}, (err, updatedScreening) => {
       // and redirect to the nominations archive
-      console.log("Nominated movie-non-winner: " + updatedMovie);
+      console.log("Nominated movie (non-winner): " + updatedMovie);
       res.redirect('/nominations') 
     })
   })
 }
 
-//ASYNC NOMINATION CREATION
-const createNomination = (nomObj, movie, screening, res) => {
+//COULDN'T FIGURE OUT HOW TO MAKE ABOVE CODE DRYER WITHOUT BREAKING THE APP WHEN ACCESSING NON-WINNING MOVIES. NEEDED TO BE ABLE TO ACCESS VALID SCREENING._ID or NO SCREENING._ID. SETTING IT TO NULL WOULD BREAK THINGS
+
+//NOMINATION CREATION WITH A MOVIE FROM THE MOVIES DB
+const createNominationFromDB = (nomObj, movie, screening, res) => { //create a nomination for a given screening/movie association with a movie already in the movies db
   Nomination.create(nomObj, (err, createdNomination) => {
     if(err) console.log(err);
     if (!movie.nominations.length) { // if there are no previous nominations for this movie, assign the original nominator
       movie.origNominator = createdNomination.nominator
+
+      // update movie with any new data for winner, screening, nominations, and nominators
+      if(nomObj.winner) { // if the new nom is for a winning movie, update appropriately
+        updateWinningMovieAndScreening(nomObj, movie, screening, createdNomination, res);
+      } else { // if it's not a winner, update appropriately.
+        updateNonWinningMovieAndScreening(nomObj, movie, screening, createdNomination, res);
+      }
+
     } else { // manage the origNominator value, if necessary. If nomination is earlier than a previous nomination, update the origNominator value appropriately
-      movie.origNominator = findOrigNominator(movie, createdNomination)
-    }
+      Nomination.find({nominee: movie._id}, (err, foundNoms) => { //find all noms associated with the same movie as the new nomination 
+        if (err) console.log(err.message)
+        let origNom = null
+        let origNominator = ""
+        if (!foundNoms.length) { // if there are no found noms, this means the movie has never been nominated.
+          movie.origNominator = origNominator
+        }
+        // loop through existing noms and set the earliest one as origNom
+        for (let nom of foundNoms) {
+          if(!origNom) {
+            origNom = nom
+          }
+          if (origNom.screening > nom.screening) { // if nom.screening (weekID) is earlier than current origNom, replace it
+            origNom = nom
+          }
+        }
+        //check if newest nom is earlier
+        if (origNom.screening > createdNomination.screening) {
+          origNom = createdNomination
+        }
+    
+        origNominator = origNom.nominator // set the origNominator with the earliest nom's nominator value
+        console.log("findOrigNominator returned: " + origNominator)
+        movie.origNominator = origNominator // return the string
 
-    ////FIGURE OUT HOW TO MAKE THE NEXT LINES WAIT FOR FINDORIGNOMINATOR TO COMPLETE!!!
-
-    // update movie with any new data for winner, screening, nominations, and nominators
-    if(nomObj.winner) { // if it's a winning movie, update appropriately
-      updateWinningMovieAndScreening(nomObj, movie, screening, createdNomination, res);
-    } else { // if it's not a winner, update appropriately.
-      updateNonWinningMovieAndScreening(nomObj, movie, screening, createdNomination, res);
+        // update movie with any new data for winner, screening, nominations, and nominators
+        if(nomObj.winner) { // if the new nom is for a winning movie, update appropriately
+          updateWinningMovieAndScreening(nomObj, movie, screening, createdNomination, res);
+        } else { // if it's not a winner, update appropriately.
+          updateNonWinningMovieAndScreening(nomObj, movie, screening, createdNomination, res);
+        }
+      })
     }
   })
 }
 
 //CREATE
 router.post('/', (req, res) => {
-  console.log(req.body)
+  // console.log(req.body)
   let nomObj = {} // build a properly formatted nomination prior to calling Nomination.create
   // all Nominations conform to model with keys that include screening, nominee, nominator, blurb, and winner.
   nomObj.nominator = req.body.nominator
@@ -200,12 +208,13 @@ router.post('/', (req, res) => {
   nomObj.winner = req.body.winner === "on" ? true : false
 
   if (req.body.nominee) { // if user chooses an unwatched movie from the database to submit
+    console.log('User chose an unwatched movie from existing db of movies. Creating nomination...');
     Screening.findOne({weekID: req.body.screeningID}, (err, foundScreening) => { //assign the screeningID to the new nomination object
       nomObj.screening = foundScreening._id
       Movie.findOne({title: req.body.nominee}, (err, foundMovie) => { // find the movie in the database and assign it to the nomination object
         nomObj.nominee = foundMovie._id
         // Create the new nomination
-        createNomination(nomObj, foundMovie, foundScreening, res);
+        createNominationFromDB(nomObj, foundMovie, foundScreening, res);
       }) 
     })
   } else { //if it's a first-time nominee
