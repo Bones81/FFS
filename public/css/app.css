@@ -215,9 +215,11 @@ td {
   text-align: center;
 }
 
-#nominations-list tr:nth-of-type(2n+1), .screenings-table tr:nth-of-type(2n+1) {
+#nominations-list tr.tr-section2, .screenings-table tr:nth-of-type(2n+1) {
   background: var(--table-row1);
 }
+
+
 
 .non-mobile, .x-large {
   display: none;

@@ -19,8 +19,12 @@
       </thead>
       <tbody>
         <% for (let nomination of nominations) { %>
-          <tr>
-              <td><%=nomination.screening.date.toString().slice(3,15)%></td>
+          <% if(nomination.screening.weekID % 2 === 0) { %> 
+            <tr class="tr-section1">
+          <% } else { %>
+            <tr class="tr-section2">
+          <% } %> 
+              <td class="td-screening-date"><%=nomination.screening.date.toString().slice(3,15)%></td>
               <td><%=nomination.nominator%></td>
               <td><% if (nomination.winner) { %> ⭐ <% } %><%=nomination.nominee.title%></td>
               <td class="text-center no-border"><button><a href="/nominations/<%=nomination._id%>">View</a></button></td>
