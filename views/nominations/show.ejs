@@ -13,6 +13,11 @@
     <h1 class="data-title nomination-bgcolor">Nomination Info</h1>
     <table class="nomination-show-table">
       <tr>
+        <td colspan="2">
+          <% if (nomination.winner) { %><h3 class="winning-nom-text"> ⭐ Winning Nomination ⭐</h3><% } %>
+        </td>
+      </tr>
+      <tr>
         <td class="info-start-text">Movie Nominated: </td>
         <td class="info-data-text nominee"><a href="/movies/<%=nomination.nominee._id%>"><%=nomination.nominee.title.toUpperCase()%></a></td>
       </tr>

@@ -22,7 +22,7 @@
           <tr>
               <td><%=nomination.screening.date.toString().slice(3,15)%></td>
               <td><%=nomination.nominator%></td>
-              <td><%=nomination.nominee.title%></td>
+              <td><% if (nomination.winner) { %> ⭐ <% } %><%=nomination.nominee.title%></td>
               <td class="text-center no-border"><button><a href="/nominations/<%=nomination._id%>">View</a></button></td>
           </tr>
         <% } %>
