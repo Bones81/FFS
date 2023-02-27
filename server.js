@@ -61,7 +61,11 @@ app.get('/', (req, res) => {
 //   })
 // })
 
-
+app.get('/staff', (req, res) => {
+  res.render('staff.ejs', {
+    tabTitle: 'FFS Staff'
+  }) 
+})
 
 
 
