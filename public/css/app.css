@@ -395,10 +395,11 @@ nav a:hover {
 /* STAFF PAGE */
 .staff-link {
   position: absolute;
-  top: 25px;
-  right: 25px;
+  top: 10px;
+  right: 5px;
   border-radius: 50%;
-  padding: 1em;
+  font-size: 0.75em;
+  padding: 0.5em;
   text-decoration: none;
   transition: all 0.2s ease;
   background: linear-gradient(0deg, grey, silver, grey);
@@ -468,6 +469,11 @@ nav a:hover {
 
   .staff-title {
     width: 80%;
+  }
+
+  .staff-link {
+    font-size: 1em;
+    right: 10px;
   }
 }
 
@@ -551,6 +557,12 @@ nav a:hover {
 
   .selection-title {
     max-width: 300px;
+  }
+
+  .staff-link {
+    top: 25px;
+    right: 25px;
+    padding: 1em;
   }
 }
 
