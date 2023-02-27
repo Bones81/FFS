@@ -401,6 +401,7 @@ nav a:hover {
   padding: 1em;
   text-decoration: none;
   transition: all 0.2s ease;
+  background: linear-gradient(0deg, grey, silver, grey);
 }
 
 .staff-link:hover {
