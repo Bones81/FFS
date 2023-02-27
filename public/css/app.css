@@ -6,6 +6,10 @@
   --table-row2: linear-gradient(35deg, rgba(192,192,192, 1) 0%, #bbc 25%, #bbc 75%, rgba(192,192,192,1) 100%);
 }
 
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
 body {
   text-align: center;
   background: radial-gradient(lime, green, olive, lime, green, olive, lime, green, olive);
@@ -388,6 +392,39 @@ nav a:hover {
   color: red;
 }
 
+/* STAFF PAGE */
+.staff-link {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  border-radius: 50%;
+  padding: 1em;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.staff-link:hover {
+  transform: scale(1.2);
+}
+
+.staff-title {
+  padding: 0.5em 10%;
+  font-size: 20px;
+  border-top: 1px solid black;
+  background: linear-gradient(-25deg, blue 0%, silver 20%, silver 80%, blue 100%);
+  margin: 0.5em auto;
+  border-radius: 20px;
+  box-shadow: 2px 2px 5px black;
+  width: 90%;
+}
+
+.staff-member {
+  font-size: 1.5em;
+  font-family: 'Raleway', sans-serif;
+  margin-top: 0.5em;
+  text-shadow: 1px 1px 10px whitesmoke;
+}
+
 @media (min-width: 480px) {
   td img {
     max-height: 120px;
@@ -427,6 +464,10 @@ nav a:hover {
     position: relative;
     z-index: 0;
   }
+
+  .staff-title {
+    width: 80%;
+  }
 }
 
 @media (min-width: 640px) {
@@ -457,6 +498,15 @@ nav a:hover {
 
   .nominator, .nominee {
     font-size: 1em;
+  }
+
+  .staff-title {
+    font-size: 1.5em;
+    width: 70%
+  }
+
+  .staff-member {
+    font-size: 1.75em;
   }
 }
 
@@ -530,5 +580,14 @@ nav a:hover {
 
   .nominator, .nominee {
     font-size: 1.25em;
+  }
+
+  .staff-title {
+    font-size: 2em;
+    width: 60%
+  }
+
+  .staff-member {
+    font-size: 2.25em;
   }
 }
