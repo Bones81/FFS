@@ -127,12 +127,22 @@ h1 {
   background: linear-gradient(to top, aqua, aquamarine);
   width: 80vw;
   margin: 0 auto;
-  padding: 1em;
+  padding: 2em;
   border-top-left-radius: 25%;
   border-bottom-right-radius: 25%;
   border-top-right-radius: 5px;
   border-bottom-left-radius: 5px;
   font-family: 'Cabin', sans-serif;
+}
+
+.blurb-first-lines {
+  display: inline-block;
+  width: 85%;
+}
+
+hr {
+  border: 1px solid black;
+  width: 25%;
 }
 
 h2 {
