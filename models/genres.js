@@ -15,6 +15,7 @@ module.exports = [
     'Fantasy',
     'Historical',
     'Holiday',
+    'Medieval',
     'Military',
     'Musical',
     'Mystery',
