@@ -16,5 +16,6 @@ module.exports = [
     'Micah Baskir',
     'Brain Trust',
     'Ziemba Household',
-    'Clay Hayles'
+    'Clay Hayles',
+    'Lauren Berger'
 ]

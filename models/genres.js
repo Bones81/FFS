@@ -11,6 +11,7 @@ module.exports = [
     'Cyberpunk',
     'Disaster',
     'Drama',
+    'Dystopian',
     'Experimental',
     'Fantasy',
     'Historical',

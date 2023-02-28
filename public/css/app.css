@@ -464,7 +464,7 @@ nav a:hover {
     flex-flow: column wrap;
     align-items: flex-start;
     justify-content: center;
-    max-height: 200px;
+    max-height: 400px;
   }
 
   .page-title {
