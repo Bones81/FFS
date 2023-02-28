@@ -8,30 +8,7 @@ const Nomination = require('../models/nominations')
 const Screening = require('../models/screening')
 const screeningSeed = require('../models/seed_screenings')
 
-const genres = [
-    'Action',
-    'Adventure',
-    'Animated',
-    'Art Film',
-    'Comedy',
-    'Comic Book-Based',
-    'Crime',
-    'Drama',
-    'Experimental',
-    'Fantasy',
-    'Historical',
-    'Musical',
-    'Mystery',
-    'Holiday',
-    'Horror',
-    'Rom-Com',
-    'Satire',
-    'Science Fiction',
-    'Thriller',
-    'Video Game-Based',
-    'Western',
-    'Other'
-]
+const genres = require('../models/genres')
 
 //ADD SCREENINGS TO EXISTING MOVIES IN MOVIES COLLECTION
 // router.get('/addscreenings', (req, res) => {

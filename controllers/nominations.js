@@ -6,50 +6,9 @@ const nominationSeed = require('../models/seed_nominations')
 const Screening = require('../models/screening')
 const Movie = require('../models/movies')
 
-const genres = [
-  'Action',
-  'Adventure',
-  'Animated',
-  'Art Film',
-  'Comedy',
-  'Comic Book-Based',
-  'Crime',
-  'Drama',
-  'Experimental',
-  'Fantasy',
-  'Historical',
-  'Holiday',
-  'Musical',
-  'Mystery',
-  'Horror',
-  'Romance',
-  'Satire',
-  'Science Fiction',
-  'Thriller',
-  'Video Game-Based',
-  'Western',
-  'Other'
-]
+const genres = require('../models/genres')
 
-const nominators = [
-  'Nathan Freeman',
-  'Sujan Trivedi',
-  'Stephanie Weitzner',
-  'Nigam Trivedi',
-  'Walter J. McMath',
-  'John Vennema',
-  'Katharine Croke',
-  'Paul Ziemba',
-  'Emily Ziemba',
-  'Carmen Roman',
-  'Ben Beckley-Chayes',
-  'Jeffrey Kitrosser',
-  'Salman Baig',
-  'Jeremy Weissmann',
-  'Micah Baskir',
-  'Brain Trust',
-  'Ziemba Household',
-]
+const nominators = require('../models/nominators')
 
 let nominators_sorted = nominators.sort((a,b) => {
   if(a > b) {
