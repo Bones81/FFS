@@ -2,6 +2,7 @@ module.exports = [
     'Action',
     'Adventure',
     'Animated',
+    'Apocalytpic',
     'Art Film',
     'Black Comedy',
     'Blaxploitation',
