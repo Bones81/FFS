@@ -14,6 +14,7 @@ module.exports = [
     'Dystopian',
     'Epic',
     'Experimental',
+    'Family',
     'Fantasy',
     'Historical',
     'Holiday',
