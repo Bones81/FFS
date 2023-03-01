@@ -237,6 +237,13 @@ router.post('/initial-info', (req, res) => {
   Screening.find({weekID: screeningID}, (err, screening) => {
     screening = screening[0]
     Movie.find({}, (err, movies) => {
+      movies.sort((a,b) => {
+        if(a.title > b.title) {
+          return 1
+        } else {
+          return -1
+        }
+      })
       res.render('nominations/new.ejs', {
         tabTitle: 'Continue Nomination',
         screening: screening,
