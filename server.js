@@ -32,7 +32,8 @@ const nominationsController = require('./controllers/nominations.js')
 app.use('/movies', moviesController)
 app.use('/screenings', screeningsController)
 app.use('/nominations', nominationsController)
-let maintenance = true
+
+let maintenance = false // Switch to true to turn on maintenance mode; initial page will render maintenance.ejs instead
 
 //JSON routes
 
