@@ -32,13 +32,19 @@ const nominationsController = require('./controllers/nominations.js')
 app.use('/movies', moviesController)
 app.use('/screenings', screeningsController)
 app.use('/nominations', nominationsController)
-
+let maintenance = true
 
 //JSON routes
 
 //HOME ROUTE
 app.get('/', (req, res) => {
-  res.redirect('/screenings')
+  if(maintenance) {
+    res.render('maintenance.ejs', {
+      tabTitle: 'FFS Maintenance Mode'
+    })
+  } else {
+    res.redirect('/screenings')
+  }
 })
 
 //FIX DATES ROUTE
