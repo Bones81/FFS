@@ -420,8 +420,14 @@ router.delete('/:id', (req, res) => {
 //     console.log(updatedM); 
 // })
 
-// Screening.findOneAndUpdate({weekID: 72}, {nominations: ["63e91aa8b420431ccea0042a"]}, {new: true}, (err, foundScreening) => {
-//     console.log(foundScreening);
+// Screening.findOneAndUpdate({weekID: 72}, {nominations: [
+//         "63fa7568326f87599acfbddb",
+//         "63fa92fe3de81b4b019fe193",
+//         "63fa94703de81b4b019fe1b4",
+//         "63fa95103de81b4b019fe1c5",
+//         "63fa95643de81b4b019fe1d6"
+//     ]}, {new: true}, (err, foundScreening) => {
+//         console.log(foundScreening);
 // })
 
 module.exports = router
