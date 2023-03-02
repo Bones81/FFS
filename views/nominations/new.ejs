@@ -86,7 +86,7 @@ genre: [String] -->
                   <% for (let genre of genres) { %> 
                       <div class="genre-option">
                           <input type="checkbox" name="genre" value="<%=genre%>" class="" id="genre-option-<%=genre%>"/>
-                          <label for="genre-option" class="genre-option-label"><%=genre%></label><br/>
+                          <label for="genre-option-<%=genre%>" class="genre-option-label"><%=genre%></label><br/>
                       </div>
                   <% } %>
                   </td>

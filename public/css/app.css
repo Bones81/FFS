@@ -464,7 +464,7 @@ nav a:hover {
     flex-flow: column wrap;
     align-items: flex-start;
     justify-content: center;
-    max-height: 500px;
+    max-height: 400px;
     font-size: 0.75em;
   }
 
