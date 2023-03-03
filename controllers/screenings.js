@@ -219,7 +219,8 @@ router.get('/json', (req, res) => {
     Screening.find({}, (err, allScreenings) => {
         err ? console.log(err) : console.log('All screenings found');;
         res.json(allScreenings)
-    }).populate("selection").populate("nominations")
+    // }).populate("selection").populate("nominations")
+    }) //commented previously line out for purposes of migrating database more easily. Can uncomment when migration complete
 })
 
 router.get('/:id/json', (req, res) => {
@@ -371,7 +372,8 @@ router.put('/:id', (req, res) => {
         // res.json(req.body)
         Screening.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, updatedScreening) => {
             // if there is a new selection value, update the related nominations and movies
-
+            // THIS AREA NEEDS ATTENTION; NEED TO REMOVE WINNING NOMINATION STATUS FROM PREVIOUSLY MARKED WINNING NOM AND MOVIE THEN
+            // WOULD NEED TO UPDATE THE WINNING NOM AND MOVIE AS WELL
             
             console.log('Screening updated: ' + updatedScreening);
             //now adjust weekIDs to reflect any updated dates
