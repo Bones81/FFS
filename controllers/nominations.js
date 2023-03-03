@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const mongoose = require('mongoose')
 
 const Nomination = require('../models/nominations')
 const nominationSeed = require('../models/seed_nominations')
@@ -22,7 +23,8 @@ let nominators_sorted = nominators.sort((a,b) => {
 
 //JSON
 router.get('/json', (req, res) => {
-  Nomination.find({}, (err, nominations) => {
+  Nomination.find({}).exec((err, nominations) => {
+    if (err) console.log(err);
     res.json(nominations)
   })
 })
@@ -33,6 +35,18 @@ router.get('/:id/json', (req, res) => {
   })
 })
 
+router.get('/json/populatefixattempt', (req, res) => {
+  Nomination.findOne({}, (err, nom) => {
+      console.log(nom);
+      // nom.nominee = new mongoose.Types.ObjectId(nom.nominee)
+      // console.log('after' + nom.nominee);
+      // nom.screening = new mongoose.Types.ObjectId(nom.screening)
+      // Nomination.findByIdAndUpdate(nom._id, nom, {new: true}, (err, updatedNom) => {
+      //   console.log(updatedNom); 
+      // })
+  }).populate("screening").populate("nominee")
+})
+
 
 //INDEX
 router.get('/', (req, res) => {
@@ -40,7 +54,9 @@ router.get('/', (req, res) => {
     res.render('maintenance.ejs', {tabTitle: 'FFS Maintenance Mode'})
 } else {
     Screening.find({}, (err, screenings) => {
+      if(err) console.log('screenings error' + err);
       Movie.find({}, (err, movies) => {
+        if(err) console.log('movies error' + err);
         Nomination.find({}).populate([
           {
             path: "screening",
@@ -50,7 +66,8 @@ router.get('/', (req, res) => {
             path: "nominee",
             ref: "Movie"
           }]).exec((err, nominations) => {
-          console.log(nominations);
+          if(err) console.log(err);
+          console.log(nominations[0]);
           nominations.sort((a,b) => {
             if (a.screening.date < b.screening.date) {
               return 1
