@@ -1,4 +1,4 @@
-[
+module.exports = [
     {
     "_id": "63e86c9c60dad338f5c5b37b",
     "screening": "63e682246ff4a2b86c49d1eb",

@@ -1,4 +1,4 @@
-[
+module.exports = [
   {
   "_id": "633e69284e073d26c42698e2",
   "title": "Speed 2: Cruise Control",

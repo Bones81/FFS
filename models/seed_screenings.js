@@ -1,4 +1,4 @@
-[
+module.exports = [
     {
     "_id": "633e8748e26cc37fe711d1de",
     "weekID": 15,

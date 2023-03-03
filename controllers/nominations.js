@@ -35,17 +35,17 @@ router.get('/:id/json', (req, res) => {
   })
 })
 
-router.get('/json/populatefixattempt', (req, res) => {
-  Nomination.findOne({}, (err, nom) => {
-      console.log(nom);
-      // nom.nominee = new mongoose.Types.ObjectId(nom.nominee)
-      // console.log('after' + nom.nominee);
-      // nom.screening = new mongoose.Types.ObjectId(nom.screening)
-      // Nomination.findByIdAndUpdate(nom._id, nom, {new: true}, (err, updatedNom) => {
-      //   console.log(updatedNom); 
-      // })
-  }).populate("screening").populate("nominee")
-})
+// router.get('/json/populatefixattempt', (req, res) => {
+//   Nomination.findOne({}, (err, nom) => {
+//       console.log(nom);
+//       // nom.nominee = new mongoose.Types.ObjectId(nom.nominee)
+//       // console.log('after' + nom.nominee);
+//       // nom.screening = new mongoose.Types.ObjectId(nom.screening)
+//       // Nomination.findByIdAndUpdate(nom._id, nom, {new: true}, (err, updatedNom) => {
+//       //   console.log(updatedNom); 
+//       // })
+//   }).populate("screening").populate("nominee")
+// })
 
 
 //INDEX
