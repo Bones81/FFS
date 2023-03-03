@@ -1,3 +1,15 @@
+:root {
+  --screening-bg: linear-gradient(35deg, rgba(192,192,192,0.2) 0%, green 50%, green 50%, rgba(192,192,192,0.2) 100%);
+  --nomination-bg: linear-gradient(35deg, rgba(192,192,192,0.2) 0%, orange 50%, orange 50%, rgba(192,192,192,0.2) 100%);
+  --movie-bg: linear-gradient(35deg, rgba(192,192,192,0.2) 0%, blue 50%, blue 50%, rgba(192,192,192,0.2) 100%);
+  --table-row1: linear-gradient(35deg, rgba(192,192,192,0.2) 0%, lightgray 25%, lightgray 75%, rgba(192,192,192,0.2) 100%);
+  --table-row2: linear-gradient(35deg, rgba(192,192,192, 1) 0%, #bbc 25%, #bbc 75%, rgba(192,192,192,1) 100%);
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
 body {
   text-align: center;
   background: radial-gradient(lime, green, olive, lime, green, olive, lime, green, olive);
@@ -17,6 +29,10 @@ body {
   margin: 1em auto;
 }
 
+.movies-container {
+  gap: 1em;
+}
+
 .card-link {
   text-decoration: none;
   color: black;
@@ -34,6 +50,19 @@ body {
   background: linear-gradient(225deg, whitesmoke, silver, whitesmoke);
 }
 
+.movie-card {
+  height: 360px;
+  display: grid;
+  place-items: center;
+  gap: 0;
+  padding: 0.25em;
+  margin: 0;
+}
+
+.movie-card img {
+  height: 250px;
+}
+
 .show-card {
   min-width: 50vw;
   max-width: 80vw;
@@ -42,6 +71,7 @@ body {
 .card img {
   object-fit: cover;
   max-width: 90%;
+  max-height: 350px;
 }
 
 .card h3 {
@@ -53,18 +83,66 @@ h1 {
   font-size: 1.5em;
 }
 
+.data-link {
+  padding: 0.25em 0.5em;
+  border-radius: 50px;
+  box-shadow: 1px 1px 5px black;  
+  color: whitesmoke;
+  text-shadow: 1px 1px 5px black;
+}
+
+.data-span {
+  border-radius: 50px;
+}
+
+.movie-data-title, .movie-data-link, .movie-data-span, .movie-bgcolor {
+  background: var(--movie-bg);
+}
+
+.nomination-data-title, .nomination-data-link, .nomination-data-span, .nomination-bgcolor {
+  background: var(--nomination-bg);
+}
+
+.screening-data-title, .screening-data-link, .screening-data-span, .screening-bgcolor {
+  background: var(--screening-bg);
+}
+
+.data-title {
+  width: 70%;
+  margin: 0em auto;
+  transform: skewX(-10deg) rotate(-5deg);
+  text-shadow: 2px 2px 5px black;
+}
+
+.data-span, .data-title {
+  text-shadow: 1px 1px 5px black;
+  color: whitesmoke;
+  font-size: 1em;
+  padding: 0.25em 0.5em;
+}
+
 .blurb {
   border: 1px solid black;
   box-shadow: 2px 2px 5px black;
   background: linear-gradient(to top, aqua, aquamarine);
   width: 80vw;
   margin: 0 auto;
-  padding: 1em;
+  padding: 2em;
   border-top-left-radius: 25%;
   border-bottom-right-radius: 25%;
   border-top-right-radius: 5px;
   border-bottom-left-radius: 5px;
   font-family: 'Cabin', sans-serif;
+}
+
+.blurb-first-lines {
+  display: inline-block;
+  width: 85%;
+}
+
+hr {
+  border: 1px solid black;
+  width: 25%;
 }
 
 h2 {
@@ -106,6 +184,7 @@ button {
 
 .delete-btn {
   background: linear-gradient(to top, red, coral, red);
+  font-size: 0.5em;
   /* font-family: 'Cabin', sans-serif; */
 }
 
@@ -125,17 +204,68 @@ label {
 }
 
 table {
-  background-color: #bbc;
+  background: var(--table-row2);
   text-align: left;
-  max-width: 90%;
+  /* max-width: 300px; */
   margin: 0 auto;
+  border-collapse: collapse;
+  padding: 1em;
+}
+
+thead {
+  text-align: center;
+}
+
+th {
+  background-color: var(--table-row2);
+  padding-left: 0.25em;
 }
 
 td {
-  /* padding: 1px; */
-  border: 1px solid grey;
-  font-size: 0.67em;
+  padding: 0.25em 0.5em;
+  /* border: 1px solid grey; */
+  font-size: 0.5em;
   font-family: 'Raleway', sans-serif;
+  text-align: center;
+}
+
+#nominations-list tr.tr-section2, .screenings-table tr:nth-of-type(2n+1) {
+  background: var(--table-row1);
+}
+
+
+
+.non-mobile, .x-large {
+  display: none;
+  font-size: 1em;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+.card .winning-nom-text {
+  font-size: 0.67em;
+}
+
+.card .winner-text, .card .movie-title {
+  font-size: 1em;
+}
+
+.screening-date, .selection-title {
+  font-size: 0.67em;
+  text-align: center;
+  font-variant: small-caps;
+}
+
+.screening-date a, .selection-title a {
+  text-decoration: none;
+}
+
+td img {
+  max-height: 100px;
+  max-width: 70px;
+  object-fit: contain;
+  object-position: center;
 }
 
 .info-start-text {
@@ -148,7 +278,42 @@ td {
 }
 
 .info-data-text {
-  text-align: right;
+  text-align: center;
+}
+
+.new-nomination-note {
+  padding: 1em 25%;
+  border-top: 1px dotted black;
+}
+
+/* .nomination-show-table .info-data-text {
+  text-align: center;
+} */
+
+.nominator, .nominee {
+  font-size: 0.83em;
+}
+
+.table-spacer {
+  height: 0.25em;
+}
+
+.no-border {
+  border: none;
+}
+
+.text-center {
+  text-align: center;
+}
+
+ol {
+  padding-left: 1em;
+  margin: 0;
+  list-style: none;
+}
+
+.screenings-table ol {
+  padding-left: 1em;
 }
 
 #create-btn, .submit-btn {
@@ -166,6 +331,17 @@ td {
   box-shadow: -2px 2px 5px green;
 }
 
+#nominations-list {
+  margin: 0.5em auto;
+}
+
+#nominations-list td {
+  padding: 0.25em;
+}
+
+#nominations-list tr td:nth-of-type(3) {
+  font-style: italic;
+}
 
 header {
   position: sticky;
@@ -196,7 +372,7 @@ nav a {
 
 nav a:hover {
   transform: scale(1.1);
-  color: blue;
+  /* color: blue; */
 }
 #search-form {
   flex-basis: 100%;
@@ -209,7 +385,7 @@ nav a:hover {
 
 .page-title {
   background-image: url(/img/film-negative-brown.jpeg);
-  background-size: contain;
+  background-size: cover;
   background-position: center;
   /* background-repeat: no-repeat; */
   color: white;
@@ -217,13 +393,139 @@ nav a:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.25em;
+  font-size: 1em;
   margin: 1em auto;
   text-shadow: black 2px 2px 5px;
 }
 
 .red {
   color: red;
+}
+
+/* STAFF PAGE */
+.staff-link {
+  position: absolute;
+  top: 10px;
+  right: 5px;
+  border-radius: 50%;
+  font-size: 0.75em;
+  padding: 0.5em;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  background: linear-gradient(0deg, grey, silver, grey);
+}
+
+.staff-link:hover {
+  transform: scale(1.2);
+}
+
+.staff-title {
+  padding: 0.5em 10%;
+  font-size: 20px;
+  border-top: 1px solid black;
+  background: linear-gradient(-25deg, blue 0%, silver 20%, silver 80%, blue 100%);
+  margin: 0.5em auto;
+  border-radius: 20px;
+  box-shadow: 2px 2px 5px black;
+  width: 90%;
+}
+
+.staff-member {
+  font-size: 1.5em;
+  font-family: 'Raleway', sans-serif;
+  margin-top: 0.5em;
+  text-shadow: 1px 1px 10px whitesmoke;
+}
+
+@media (min-width: 480px) {
+  td img {
+    max-height: 120px;
+    max-width: 80px;
+  }
+
+  .screening-date, .selection-title {
+    font-size: 0.83em;
+  }
+
+  .delete-btn {
+    font-size: 0.67em;
+  }
+
+  .non-mobile {
+    display: table-cell;
+  }
+
+  .x-large {
+    display: none;
+  }
+
+  .genre-options {
+    display: flex;
+    flex-flow: column wrap;
+    align-items: flex-start;
+    justify-content: center;
+    max-height: 400px;
+    font-size: 0.75em;
+  }
+
+  .page-title {
+    font-size: 1.25em;
+  }
+  
+  .data-title {
+    font-size: 1.25em;
+    position: relative;
+    z-index: 0;
+  }
+
+  .staff-title {
+    width: 80%;
+  }
+
+  .staff-link {
+    font-size: 1em;
+    right: 10px;
+  }
+}
+
+@media (min-width: 640px) {
+  td img {
+    max-height: 120px;
+    max-width: 80px;
+  }
+
+  .screening-date, .selection-title {
+    font-size: 1em;
+  }
+
+  .selection-title {
+    max-width: 200px;
+  }
+
+  .delete-btn, .edit-btn {
+    font-size: 0.83em;
+  }
+
+  .page-title {
+    background-size: contain;
+  }
+
+  .page-title, .data-title {
+    font-size: 1.5em;
+  }
+
+  .nominator, .nominee {
+    font-size: 1em;
+  }
+
+  .staff-title {
+    font-size: 1.5em;
+    width: 70%
+  }
+
+  .staff-member {
+    font-size: 1.75em;
+  }
 }
 
 @media (min-width: 840px) {
@@ -235,6 +537,10 @@ nav a:hover {
     font-size: 1.5em;
   }
 
+  .data-title {
+    font-size: 2.5em;
+  }
+
   h2 {
     font-size: 1.25em;
   }
@@ -243,8 +549,31 @@ nav a:hover {
     font-size: 1em;
   }
 
+  .card .winning-nom-text {
+    font-size: 0.75em;
+  }
+
   td, label {
     font-size: 0.83em;
+  }
+
+  td img {
+    max-height: 120px;
+    max-width: 80px;
+  }
+
+  .screening-date, .selection-title {
+    font-size: 2em;
+  }
+
+  .selection-title {
+    max-width: 300px;
+  }
+
+  .staff-link {
+    top: 25px;
+    right: 25px;
+    padding: 1em;
   }
 }
 
@@ -265,7 +594,24 @@ nav a:hover {
     font-size: 1.25em;;
   }
 
+  .card .winning-nom-text {
+    font-size: 0.9em;
+  }
+
   td, label {
     font-size: 1em;
+  }
+
+  .nominator, .nominee {
+    font-size: 1.25em;
+  }
+
+  .staff-title {
+    font-size: 2em;
+    width: 60%
+  }
+
+  .staff-member {
+    font-size: 2.25em;
   }
 }

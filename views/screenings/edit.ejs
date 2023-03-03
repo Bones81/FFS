@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head.ejs')%>
+  </head>
+  <body>
+    <header><%- include('../partials/header.ejs')%></header>
+    <h1 class="page-title">
+      Edit Screening Info for <%=screening.date.toString().slice(3,15)%>
+    </h1>
+    <form
+      action="/screenings/<%=screening._id%>?_method=PUT"
+      method="POST"
+      id="new-form"
+    >
+      <table>
+        <tr>
+          <td class="info-start-text">Date of Screening:</td>
+          <td class="new-data-text">
+            <input type="date" name="date" id="date" value="<%=date%>" />
+            <input
+              type="number"
+              name="weekID"
+              hidden
+              value="<%=screening.weekID%>"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td class="info-start-text">Notes / Comments:</td>
+          <td class="new-data-text">
+            <textarea
+              name="notes"
+              rows="10"
+              cols="50"
+              placeholder="Anything noteworthy about the screening: Brain Trust-decreed themes, nomination trends, FFS developments"
+            ><%=screening.notes%></textarea> 
+            <!-- Adding space inside previous textarea element causes \r\n to be added to text box. Leave no spaces to avoid this. -->
+          </td>
+        </tr>
+        <% if(screening.nominations.length) { %>
+        <tr>
+          <td class="info-start-text">⭐ FFS Selection ⭐</td>
+          <td class="new-data-text">
+            <select name="selection">
+              <option value=""
+                <% if(!screening.selection) { %>
+                  selected
+                <% } %>
+              >--Selection not yet made--</option>
+              <% for(let nomination of screening.nominations) { %>
+              <option value="<%=nomination.nominee._id%>"
+                <% if(screening.selection && screening.selection.title === nomination.nominee.title) { %> 
+                  selected
+                <% } %>
+                >
+                <%=nomination.nominee.title%>
+              </option>
+              <% } %>
+            </select>
+          </td>
+        </tr>
+        <% } else { %>
+          <tr>
+            <td class="info-start-text">⭐ FFS Selection ⭐</td>
+            <input hidden type="text" value="" name="selection" />
+            <td class="info-data-text">Nominations not yet entered</td>
+          </tr>
+        <% } %>
+        <tr>
+          <td class="info-start-text">Edit Nominations:</td>
+          <td class="info-data-text">Click a nomination to edit its details: <br/>
+            <ol class="nominee-list">
+              <% for (let nomination of screening.nominations) { %> 
+                <li class="nominee-li"><a href="/nominations/<%=nomination._id%>/edit"><%=nomination.nominee.title%></a></li><br/>
+              <% } %>
+            </ol>
+          </td>
+        </tr>
+      </table>
+      <input
+        type="submit"
+        id="create-btn"
+        value="Update FFS Screening with Changes"
+      />
+    </form>
+  </body>
+</html>
