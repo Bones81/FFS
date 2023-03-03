@@ -219,8 +219,8 @@ router.get('/json', (req, res) => {
     Screening.find({}, (err, allScreenings) => {
         err ? console.log(err) : console.log('All screenings found');;
         res.json(allScreenings)
-    // }).populate("selection").populate("nominations")
-    }) //commented previously line out for purposes of migrating database more easily. Can uncomment when migration complete
+    }).populate("selection").populate("nominations")
+    // }) //commented previously line out for purposes of migrating database more easily. Can uncomment when migration complete
 })
 
 router.get('/:id/json', (req, res) => {

@@ -23,7 +23,7 @@ let nominators_sorted = nominators.sort((a,b) => {
 
 //JSON
 router.get('/json', (req, res) => {
-  Nomination.find({}).exec((err, nominations) => {
+  Nomination.find({}).populate("screening").populate("nominee").exec((err, nominations) => {
     if (err) console.log(err);
     res.json(nominations)
   })
@@ -32,7 +32,7 @@ router.get('/json', (req, res) => {
 router.get('/:id/json', (req, res) => {
   Nomination.findById(req.params.id, (err, foundNom) => {
     res.json(foundNom)
-  })
+  }).populate("screening").populate("nominee")
 })
 
 // router.get('/json/populatefixattempt', (req, res) => {
