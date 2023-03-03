@@ -7,6 +7,7 @@ const seedMoviesNew = require('../models/seed_movies_new')
 const Nomination = require('../models/nominations')
 const Screening = require('../models/screening')
 const screeningSeed = require('../models/seed_screenings')
+const maintenance = require('../models/maintenance')
 
 const genres = require('../models/genres')
 
@@ -78,23 +79,31 @@ router.get('/seed', (req, res) => {
 
 //INDEX ROUTES
 router.get('/', (req, res) => {
-    Movie.find({}, (err, allMovies) => {  
-        err ? console.log(err) : console.log('All movies found');
-        // res.json(allMovies);
-      res.render('movies/index.ejs', {
-        tabTitle: 'The Fortnightly Film Society Website',
-        movies: allMovies
-      })
-    }).populate("nominations").populate("screening")
+    if (maintenance) {
+        res.render('maintenance.ejs', {tabTitle: 'FFS Maintenance Mode'})
+    } else {
+        Movie.find({}, (err, allMovies) => {  
+            err ? console.log(err) : console.log('All movies found');
+            // res.json(allMovies);
+        res.render('movies/index.ejs', {
+            tabTitle: 'The Fortnightly Film Society Website',
+            movies: allMovies
+        })
+        }).populate("nominations").populate("screening")
+    }
   })
   
 
 //NEW
 router.get('/new', (req, res) => {
-    res.render('movies/new.ejs', {
-      tabTitle: 'Add Movie',
-      genres: genres
-    })
+    if (maintenance) {
+        res.render('maintenance.ejs', {tabTitle: 'FFS Maintenance Mode'})
+    } else {
+        res.render('movies/new.ejs', {
+        tabTitle: 'Add Movie',
+        genres: genres
+        })
+    }
   })
 
 //CREATE
@@ -164,18 +173,22 @@ router.delete('/:id', (req, res) => {
 
 //SHOW ROUTE
 router.get('/:id', (req, res) => {
-    Movie.findById(req.params.id).populate("screening").populate("nominations").exec((err, foundMovie) => {
-        Nomination.find({nominee: foundMovie._id}, (err, foundNoms) => {
-            Screening.findOne({selection: foundMovie._id}, (err, foundScreening) => {    
-                res.render('movies/show.ejs', {
-                    movie: foundMovie,
-                    screening: foundScreening,
-                    nominations: foundNoms,
-                    tabTitle: foundMovie.title + ' | Show Page' 
+    if (maintenance) {
+        res.render('maintenance.ejs', {tabTitle: 'FFS Maintenance Mode'})
+    } else {
+        Movie.findById(req.params.id).populate("screening").populate("nominations").exec((err, foundMovie) => {
+            Nomination.find({nominee: foundMovie._id}, (err, foundNoms) => {
+                Screening.findOne({selection: foundMovie._id}, (err, foundScreening) => {    
+                    res.render('movies/show.ejs', {
+                        movie: foundMovie,
+                        screening: foundScreening,
+                        nominations: foundNoms,
+                        tabTitle: foundMovie.title + ' | Show Page' 
+                    })
                 })
-            })
-        }).populate("nominee").populate("screening")
-    })
+            }).populate("nominee").populate("screening")
+        })
+    }
 })
 
 //SEARCH RESULTS ROUTE
@@ -284,19 +297,23 @@ router.post('/sort', (req, res) => {
   
 //EDIT ROUTES
 router.get('/:id/edit', (req, res) => {
-    Movie.findById(req.params.id).populate("screening").exec((err, foundMovie) => {
-        Screening.find({}, (err, allScreenings) => {
-            allScreenings.sort((a,b) => {
-                if(a.date > b.date) { return 1 } else { return -1 }
-            })
-            res.render('movies/edit.ejs', {
-                tabTitle: foundMovie.title + " | Edit Page",
-                movie: foundMovie,
-                screenings: allScreenings,
-                genres: genres
+    if (maintenance) {
+        res.render('maintenance.ejs', {tabTitle: 'FFS Maintenance Mode'})
+    } else {
+        Movie.findById(req.params.id).populate("screening").exec((err, foundMovie) => {
+            Screening.find({}, (err, allScreenings) => {
+                allScreenings.sort((a,b) => {
+                    if(a.date > b.date) { return 1 } else { return -1 }
+                })
+                res.render('movies/edit.ejs', {
+                    tabTitle: foundMovie.title + " | Edit Page",
+                    movie: foundMovie,
+                    screenings: allScreenings,
+                    genres: genres
+                })
             })
         })
-    })
+    }
 })
 
 //PUT ROUTES

@@ -6,6 +6,8 @@ const nominationSeed = require('../models/seed_nominations')
 const Screening = require('../models/screening')
 const Movie = require('../models/movies')
 
+const maintenance = require('../models/maintenance') 
+
 const genres = require('../models/genres')
 
 const nominators = require('../models/nominators')
@@ -34,43 +36,51 @@ router.get('/:id/json', (req, res) => {
 
 //INDEX
 router.get('/', (req, res) => {
-  Screening.find({}, (err, screenings) => {
-    Movie.find({}, (err, movies) => {
-      Nomination.find({}, (err, nominations) => {
-        nominations.sort((a,b) => {
-          if (a.screening.date < b.screening.date) {
-            return 1
-          } else {
-            return -1
-          }
-        })
-        res.render('nominations/index.ejs', {
-          tabTitle: 'FFS Nominations',
-          nominations: nominations,
-          screenings: screenings,
-          movies: movies
-        })
-      }).populate("screening").populate("nominee")
+  if (maintenance) {
+    res.render('maintenance.ejs', {tabTitle: 'FFS Maintenance Mode'})
+} else {
+    Screening.find({}, (err, screenings) => {
+      Movie.find({}, (err, movies) => {
+        Nomination.find({}, (err, nominations) => {
+          nominations.sort((a,b) => {
+            if (a.screening.date < b.screening.date) {
+              return 1
+            } else {
+              return -1
+            }
+          })
+          res.render('nominations/index.ejs', {
+            tabTitle: 'FFS Nominations',
+            nominations: nominations,
+            screenings: screenings,
+            movies: movies
+          })
+        }).populate("screening").populate("nominee")
+      })
     })
-  })
+  }
 })
 
 //NEW
 router.get('/new', (req, res) => {
-  Screening.find({}, (err, screenings) => { //show screenings in reverse date order
-    screenings.sort((a,b) => {
-      if (a.date > b.date) { return 1 } else { return -1 };
-    })
-    Movie.find({}, (err, movies) => {
-      res.render('nominations/create_nomination.ejs', {
-        tabTitle: 'Create Nomination',
-        screenings: screenings,
-        movies: movies,
-        genres: genres,
-        nominators: nominators_sorted
+  if (maintenance) {
+    res.render('maintenance.ejs', {tabTitle: 'FFS Maintenance Mode'})
+} else {
+    Screening.find({}, (err, screenings) => { //show screenings in reverse date order
+      screenings.sort((a,b) => {
+        if (a.date > b.date) { return 1 } else { return -1 };
+      })
+      Movie.find({}, (err, movies) => {
+        res.render('nominations/create_nomination.ejs', {
+          tabTitle: 'Create Nomination',
+          screenings: screenings,
+          movies: movies,
+          genres: genres,
+          nominators: nominators_sorted
+        })
       })
     })
-  })
+  }
 })
 
 //FIND ORIGINAL NOMINATOR
@@ -258,27 +268,35 @@ router.post('/initial-info', (req, res) => {
 
 //SHOW
 router.get('/:id', (req, res) => {
+  if (maintenance) {
+    res.render('maintenance.ejs', {tabTitle: 'FFS Maintenance Mode'})
+  } else {
     Nomination.findById(req.params.id, (err, foundNomination) => {
       res.render('nominations/show.ejs', {
         nomination: foundNomination,
         tabTitle: foundNomination.title + ' | Nomination' 
       })
     }).populate("screening").populate("nominee")
+  }
 })
 
 
 //EDIT
 router.get('/:id/edit', (req, res) => {
-  Screening.find({}, (err, allScreenings) => { 
-    Nomination.findById(req.params.id, (err, foundNom) => {
-      res.render('nominations/edit.ejs', {
-        tabTitle: foundNom.nominee.title + " | Edit Nomination",
-        nomination: foundNom,
-        screenings: allScreenings,
-        nominators: nominators_sorted
-      })
-    }).populate("screening").populate("nominee")
-  })
+  if (maintenance) {
+    res.render('maintenance.ejs', {tabTitle: 'FFS Maintenance Mode'})
+  } else {
+    Screening.find({}, (err, allScreenings) => { 
+      Nomination.findById(req.params.id, (err, foundNom) => {
+        res.render('nominations/edit.ejs', {
+          tabTitle: foundNom.nominee.title + " | Edit Nomination",
+          nomination: foundNom,
+          screenings: allScreenings,
+          nominators: nominators_sorted
+        })
+      }).populate("screening").populate("nominee")
+    })
+  }
 })
 
 //CONFIRM DELETE

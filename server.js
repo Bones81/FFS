@@ -33,7 +33,7 @@ app.use('/movies', moviesController)
 app.use('/screenings', screeningsController)
 app.use('/nominations', nominationsController)
 
-let maintenance = false // Switch to true to turn on maintenance mode; initial page will render maintenance.ejs instead
+const maintenance = require('./models/maintenance.js') // Boolean indicating whether maintenance mode is on or not; initial page will render maintenance.ejs if true
 
 //JSON routes
 

@@ -12,6 +12,8 @@ const seedMoviesNew = require('../models/seed_movies_new')
 
 const Nomination = require('../models/nominations')
 
+const maintenance = require('../models/maintenance')
+
 const updateWeekIDs = () => {
     Screening.find({}, (err, allScreenings) => { 
         const dates = []
@@ -169,7 +171,11 @@ const updateWeekIDs = () => {
 
 //INDEX
 router.get('/', (req, res) => {
-    Screening.find({}).populate(//populate the selection and nominations fields
+    if (maintenance) {
+        res.render('maintenance.ejs', {tabTitle: 'FFS Maintenance Mode'})
+    } else {
+
+        Screening.find({}).populate(//populate the selection and nominations fields
         [
             {
                 path: 'selection', model: 'Movie'
@@ -183,18 +189,19 @@ router.get('/', (req, res) => {
                 }
             }
         ]
-    ).exec((err, allScreenings) => { 
-        //put the screenings in chronological order
-        allScreenings.sort( (a,b) => {
-            if (a.weekID > b.weekID) { return 1 } else { return -1 }
+        ).exec((err, allScreenings) => { 
+            //put the screenings in chronological order
+            allScreenings.sort( (a,b) => {
+                if (a.weekID > b.weekID) { return 1 } else { return -1 }
+            })
+            res.render('screenings/index.ejs', {
+                tabTitle: 'FFS Screenings',
+                screenings: allScreenings,
+                screeningWeeks: screeningWeeks,
+                
+            })
         })
-        res.render('screenings/index.ejs', {
-            tabTitle: 'FFS Screenings',
-            screenings: allScreenings,
-            screeningWeeks: screeningWeeks,
-            
-        })
-    })
+    }
 })
 
 //JSON
@@ -224,10 +231,15 @@ router.get('/:id/json', (req, res) => {
 
 //NEW
 router.get('/new', (req, res) => {
-    res.render('screenings/new.ejs', {
-        tabTitle: 'Add New Screening Info',
-        weeks: screeningWeeksSeed
-    })
+    if (maintenance) {
+        res.render('maintenance.ejs', {tabTitle: 'FFS Maintenance Mode'})
+    } else {
+
+        res.render('screenings/new.ejs', {
+            tabTitle: 'Add New Screening Info',
+            weeks: screeningWeeksSeed
+        })
+    }
 })
 
 //CREATE
@@ -280,6 +292,9 @@ router.post('/', (req, res) => {
 
 //SHOW
 router.get('/:id', (req, res) => {
+    if (maintenance) {
+        res.render('maintenance.ejs', {tabTitle: 'FFS Maintenance Mode'})
+    } else {
     Screening.findById(req.params.id).populate(
         [
             {
@@ -295,45 +310,50 @@ router.get('/:id', (req, res) => {
                 }
             }
         ]).exec((err, foundScreening) => {
-        res.render('screenings/show.ejs', {
-            tabTitle: foundScreening.date.toString().slice(3,15) + " FFS Screening",
-            screening: foundScreening
+            res.render('screenings/show.ejs', {
+                tabTitle: foundScreening.date.toString().slice(3,15) + " FFS Screening",
+                screening: foundScreening
+            })
         })
-    })
+    }
 })
 
 //EDIT
 router.get('/:id/edit', (req, res) => {
-    Screening.findById(req.params.id).populate(
-        [
-            {
-                path: 'selection',
-                model: 'Movie'
-            },
-            {
-                path: 'nominations',
-                model: 'Nomination',
-                populate: {
-                    path: 'nominee',
+    if (maintenance) {
+        res.render('maintenance.ejs', {tabTitle: 'FFS Maintenance Mode'})
+    } else {
+        Screening.findById(req.params.id).populate(
+            [
+                {
+                    path: 'selection',
                     model: 'Movie'
+                },
+                {
+                    path: 'nominations',
+                    model: 'Nomination',
+                    populate: {
+                        path: 'nominee',
+                        model: 'Movie'
+                    }
                 }
-            }
-        ]
-    ).exec((err, foundScreening) => {
-        //The logic below generates the date in the correct format to preset it in the Date of Screening field in edit.ejs
-        let date = new Date(foundScreening.date)
-        let dateTime = date.getTime()
-        dateTime -=(1000 * 60 * 60 * 4)
-        date = new Date(dateTime)
-        date = date.toISOString().slice(0,10)
-        console.log('screening.selection = ' + foundScreening.selection);
-        console.log('screening.nominations = ' + foundScreening.nominations);
-        res.render('screenings/edit.ejs', {
-            tabTitle: "Edit " + foundScreening.date.toString().slice(3,15) + " Screening",
-            screening: foundScreening,
-            date: date
+            ]
+        ).exec((err, foundScreening) => {
+            //The logic below generates the date in the correct format to preset it in the Date of Screening field in edit.ejs
+            let date = new Date(foundScreening.date)
+            let dateTime = date.getTime()
+            dateTime -=(1000 * 60 * 60 * 4)
+            date = new Date(dateTime)
+            date = date.toISOString().slice(0,10)
+            console.log('screening.selection = ' + foundScreening.selection);
+            console.log('screening.nominations = ' + foundScreening.nominations);
+            res.render('screenings/edit.ejs', {
+                tabTitle: "Edit " + foundScreening.date.toString().slice(3,15) + " Screening",
+                screening: foundScreening,
+                date: date
+            })
         })
-    })
+    }
 })
 
 //UPDATE
