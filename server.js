@@ -76,7 +76,7 @@ app.get('/staff', (req, res) => {
 
 
 
-mongoose.connect(mongoLOC, () => {
+mongoose.connect(mongoURI, () => {
   console.log('The connection with mongod is established')
 })
 
