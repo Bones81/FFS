@@ -67,7 +67,6 @@ router.get('/', (req, res) => {
             ref: "Movie"
           }]).exec((err, nominations) => {
           if(err) console.log(err);
-          console.log(nominations[0]);
           nominations.sort((a,b) => {
             if (a.screening.date < b.screening.date) {
               return 1
