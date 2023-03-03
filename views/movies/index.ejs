@@ -7,14 +7,14 @@
   <header>
     <%- include('../partials/header.ejs')%>
   </header>
-  <h1 class="page-title" id="home-title">Fortnightly Film Society Movies</h1>
+  <h1 class="page-title" id="home-title">Fortnightly Film Society Database of Considered Movies</h1>
   <h2>Click on a movie to see/edit its details</h2>
-  <h3 class="blurb">Major flops, sci-fi shlock, video game adaptations, high camp, oddball curiosities of cinema, or just plain "dumb" movies... The Fortnightly Film Society has screened them all!</h3>
+  <h3 class="blurb">This area of the site houses all movies that have been screened, nominated, or publicly considered as potential nominations by FFS membership. FFS screening selections are noted with stars.</h3>
   <% if (movies.length === 0) { %>
     <h2 class="no-results-text">Your search returned zero results. Currently the search bar only works when entering full movie titles spelled correctly. Go back to the <a href="/movies">home page</a> to see the full list of movies.</h2>
   <% } %>
   <form action="/movies/sort" id="sort-box" method="POST">
-    <h2 id="sort-header">Sort options (very much in beta testing):</h2>
+    <h2 id="sort-header">Sort options (Needs attention; refined options hopefully available in a future update):</h2>
 
     <input type="radio" id="sort-by-screening-order" name="sortChoice" value="screening_order">
     <label for="sort-by-screening-order">Order Screened</label><br/> 
