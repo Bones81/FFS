@@ -41,7 +41,16 @@ router.get('/', (req, res) => {
 } else {
     Screening.find({}, (err, screenings) => {
       Movie.find({}, (err, movies) => {
-        Nomination.find({}, (err, nominations) => {
+        Nomination.find({}).populate([
+          {
+            path: "screening",
+            ref: "Screening"
+          }, 
+          {
+            path: "nominee",
+            ref: "Movie"
+          }]).exec((err, nominations) => {
+          console.log(nominations);
           nominations.sort((a,b) => {
             if (a.screening.date < b.screening.date) {
               return 1
@@ -55,7 +64,7 @@ router.get('/', (req, res) => {
             screenings: screenings,
             movies: movies
           })
-        }).populate("screening").populate("nominee")
+        })
       })
     })
   }
@@ -473,6 +482,17 @@ router.put('/:id', (req, res) => {
 // DELETE APP-BREAKING NOMS BY ID, USE WITH CAUTION
 // Nomination.findByIdAndRemove('63df3d39c96c3160fcf15c1b', (err, dNom) => {
 //   console.log(dNom); 
+// })
+
+// Nomination.findOne({nominator: 'Sujan Trivedi'}, (err, foundNom) => {
+//   console.log(foundNom)
+//   Screening.findOne({_id: foundNom.screening}, (err, foundScreening) => {
+//     console.log(foundScreening); 
+//   })
+// })
+
+// Screening.findOne({weekID: 69}, (err, foundScreening) => {
+//   console.log(foundScreening); 
 // })
 
 module.exports = router
