@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include ('../partials/head.ejs') %>
+</head>
+<body>
+  <header>
+    <%- include('../partials/header.ejs') %>
+  </header>
+  <div class="container">
+    <h1 class="page-title" id="confirm-delete-title">Confirm Delete?</h1>
+    <h2>ARE YOU SURE?</h2>
+    <h3>Clicking confirm will remove the entry for <%=screening.weekID%> | <%=screening.date.toString().slice(3,15)%> from the database! If this Screening is associated with any Nominations or selections, removing it could cause those Nominations or selections to break!</h3>
+    <h3>
+      <a href="/screenings/<%=screening._id%>"><button class="btn">Go Back</button></a>
+    </h3>
+    <form action="/screenings/<%=screening._id%>?_method=DELETE" method="POST" class="show-form">
+      <button type="submit" class="btn delete-btn">Confirm Delete of <%=screening.weekID%> | <%=screening.date.toString().slice(3,15)%></button>
+    </form>
+  </div>
+
+
+</body>
+</html>

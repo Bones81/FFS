@@ -1,0 +1,113 @@
+<!-- title: {type: String, required: true}, //name of movie
+year: Number, //year of movie's release
+director: String,
+cast: [String],
+poster: String, //url string
+origNominator: String,
+allNominators: [String],
+nominations: [{type: mongoose.Schema.Types.ObjectId, ref: 'Nomination'}],
+screened: Boolean,
+genre: [String] -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head.ejs')%>
+</head>
+<body>
+  <header>
+    <%- include('../partials/header.ejs')%>
+  </header>
+  <h1 class="page-title">Enter New Nomination</h1>
+  <form action="/nominations" method="POST" id="new-form">
+    <table>
+        <tr>
+            <td class="info-start-text no-border">Person Submitting Nomination: </td>
+            <td class="new-data-text no-border">
+              <%=nominator%> <input hidden type="text" name="nominator" value="<%=nominator%>" />
+            </td>
+        </tr>
+        <tr>
+            <td class="info-start-text no-border">Nominating for Screening Date: </td>
+            <td class="new-data-text no-border">
+              <%=screening.weekID%> | <%=screening.date.toString().slice(3,15)%>
+              <input hidden name="screeningID" value=<%=screening.weekID%> />
+            </td>
+        </tr>
+      <% if(nomination_type === "prev_nomination") { %>      
+        <tr>
+          <td class="info-start-text"><span class="red">* </span>Choose an unscreened movie from our movies database</td>
+          <td class="new-data-text">
+            <select name="nominee" id="nominee" required>
+              <option value="">-Unscreened Movies in FFS database-</option>
+              <% for (let movie of movies) { %>
+                <% if (!movie.screened) { %> 
+                  <option value="<%=movie.title%>"><%=movie.title%></option>
+                <% } %>
+              <% } %>
+            </select>
+          </td>
+        </tr>
+      <% } else { %>
+        <tr>
+          <td class="info-start-text">Make a new nomination</td>
+          <td class="new-data-text">
+            <table>
+              <tr>
+                  <td class="info-start-text"><span class="red">* </span>Title: </td>
+                  <td class="new-data-text"><input type="text" name="title" placeholder="(Required) Title of Movie" size="50" /></td>
+              </tr>
+              <tr>
+                  <td class="info-start-text">Poster Image: </td>
+                  <td class="new-data-text"><input type="url" name="poster" placeholder="(Optional, but encouraged) URL of poster image (Wikipedia is usually a good source for images that will work.)" size="80" /></td>
+              </tr>
+              <tr>
+                  <td class="info-start-text">Cast List: </td>
+                  <td class="new-data-text"><textarea id="cast" name="cast" rows="10" cols="50" placeholder="(Optional) List of cast members, comma-separated. e.g. 'Will Ferrell, Christina Applegate, Steve Carrell, Paul Rudd, David Koechner, Fred Willard, Vince Vaughan, Chris Parnell, etc.'"></textarea></td>
+              </tr>
+              <tr>
+                  <td class="info-start-text">Release Year: </td>
+                  <td class="new-data-text">
+                      <select id="year" name="year">
+                          <option value="">--none selected--</option>
+                          <% for (let i = new Date().getFullYear(); i >=1900; i--) { %>
+                              <option value=<%=i%>><%=i%></option>
+                          <% } %>
+                      </select>
+                  </td>
+              </tr>
+              <tr>
+                  <td class="info-start-text">Director: </td>
+                  <td class="new-data-text"><input type="text" name="director" placeholder="(Optional) Director of Movie" size="50" /></td>
+              </tr>
+              <tr>
+                  <td class="info-start-text">Genres: </td>
+                  <td class="new-data-text genre-options">
+                  <% for (let genre of genres) { %> 
+                      <div class="genre-option">
+                          <input type="checkbox" name="genre" value="<%=genre%>" class="" id="genre-option-<%=genre%>"/>
+                          <label for="genre-option-<%=genre%>" class="genre-option-label"><%=genre%></label><br/>
+                      </div>
+                  <% } %>
+                  </td>
+              </tr>
+          </table>
+          </td>
+        </tr>
+      <% } %>
+        <tr>
+            <td class="info-start-text">Nomination Comments: </td>
+            <td class="new-data-text"><textarea name="blurb" rows=10 cols=50 placeholder="(Optional) Legacy Notes / Why should we consider this nomination?"></textarea></td>
+        </tr>
+        <!-- <tr>
+            <td class="info-start-text">(for legacy nominations) Did it win for this screening date?: </td>
+            <td class="new-data-text"><input type="checkbox" name="winner" /></td>
+        </tr> -->
+    </table>
+    <input type="submit" id="create-btn" value="Add new nomination with this data">
+  </form>
+</body>
+
+</html>
+
+<!-- Add ability to choose movie from previous nominees (filter out if already screened) -->

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head.ejs')%>
+  </head>
+  <body>
+    <header><%- include('../partials/header.ejs')%></header>
+    <h1 class="page-title" id="home-title">
+      Fortnightly Film Society Screenings
+    </h1>
+    <h3 class="blurb">
+      <span class="blurb-first-lines">
+        Major flops, sci-fi shlock, video game adaptations, high camp, oddball
+        curiosities of cinema, or just plain "dumb" movies... The Fortnightly Film
+        Society has screened them all!
+      </span> <hr/>
+      First, a reassurance! -- the Fortnightly Film Society is a loose federation of absurdist cinéastes with purely discretionary rights to congregate via videoconference every other Saturday night to "watch" "films" "together" and to use [its] email chain either to nominate and vote upon those "films" beforehand or just to say stupid things to one another.  The actual screening tends to involve a very small group of drunk adults and screaming children (and--let's face it--drunk children).
+      <hr/>
+      But then, a warning! -- although various political factions within the Fortnightly Film Society vehemently promote differing schemata as to what criteria should mitigate in favor of a film's selection, in practice all such theoretical organizing principles have fallen by the wayside, leaving the nomination process to fickle whimsy and utter chaos!
+      <hr/>
+      So say the mysterious giant brains that comprise the Fortnightly Film Society's shadowy governing Brain Trust!
+    </h3>
+    <h2>Click on a screening date to see/edit <span class="screening-bgcolor data-span">screening</span> details</h2>
+    <h2>Click on a nominee to see/edit <span class="nomination-bgcolor data-span">nomination</span> details</h2>
+    <h2>Click on a selection to see/edit <span class="movie-bgcolor data-span">movie</span> details</h2>
+
+    <h1>FFS Screenings</h1>
+    <div class="flex-container screenings-table">
+      <table>
+        <thead>
+          <tr>
+            <th class="non-mobile">Screening</th>
+            <th>Date</th>
+            <th>Poster</th>
+            <th>Selection</th>
+            <th>Nominees</th>
+            <th class="non-mobile x-large">Comments</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for (let screening of screenings.reverse()) { %>
+          <tr>
+            <td class="non-mobile"><%=screening.weekID%></td>
+            <td class="screening-date">
+              <a href="/screenings/<%=screening._id%>"
+                ><%=screening.date.toString().slice(3,15)%></a
+              >
+            </td>
+            <% if(screening.selection) { %>
+              <td>
+                <img
+                src="<%=screening.selection.poster%>"
+                alt="pic of <%=screening.selection.title%>"
+                loading="lazy"
+                />
+              </td>
+              <td class="selection-title">
+                <a href="/movies/<%=screening.selection._id%>"
+                  ><%=screening.selection.title%>
+                </a>
+              </td>
+            <% } else { %>
+              <td>Selection not yet made</td>
+              <td>Selection not yet made</td>
+            <% } %>
+            <td>
+              <ol>
+                <% for (let nom of screening.nominations) { %> 
+                  <li class="nominee-li">
+                    <% if (nom.winner) { %> 
+                      ⭐️
+                    <% } %>
+                    <a class="nom-link" href="/nominations/<%=nom._id%>"><%=nom.nominee.title%></a><br/>
+                  </li>
+                <% } %>
+              </ol>
+            </td>
+            <td class="non-mobile x-large"><%=screening.notes%></td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

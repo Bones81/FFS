@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head.ejs')%>
+</head>
+<body>
+  <header>
+    <%- include('../partials/header.ejs')%>
+  </header>
+  <div id="edit-container">
+      <h1 class="page-title"><%=nomination.nominee.title.toUpperCase()%></h1>
+      <h3>Edit Nomination Details</h3>
+      <img src="<%=nomination.nominee.poster%>" alt="<%=nomination.nominee.title%> poster" />
+      <h2><%=nomination.nominee.title%></h2>
+    <form action="/nominations/<%=nomination._id%>?_method=PUT" method="POST" id='edit-form'>
+      <table>
+        <input hidden type="text" id='nomination-title' name="title" value="<%=nomination.nominee.title%>" />
+        <input hidden type="url" name="poster" id="nomination-poster" value="<%=nomination.nominee.poster%>" />
+        <tr>
+          <td class="no-border text-center" colspan="2">To edit movie title or poster url, <a href="/movies/<%=nomination.nominee._id%>/edit">click here</a></td>
+        </tr>
+        <tr>
+          <td class="table-spacer no-border"></td>
+        </tr>
+        <tr>
+          <td><label for="screening">Nominating for Screening Date: <br/></label></td>
+          <td>
+            <select name="screening">
+              <option selected value="<%=nomination.screening.weekID%>"><%=nomination.screening.weekID%> | <%=nomination.screening.date.toString().slice(3,15)%> (current)</option>
+              <% for (let screening of screenings.reverse()) { %> 
+                <option value="<%=screening.weekID%>"><%=screening.weekID%> | <%=screening.date.toString().slice(3, 15)%></option>
+              <% } %>
+            </select>
+            
+          </td>
+        </tr>
+        <tr>
+          <td><label for="nominator">Person Submitting Nomination: </label></td>
+          <td>
+            <select name="nominator" id="nominator">
+              <option selected value="<%=nomination.nominator%>"><%=nomination.nominator%> (current)</option>
+              <% for (let nominator of nominators) { %> 
+                <option value="<%=nominator%>"><%=nominator%></option>
+              <% } %>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td><label for="blurb">Comments: </label></td>
+          <td><textarea name="blurb" id='blurb' rows=10 cols=50><%=nomination.blurb%></textarea></td>
+        </tr>
+        <tr>
+          <td><label for="winner">Did it win? &#127942;: </label></td>
+          <td>
+            <% if (nomination.winner) { %> 
+                <input type="checkbox" name="winner" id='winner' checked />
+            <% } else { %> 
+                <input type="checkbox" name="winner" id='winner' />
+            <% } %>
+          </td>
+        </tr>
+      </table>
+      <input type="submit" class="submit-btn" value="SUBMIT CHANGES">
+    </form>
+    <form action="/nominations/<%=nomination._id%>/confirm-delete" class="show-form">
+        <input type="submit" class='btn delete-btn' value="DELETE nomination record from database. (The movie info will remain available for future nominations.)">
+      </form>
+  </div>
+</body>
+</html>

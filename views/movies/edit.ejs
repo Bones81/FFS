@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head.ejs')%>
+</head>
+<body>
+  <header>
+    <%- include('../partials/header.ejs')%>
+  </header>
+  <div id="edit-container">
+      <h1 class="page-title"><%=movie.title.toUpperCase()%></h1>
+      <h3>Edit Movie Details</h3>
+    <form action="/movies/<%=movie._id%>?_method=PUT" method="POST" id='edit-form'>
+      <input hidden type="text" name="id" value="<%=movie._id%>"/>
+      
+      <table>
+        <tr>
+          <td class="info-start-text"><label for="title"><span class="red">* </span>Title: </label></td>
+          <td class="new-data-text"><input type="text" id='title' name="title" value="<%=movie.title%>" required size="50"></td>
+        </tr>
+        <tr>
+          <td class="info-start-text"><label for="poster">Poster Image: </label></td>
+          <td class="new-data-text"><input type="url" name="poster" id="poster" value="<%=movie.poster%>" size="80"></td>
+        </tr>
+        <tr>
+          <td class="info-start-text"><label for="cast">Cast List: </label></td>
+          <td class="new-data-text"><textarea id="cast" name="cast" rows=10 cols=50 id="movie-cast"><%=movie.cast.join(', ')%></textarea></td>
+        </tr>
+        <tr>
+          <td class="info-start-text"><label for="year">Release Year: </label></td>
+          <td class="new-data-text">
+              <select id="year" name="year" value="<%=movie.year.toString()%>">
+                  <option value="">--none selected--</option>
+                  <% for (let i = new Date().getFullYear(); i >=1900; i--) { %>
+                      <option value=<%=i%> 
+                          <% if (movie.year === i) { %> 
+                            selected
+                          <% } %>
+                        ><%=i%></option>
+                  <% } %>
+              </select>
+          </td>
+        </tr>
+        <tr>
+          <td class="info-start-text"><label for="director">Director: </label></td>
+          <td class="new-data-text"><input type="text" name="director" id='director' value="<%=movie.director%>" size="30"></td>
+        </tr>
+        <tr>
+          <td class="info-start-text"><label for="genre">Genres: </label></td>
+          <td class="new-data-text genre-options">
+            <% for (let genre of genres) { %> 
+              <div class="genre-option">
+                <input type="checkbox" name="genre" value="<%=genre%>" class="" id="genre-option-"<%=genre%>
+                <% if(movie.genre.includes(genre)) { %>
+                  checked
+                <% } %>
+                />
+                <label for="genre-option-<%=genre%>" class="genre-option-label"><%=genre%></label><br/>
+              </div>
+            <% } %>
+          </td>
+        </tr>
+        <!-- <tr>
+          <td class="info-start-text"><label for="screening">Screened by FFS: </label></td>
+          <td class="new-data-text">
+            <input hidden type="number" 
+              name="origWeekID" 
+              <% if(movie.screening) { %> 
+                value="<%=movie.screening.weekID%>"
+              <% } else { %>
+                value=""
+              <% } %>
+            />
+            <select id="screening" 
+                    name="screening" 
+                    <% if(movie.screening) { %> 
+                      value="<%=movie.screening.weekID%>"
+                    <% } %>
+                    >
+              <option name="screening" value="">--Not yet screened--</option>
+              <% for (let screening of screenings.reverse()) { %> 
+              <option name="screening" 
+                      value="<%=screening.weekID%>"
+                      <% if(movie.screening && movie.screening.weekID === screening.weekID) { %> 
+                        selected
+                      <% } %>
+                      >
+                        #<%=screening.weekID%> | <%=screening.date.toString().slice(3,15)%>
+              </option>
+              <% } %>
+            </select>
+          </td>
+        </tr> -->
+      </table>
+      <input type="submit" class="submit-btn" value="SUBMIT CHANGES">
+    </form>
+  </div>
+</body>
+</html>

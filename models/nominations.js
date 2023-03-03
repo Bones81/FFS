@@ -1,15 +1,24 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-const nominationSchema = new Schema({
-  title: {type: String, required: true},
-  forWhatScreening: {type: Date, required: true},
-  submittedBy: {type: String, required: true},
-  poster: {type: String},
-  blurb: {type: String},
-  winner: {type: Boolean}
-}, {timestamps: true}
-)
+const nominationSchema = new Schema(
+  {
+    screening: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Screening",
+      required: true,
+    },
+    nominator: { type: String, required: true },
+    blurb: { type: String },
+    nominee: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Movie",
+      required: true,
+    },
+    winner: Boolean,
+  },
+  { timestamps: true }
+);
 
-const Nomination = mongoose.model('Nomination', nominationSchema)
-module.exports = Nomination
+const Nomination = mongoose.model("Nomination", nominationSchema);
+module.exports = Nomination;

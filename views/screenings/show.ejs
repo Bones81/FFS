@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head.ejs')%>
+  </head>
+  <body>
+    <header><%- include('../partials/header.ejs')%></header>
+    <div class="card show-card">
+      <h1 class="page-title"><%=screening.date.toString().slice(3,15)%></h1>
+      <h2>Screening #<%=screening.weekID%></h2>
+      <% if(screening.selection) { %> 
+        <img
+        src="<%=screening.selection.poster%>"
+        alt="poster for <%=screening.selection.title%>"
+        /><br />
+      <% } else { %>
+        <h3>Selection Not Yet Made</h3>
+      <% } %>
+      <h1 class="data-title screening-bgcolor">Screening Info</h1>
+      <table>
+        <% if(screening.selection) { %> 
+          <tr>
+            <td class="info-start-text">Selection:</td>
+            <td class="info-data-text">
+              <a href="/movies/<%=screening.selection._id%>"
+                ><%=screening.selection.title%></a
+                >
+              </td>
+            </tr>
+        <% } %>
+        <tr>
+          <td class="info-start-text">Notes:</td>
+          <td class="info-data-text"><%=screening.notes%></td>
+        </tr>
+        <tr>
+          <td class="info-start-text">Nominations</td>
+          <td class="info-data-text">
+            <ol>
+              <% for (let nom of screening.nominations) { %> 
+                <li class="nominee-li">
+                  <% if (nom.winner) { %> 
+                    ⭐️
+                  <% } %>
+                  <a class="nom-link" href="/nominations/<%=nom._id%>"><%=nom.nominee.title%></a><br/>
+                </li>
+              <% } %>
+            </ol>
+          </td>
+        </tr>
+      </table>
+      <h3>
+        <a href="/screenings/<%=screening._id%>/edit"
+          ><button class="btn edit-btn">Edit Screening Details</button></a
+        >
+      </h3>
+
+      <form
+        action="/screenings/<%=screening._id%>/confirm-delete"
+        class="show-form"
+      >
+        <input
+          type="submit"
+          class="btn delete-btn"
+          value="DELETE FFS Screening from database (CAUTION)"
+        />
+      </form>
+    </div>
+  </body>
+</html>
