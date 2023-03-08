@@ -7,7 +7,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "env TZ='America/New York' node server.js"
+    "start": "env TZ='America/New_York' node server.js"
   },
   "author": "",
   "license": "ISC",
