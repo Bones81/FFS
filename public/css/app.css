@@ -51,12 +51,36 @@ body {
 }
 
 .movie-card {
+  position: relative;
   height: 360px;
   display: grid;
   place-items: center;
   gap: 0;
   padding: 0.25em;
   margin: 0;
+}
+
+.card-number {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--movie-bg);
+  min-height: 1.5em;
+  min-width: 1.5em;
+  line-height: 1.5em;
+  padding: 0.05em;
+  border: 1px solid blue;
+  color: white;
+  border-radius: 50%;
+  z-index: 10;
+  font-weight: 100;
+}
+
+.number-of-noms {
+  font-size: 0.75em;
+  padding: 0;
+  margin: 0 auto;
 }
 
 .movie-card img {
@@ -76,7 +100,7 @@ body {
 
 .card h3 {
   font-size: 1em;
-  margin: 0.25em;
+  margin: 0;
 }
 
 h1 {
@@ -341,6 +365,7 @@ ol {
 header {
   position: sticky;
   top: 0;
+  z-index: 99;
 }
 
 nav {
@@ -355,6 +380,7 @@ nav {
   background: goldenrod;
   border-bottom-left-radius: 25px;
   border-bottom-right-radius: 25px;
+
 }
 
 nav a {

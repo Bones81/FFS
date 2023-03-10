@@ -16,7 +16,7 @@
   <form action="/movies/sort" id="sort-box" method="POST">
     <h2 id="sort-header">Sort options (Needs attention; refined options hopefully available in a future update):</h2>
     <fieldset id="moviesSet-container">
-      <legend>Movies to Include in Sort</legend>
+      <legend>Movies Filter</legend>
       <div class="moviesSet-option">
         <input type="radio" name="moviesSet" id="all-movies" value="allMovies" checked/>
         <label for="all-movies">All Movies</label>
@@ -59,11 +59,17 @@
           </div>
         </fieldset><br/>
         <fieldset id="genres-container">
-          <legend>Genres</legend>
+          <legend>Genre Filter</legend>
           <div class="genre-option">
-            <input type="checkbox" name="genreChoice" id="all-genres-choice" value="all-genres"/>
-            <label for="all-genres-choice">ALL GENRES</label>
-          </div><hr/>
+            <input type="radio" name="genreChoice" id="all-genres-choice" value="all-genres"/>
+            <label for="all-genres-choice">Search ALL GENRES</label>
+          </div>
+          or
+          <div class="genre-option">
+            <input type="radio" name="genreChoice" id="specific-genres-choice" value="specific-genres"/>
+            <label for="all-genres-choice">Search SPECIFIC GENRES -- please select genre(s) from list below</label>
+          </div>
+          <hr/>
           <% for (let genre of genres) { %>
             <div class="genre-option">
               <input type="checkbox" name="genreChoice" id="genre-<%=genre%>" value=<%=genre%> />
@@ -89,6 +95,10 @@
               <input type="radio" id="sort-by-top-billing" name="sortChoice" value="cast">
               <label for="sort-by-top-billing">Actor with top billing (sorts by last name)</label>
             </div>
+            <div class="sortChoice-option">
+              <input type="radio" id="sort-by-num-noms" name="sortChoice" value="num-noms">
+              <label for="sort-by-num-noms"># of Nominations</label>
+            </div>
           </fieldset><br/>
           <input type="submit" name="sortDatabase" id="sort-database-btn" value="Sort Movies with These Options">
         </form>
@@ -97,9 +107,18 @@
     <% for (let movie of movies) { %>
       <a href="/movies/<%=movie._id%>" class="card-link">
         <div class="card movie-card">
-          <span><%=movies.indexOf(movie) + 1%></span>
+          <span class="card-number"><%=movies.indexOf(movie) + 1%></span>
           <% if (movie.screened) { %>
-          <h3 class="winner-text">⭐ FFS Selection ⭐</h3>
+            <h3 class="winner-text">⭐ FFS Selection ⭐</h3>
+            <h6 class="number-of-noms"><%=movie.nominations.length%> Nomination<% if(movie.nominations.length !== 1) { %>s</h6>
+              <% } else { %>
+                </h6>
+              <% } %>
+          <% } else { %>
+            <h3 class="number-of-noms"><%=movie.nominations.length%> Nomination<% if(movie.nominations.length !== 1) { %>s</h3>
+              <% } else { %>
+                </h3>
+              <% } %>
           <% } %>
           <img src="<%=movie.poster%>" loading="lazy" alt="<%=movie.title%> poster">
           <h3 class="movie-title"><%=movie.title%></h3>
