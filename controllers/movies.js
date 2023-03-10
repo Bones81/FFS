@@ -11,6 +11,7 @@ const seedScreenings = require('../models/seed_screenings')
 const maintenance = require('../models/maintenance')
 
 const genres = require('../models/genres')
+const nominators = require('../models/nominators')
 
 //ADD SCREENINGS TO EXISTING MOVIES IN MOVIES COLLECTION
 // router.get('/addscreenings', (req, res) => {
@@ -116,7 +117,9 @@ router.get('/', (req, res) => {
             // res.json(allMovies);
         res.render('movies/index.ejs', {
             tabTitle: 'The Fortnightly Film Society Website',
-            movies: allMovies
+            movies: allMovies, 
+            genres: genres,
+            nominators: nominators
         })
         }).populate("nominations").populate("screening")
     }

@@ -15,21 +15,84 @@
   <% } %>
   <form action="/movies/sort" id="sort-box" method="POST">
     <h2 id="sort-header">Sort options (Needs attention; refined options hopefully available in a future update):</h2>
-
-    <input type="radio" id="sort-by-title" name="sortChoice" value="title">
-    <label for="sort-by-title">Title</label><br/>
-    
-    <input type="radio" id="sort-by-director" name="sortChoice" value="director">
-    <label for="sort-by-director">Director (sorts by last name)</label><br/>
-
-    <input type="radio" id="sort-by-year" name="sortChoice" value="year"> 
-    <label for="sort-by-year">Year of Release</label><br/>
-
-    <input type="radio" id="sort-by-top-billing" name="sortChoice" value="cast">
-    <label for="sort-by-top-billing">Actor with top billing (sorts by last name)</label><br/>
-    <input type="submit" name="sortDatabase" id="sort-database-btn" value="Sort">
-  </form>
-
+    <fieldset id="moviesSet-container">
+      <legend>Movies to Include in Sort</legend>
+      <div class="moviesSet-option">
+        <input type="radio" name="moviesSet" id="all-movies" value="allMovies" />
+        <label for="all-movies">All Movies</label>
+      </div>
+      <div class="moviesSet-option">
+        <input type="radio" name="moviesSet" id="all-winners" value="allWinners" />
+        <label for="all-movies">FFS Selections</label>
+      </div>
+      <div class="moviesSet-option">
+        <input type="radio" name="moviesSet" id="all-unscreened" value="allUnscreened" />
+        <label for="all-unscreened">All Unscreened</label>
+      </div>
+      <div class="moviesSet-option">
+        <input type="radio" name="moviesSet" id="non-winners" value="nonWinners" />
+        <label for="non-winners">Nominated But Never Won</label>
+      </div>
+      <div class="moviesSet-option">
+        <input type="radio" name="moviesSet" id="never-nominated" value="neverNominated" />
+        <label for="never-nominated">Never Nominated</label>
+      </div>
+      <div class="moviesSet-option">
+        <input type="radio" name="moviesSet" id="only-nominatedBy" value="nominatedBy" />
+        <label for="only-nominatedBy">Only Movies Nominated By:</label>
+        <select name="nominator" id="nominator">
+          <option value="" disabled selected>--List of Nominators--</option>
+          <% for (let nominator of nominators) { %>
+            <option value="<%=nominator%>"><%=nominator%></option>
+            <% } %>
+          </select>
+        </div>
+        <div class="moviesSet-option">
+          <input type="radio" name="moviesSet" id="only-origNomBy" value="origNomBy" />
+          <label for="only-origNomBy">Only Movies Originally Nominated By:</label>
+          <select name="origNominator" id="orig-nominator">
+            <option value="" disabled selected>--List of Nominators--</option>
+            <% for (let nominator of nominators) { %>
+              <option value="<%=nominator%>"><%=nominator%></option>
+              <% } %>
+            </select>
+          </div>
+        </fieldset><br/>
+        <fieldset id="genres-container">
+          <legend>Genres</legend>
+          <div class="genre-option">
+            <input type="checkbox" name="genreChoice" id="all-genres-choice" value="all-genres" />
+            <label for="all-genres-choice">ALL GENRES</label>
+          </div><br/>
+          <% for (let genre of genres) { %>
+            <div class="genre-option">
+              <input type="checkbox" name="genreChoice" id="genre-<%=genre%>" value=<%=genre%> />
+              <label for="genre-<%=genre%>"><%=genre%></label>
+            </div>
+            <% } %>
+          </fieldset>
+          <fieldset id="sortChoice-container">
+            <legend>Sort By</legend>
+            <div class="sortChoice-option">
+              <input type="radio" id="sort-by-title" name="sortChoice" value="title">
+              <label for="sort-by-title">Title</label>
+            </div>
+            <div class="sortChoice-option">
+              <input type="radio" id="sort-by-director" name="sortChoice" value="director">
+              <label for="sort-by-director">Director (sorts by last name)</label>
+            </div>
+            <div class="sortChoice-option">
+              <input type="radio" id="sort-by-year" name="sortChoice" value="year">
+              <label for="sort-by-year">Year of Release</label>
+            </div>
+            <div class="sortChoice-option">
+              <input type="radio" id="sort-by-top-billing" name="sortChoice" value="cast">
+              <label for="sort-by-top-billing">Actor with top billing (sorts by last name)</label>
+            </div>
+          </fieldset><br/>
+          <input type="submit" name="sortDatabase" id="sort-database-btn" value="Sort Movies with These Options">
+        </form>
+        
   <div class="flex-container movies-container">
     <% for (let movie of movies) { %>
       <a href="/movies/<%=movie._id%>" class="card-link">

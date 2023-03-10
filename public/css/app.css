@@ -197,11 +197,6 @@ label {
   font-size: 0.75em;
 }
 
-#sort-box {
-  text-align: left;
-  width: 80vw;
-  margin: 0 auto;
-}
 
 table {
   background: var(--table-row2);
@@ -400,6 +395,48 @@ nav a:hover {
 
 .red {
   color: red;
+}
+
+#sort-box {
+  text-align: left;
+  width: 80vw;
+  margin: 0 auto;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+}
+  
+#genres-container, #moviesSet-container, #sortChoice-container {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+
+}
+
+#moviesSet-container, #sortChoice-container {
+  max-height: 200px;
+  max-width: 400px;
+}
+
+#genres-container {
+  height: 200px;
+  max-width: 300px;
+  overflow-y: scroll;
+  flex: 1 0;
+}
+
+#genres-container input[type="checkbox"], #moviesSet-container input {
+  margin: 0;
+  height: 0.75em;
+}
+
+#sort-database-btn {
+  flex: 0 0 50%;
+  align-self: center;
+  justify-self: center;
+  margin: 0.5em;
+  font-size: 1em;
+  height: fit-content;
 }
 
 /* STAFF PAGE */
