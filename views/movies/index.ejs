@@ -16,12 +16,6 @@
   <form action="/movies/sort" id="sort-box" method="POST">
     <h2 id="sort-header">Sort options (Needs attention; refined options hopefully available in a future update):</h2>
 
-    <input type="radio" id="sort-by-screening-order" name="sortChoice" value="screening_order">
-    <label for="sort-by-screening-order">Order Screened</label><br/> 
-
-    <input type="radio" id="sort-by-most-recent-screening" name="sortChoice" value="most_recent">
-    <label for="sort-by-most-recent-screening">Most Recently Screened</label><br/> 
-
     <input type="radio" id="sort-by-title" name="sortChoice" value="title">
     <label for="sort-by-title">Title</label><br/>
     
@@ -51,4 +45,5 @@
     <% } %>
   </div>
 </body>
+  <%- include('../partials/script.ejs') %>
 </html>

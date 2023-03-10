@@ -5,8 +5,9 @@ const router = express.Router()
 const Movie = require('../models/movies')
 const seedMoviesNew = require('../models/seed_movies_new')
 const Nomination = require('../models/nominations')
+const seedNominations = require('../models/seed_nominations')
 const Screening = require('../models/screening')
-const screeningSeed = require('../models/seed_screenings')
+const seedScreenings = require('../models/seed_screenings')
 const maintenance = require('../models/maintenance')
 
 const genres = require('../models/genres')
@@ -66,16 +67,44 @@ router.get('/:id/json', (req, res) => {
 //     }
 // })
 
-//SEED INITIAL MOVIE DATA
-router.get('/seed', (req, res) => {
-    // console.log(seedMoviesNew)
-    Movie.create(seedMoviesNew, (err, data) => {
-      console.log(data)
-      if (err) console.log(err)
-      console.log('added provided movie data')  
-      res.redirect('/movies')
-    })
-})
+// //SEED INITIAL MOVIE DATA
+// router.get('/seedmovies', (req, res) => {
+//     // console.log(seedMoviesNew)
+//     Movie.create(seedMoviesNew, (err, data) => {
+//       if (err) console.log(err)
+//       for (let movie of data) {
+//         console.log('movie added: ' + movie.title);
+//       }
+//       console.log('added provided movie data')  
+//       res.redirect('/movies')
+//     })
+// })
+
+// //SEED NOMINATION DATA
+// router.get('/seednominations', (req, res) => {
+//     // console.log(seedNominations)
+//     Nomination.create(seedNominations, (err, data) => {
+//       if (err) console.log(err)
+//       for (let nom of data) {
+//         console.log('nom added: ' + nom.blurb);
+//       }
+//       console.log('added provided nomination data')  
+//       res.redirect('/nominations')
+//     })
+// })
+
+// //SEED SCREENINGS DATA
+// router.get('/seedscreenings', (req, res) => {
+//     // console.log(seedScreenings)
+//     Screening.create(seedScreenings, (err, data) => {
+//       if (err) console.log(err)
+//       for (let screening of data) {
+//         console.log('screening added: ' + screening.weekID);
+//       }
+//       console.log('added provided screening data')  
+//       res.redirect('/screenings')
+//     })
+// })
 
 //INDEX ROUTES
 router.get('/', (req, res) => {

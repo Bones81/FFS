@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const mongoose = require('mongoose')
 
 const Nomination = require('../models/nominations')
 const nominationSeed = require('../models/seed_nominations')
@@ -22,7 +23,8 @@ let nominators_sorted = nominators.sort((a,b) => {
 
 //JSON
 router.get('/json', (req, res) => {
-  Nomination.find({}, (err, nominations) => {
+  Nomination.find({}).populate("screening").populate("nominee").exec((err, nominations) => {
+    if (err) console.log(err);
     res.json(nominations)
   })
 })
@@ -30,8 +32,20 @@ router.get('/json', (req, res) => {
 router.get('/:id/json', (req, res) => {
   Nomination.findById(req.params.id, (err, foundNom) => {
     res.json(foundNom)
-  })
+  }).populate("screening").populate("nominee")
 })
+
+// router.get('/json/populatefixattempt', (req, res) => {
+//   Nomination.findOne({}, (err, nom) => {
+//       console.log(nom);
+//       // nom.nominee = new mongoose.Types.ObjectId(nom.nominee)
+//       // console.log('after' + nom.nominee);
+//       // nom.screening = new mongoose.Types.ObjectId(nom.screening)
+//       // Nomination.findByIdAndUpdate(nom._id, nom, {new: true}, (err, updatedNom) => {
+//       //   console.log(updatedNom); 
+//       // })
+//   }).populate("screening").populate("nominee")
+// })
 
 
 //INDEX
@@ -40,8 +54,19 @@ router.get('/', (req, res) => {
     res.render('maintenance.ejs', {tabTitle: 'FFS Maintenance Mode'})
 } else {
     Screening.find({}, (err, screenings) => {
+      if(err) console.log('screenings error' + err);
       Movie.find({}, (err, movies) => {
-        Nomination.find({}, (err, nominations) => {
+        if(err) console.log('movies error' + err);
+        Nomination.find({}).populate([
+          {
+            path: "screening",
+            ref: "Screening"
+          }, 
+          {
+            path: "nominee",
+            ref: "Movie"
+          }]).exec((err, nominations) => {
+          if(err) console.log(err);
           nominations.sort((a,b) => {
             if (a.screening.date < b.screening.date) {
               return 1
@@ -55,7 +80,7 @@ router.get('/', (req, res) => {
             screenings: screenings,
             movies: movies
           })
-        }).populate("screening").populate("nominee")
+        })
       })
     })
   }
@@ -473,6 +498,17 @@ router.put('/:id', (req, res) => {
 // DELETE APP-BREAKING NOMS BY ID, USE WITH CAUTION
 // Nomination.findByIdAndRemove('63df3d39c96c3160fcf15c1b', (err, dNom) => {
 //   console.log(dNom); 
+// })
+
+// Nomination.findOne({nominator: 'Sujan Trivedi'}, (err, foundNom) => {
+//   console.log(foundNom)
+//   Screening.findOne({_id: foundNom.screening}, (err, foundScreening) => {
+//     console.log(foundScreening); 
+//   })
+// })
+
+// Screening.findOne({weekID: 69}, (err, foundScreening) => {
+//   console.log(foundScreening); 
 // })
 
 module.exports = router
