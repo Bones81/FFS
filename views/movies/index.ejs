@@ -18,12 +18,12 @@
     <fieldset id="moviesSet-container">
       <legend>Movies to Include in Sort</legend>
       <div class="moviesSet-option">
-        <input type="radio" name="moviesSet" id="all-movies" value="allMovies" />
+        <input type="radio" name="moviesSet" id="all-movies" value="allMovies" checked/>
         <label for="all-movies">All Movies</label>
       </div>
       <div class="moviesSet-option">
         <input type="radio" name="moviesSet" id="all-winners" value="allWinners" />
-        <label for="all-movies">FFS Selections</label>
+        <label for="all-winners">FFS Selections</label>
       </div>
       <div class="moviesSet-option">
         <input type="radio" name="moviesSet" id="all-unscreened" value="allUnscreened" />
@@ -61,9 +61,9 @@
         <fieldset id="genres-container">
           <legend>Genres</legend>
           <div class="genre-option">
-            <input type="checkbox" name="genreChoice" id="all-genres-choice" value="all-genres" />
+            <input type="checkbox" name="genreChoice" id="all-genres-choice" value="all-genres"/>
             <label for="all-genres-choice">ALL GENRES</label>
-          </div><br/>
+          </div><hr/>
           <% for (let genre of genres) { %>
             <div class="genre-option">
               <input type="checkbox" name="genreChoice" id="genre-<%=genre%>" value=<%=genre%> />
@@ -74,7 +74,7 @@
           <fieldset id="sortChoice-container">
             <legend>Sort By</legend>
             <div class="sortChoice-option">
-              <input type="radio" id="sort-by-title" name="sortChoice" value="title">
+              <input type="radio" id="sort-by-title" name="sortChoice" value="title" checked>
               <label for="sort-by-title">Title</label>
             </div>
             <div class="sortChoice-option">

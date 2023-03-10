@@ -235,96 +235,97 @@ router.post('/search', (req, res) => {
   
 //SORT ROUTE
 router.post('/sort', (req, res) => {
-    if (req.body.sortChoice === 'cast') {
-        Movie.find({}, (err, allMovies) => {
-        //
-            const sortedMovies = allMovies.sort( (a, b) => {
-                // console.log(a.cast[0].split(' ')[1])
-                const namesOfA = a.cast[0].split(' ')
-                const namesOfB = b.cast[0].split(' ')
-                const lastNameA = namesOfA[namesOfA.length - 1]
-                const lastNameB = namesOfB[namesOfB.length - 1]
+    res.json(req.body)
+    // if (req.body.sortChoice === 'cast') {
+    //     Movie.find({}, (err, allMovies) => {
+    //     //
+    //         const sortedMovies = allMovies.sort( (a, b) => {
+    //             // console.log(a.cast[0].split(' ')[1])
+    //             const namesOfA = a.cast[0].split(' ')
+    //             const namesOfB = b.cast[0].split(' ')
+    //             const lastNameA = namesOfA[namesOfA.length - 1]
+    //             const lastNameB = namesOfB[namesOfB.length - 1]
 
-                //below is the compare function that orders the list of movies by main actor's last name
-                if(lastNameA > lastNameB) {
-                return 1
-                } else if (lastNameA < lastNameB) {
-                return -1
-                } else {
-                return 0
-                }
-            })
-            // res.send(sortedMovies)
-            res.render('movies/index.ejs', {
-                tabTitle: 'Sorted By ' + req.body.sortChoice,
-                movies: sortedMovies
-            })
-        })
-    } else if (req.body.sortChoice === 'director') {
-        Movie.find({}, (err, allMovies) => {
-        const sortedMovies = allMovies.sort((a, b) => {
-            const aDirectorNames = a.director.split(' ')
-            const bDirectorNames = b.director.split(' ')
-            const lastNameOfDirA = aDirectorNames[aDirectorNames.length - 1]
-            const lastNameOfDirB = bDirectorNames[bDirectorNames.length - 1]
+    //             //below is the compare function that orders the list of movies by main actor's last name
+    //             if(lastNameA > lastNameB) {
+    //             return 1
+    //             } else if (lastNameA < lastNameB) {
+    //             return -1
+    //             } else {
+    //             return 0
+    //             }
+    //         })
+    //         // res.send(sortedMovies)
+    //         res.render('movies/index.ejs', {
+    //             tabTitle: 'Sorted By ' + req.body.sortChoice,
+    //             movies: sortedMovies
+    //         })
+    //     })
+    // } else if (req.body.sortChoice === 'director') {
+    //     Movie.find({}, (err, allMovies) => {
+    //     const sortedMovies = allMovies.sort((a, b) => {
+    //         const aDirectorNames = a.director.split(' ')
+    //         const bDirectorNames = b.director.split(' ')
+    //         const lastNameOfDirA = aDirectorNames[aDirectorNames.length - 1]
+    //         const lastNameOfDirB = bDirectorNames[bDirectorNames.length - 1]
 
-            //below is the compare function that sorts the list of movies by director's last name
-            if (lastNameOfDirA > lastNameOfDirB) {
-            return 1
-            } else if (lastNameOfDirA < lastNameOfDirB) {
-            return -1
-            } else {
-            return 0
-            }
-        })
-        //now that movies are sorted, render the page
-        res.render('movies/index.ejs', {
-            tabTitle: 'Sorted By ' + req.body.sortChoice,
-            movies: sortedMovies
-        })
-        })
-    } else if (req.body.sortChoice === 'most_recent') { 
-        Movie.find({}).populate("screening").exec((err, allMovies) => {
-        err ? console.log(err.message) : console.log('Sorting movies by most recent...');;
-        const sortedMovies = allMovies.sort((a,b) => {
-            if (a.screening && b.screening && a.screening.date < b.screening.date) {
-            return 1
-            } else if (a.screening && b.screening && a.screening.date > b.screening.date) {
-            return -1 
-            } else {
-            return 0
-            }
-        })
-        res.render('movies/index.ejs', {
-            tabTitle: 'Sorted By ' + req.body.sortChoice,
-            movies: sortedMovies
-        })
-        })
-    } else if (req.body.sortChoice === 'screening_order') { 
-        Movie.find({}).populate("screening").exec((err, allMovies) => {
-            if(err) console.log(err.message);
-            const sortedMovies = allMovies.sort((a,b) => {
-                if (a.screening && b.screening && a.screening.date > b.screening.date) {
-                return 1
-                } else if (a.screening && b.screening && a.screening.date < b.screening.date) {
-                return -1 
-                } else {
-                return 0
-                }
-            })
-            res.render('movies/index.ejs', {
-                tabTitle: 'Sorted By ' + req.body.sortChoice,
-                movies: sortedMovies
-            })
-        })
-    } else {
-        Movie.find({}, null, {sort: req.body.sortChoice}, (err, sortedMovies) => {
-            res.render('movies/index.ejs', {
-                tabTitle: 'Sorted By ' + req.body.sortChoice,
-                movies: sortedMovies
-            })
-        })
-    }
+    //         //below is the compare function that sorts the list of movies by director's last name
+    //         if (lastNameOfDirA > lastNameOfDirB) {
+    //         return 1
+    //         } else if (lastNameOfDirA < lastNameOfDirB) {
+    //         return -1
+    //         } else {
+    //         return 0
+    //         }
+    //     })
+    //     //now that movies are sorted, render the page
+    //     res.render('movies/index.ejs', {
+    //         tabTitle: 'Sorted By ' + req.body.sortChoice,
+    //         movies: sortedMovies
+    //     })
+    //     })
+    // } else if (req.body.sortChoice === 'most_recent') { 
+    //     Movie.find({}).populate("screening").exec((err, allMovies) => {
+    //     err ? console.log(err.message) : console.log('Sorting movies by most recent...');;
+    //     const sortedMovies = allMovies.sort((a,b) => {
+    //         if (a.screening && b.screening && a.screening.date < b.screening.date) {
+    //         return 1
+    //         } else if (a.screening && b.screening && a.screening.date > b.screening.date) {
+    //         return -1 
+    //         } else {
+    //         return 0
+    //         }
+    //     })
+    //     res.render('movies/index.ejs', {
+    //         tabTitle: 'Sorted By ' + req.body.sortChoice,
+    //         movies: sortedMovies
+    //     })
+    //     })
+    // } else if (req.body.sortChoice === 'screening_order') { 
+    //     Movie.find({}).populate("screening").exec((err, allMovies) => {
+    //         if(err) console.log(err.message);
+    //         const sortedMovies = allMovies.sort((a,b) => {
+    //             if (a.screening && b.screening && a.screening.date > b.screening.date) {
+    //             return 1
+    //             } else if (a.screening && b.screening && a.screening.date < b.screening.date) {
+    //             return -1 
+    //             } else {
+    //             return 0
+    //             }
+    //         })
+    //         res.render('movies/index.ejs', {
+    //             tabTitle: 'Sorted By ' + req.body.sortChoice,
+    //             movies: sortedMovies
+    //         })
+    //     })
+    // } else {
+    //     Movie.find({}, null, {sort: req.body.sortChoice}, (err, sortedMovies) => {
+    //         res.render('movies/index.ejs', {
+    //             tabTitle: 'Sorted By ' + req.body.sortChoice,
+    //             movies: sortedMovies
+    //         })
+    //     })
+    // }
 })
   
 //EDIT ROUTES
