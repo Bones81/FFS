@@ -348,7 +348,7 @@ header {
   top: 0;
 }
 
-nav {
+.full-nav {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-around;
@@ -361,6 +361,32 @@ nav {
   border-bottom-left-radius: 25px;
   border-bottom-right-radius: 25px;
 }
+
+.mobile-nav {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  gap: 1em;
+  position: absolute;
+  top: 0;
+  right: 100vw;
+  transition: all 0.2s ease-in-out;
+  height: 100vh;
+  width: 100vw;
+  background: var(--movie-bg);
+}
+
+.mobile-nav a {
+  padding: 1em;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.mobile-nav.active {
+  right: 0;
+}
+
+
 
 nav a {
   font-family: 'Rowdies', cursive;
