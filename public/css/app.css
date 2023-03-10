@@ -1,7 +1,10 @@
 :root {
   --screening-bg: linear-gradient(35deg, rgba(192,192,192,0.2) 0%, green 50%, green 50%, rgba(192,192,192,0.2) 100%);
+  --mobile-screening-bg: linear-gradient(-35deg, rgba(192,192,192,1) 0%, green 20%, green 80%, rgba(192,192,192,1) 100%);
   --nomination-bg: linear-gradient(35deg, rgba(192,192,192,0.2) 0%, orange 50%, orange 50%, rgba(192,192,192,0.2) 100%);
+  --mobile-nomination-bg: linear-gradient(-35deg, rgba(192,192,192,1) 0%, orange 20%, orange 80%, rgba(192,192,192,1) 100%);
   --movie-bg: linear-gradient(35deg, rgba(192,192,192,0.2) 0%, blue 50%, blue 50%, rgba(192,192,192,0.2) 100%);
+  --mobile-movie-bg: linear-gradient(-35deg, rgba(192,192,192,1) 0%, blue 20%, blue 80%, rgba(192,192,192,1) 100%);
   --table-row1: linear-gradient(35deg, rgba(192,192,192,0.2) 0%, lightgray 25%, lightgray 75%, rgba(192,192,192,0.2) 100%);
   --table-row2: linear-gradient(35deg, rgba(192,192,192, 1) 0%, #bbc 25%, #bbc 75%, rgba(192,192,192,1) 100%);
 }
@@ -97,6 +100,18 @@ h1 {
 
 .movie-data-title, .movie-data-link, .movie-data-span, .movie-bgcolor {
   background: var(--movie-bg);
+}
+
+.mobile-movie-bgcolor {
+  background: var(--mobile-movie-bg);
+}
+
+.mobile-screening-bgcolor {
+  background: var(--mobile-screening-bg);
+}
+
+.mobile-nomination-bgcolor {
+  background: var(--mobile-nomination-bg);
 }
 
 .nomination-data-title, .nomination-data-link, .nomination-data-span, .nomination-bgcolor {
@@ -204,12 +219,14 @@ label {
 }
 
 table {
+  position: relative;
   background: var(--table-row2);
   text-align: left;
   /* max-width: 300px; */
   margin: 0 auto;
   border-collapse: collapse;
   padding: 1em;
+  z-index: 0;
 }
 
 thead {
@@ -232,8 +249,6 @@ td {
 #nominations-list tr.tr-section2, .screenings-table tr:nth-of-type(2n+1) {
   background: var(--table-row1);
 }
-
-
 
 .non-mobile, .x-large {
   display: none;
@@ -335,6 +350,12 @@ ol {
   margin: 0.5em auto;
 }
 
+#nominations-list thead tr, .screenings-table thead tr {
+  position: sticky;
+  top: 0;
+  background: var(--table-row2);
+}
+
 #nominations-list td {
   padding: 0.25em;
 }
@@ -346,20 +367,66 @@ ol {
 header {
   position: sticky;
   top: 0;
+  z-index: 999;
 }
 
-nav {
-  display: flex;
+.full-nav {
+  display: none;
   flex-flow: row wrap;
   justify-content: space-around;
   width: 70vw;
   margin: 0 auto;
-  padding: 1em;
+  padding: 0.5em;
   gap: 1em;
   background: linear-gradient(to top, gold, yellow, gold);
   background: goldenrod;
   border-bottom-left-radius: 25px;
   border-bottom-right-radius: 25px;
+}
+
+.mobile-nav {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  gap: 2em;
+  position: absolute;
+  top: 0;
+  right: 100%;
+  transition: all 0.2s ease-in-out;
+  height: 100vh;
+  width: 100%;
+  background: var(--movie-bg);
+}
+
+.mobile-nav a {
+  padding: 1em;
+  width: 70%;
+  margin: 0 auto;
+}
+
+.mobile-nav.active {
+  right: 0;
+  z-index: 1000;
+}
+
+.hamburger {
+  width: 50px;
+  text-align: center;
+  position: absolute;
+  top: 50px;
+  left: 10px;
+  transform: translateY(-50%);
+  border-radius: 5px;
+  font-size: 1em;
+  padding: 1em;
+  background: blue;
+  color: whitesmoke;
+  transition: all 0.2s ease;
+  z-index: 1001;
+}
+
+.hamburger.open {
+  font-size: 1em;
 }
 
 nav a {
@@ -394,7 +461,7 @@ nav a:hover {
   align-items: center;
   justify-content: center;
   font-size: 1em;
-  margin: 1em auto;
+  margin: 0 auto 1em;
   text-shadow: black 2px 2px 5px;
 }
 
@@ -404,15 +471,20 @@ nav a:hover {
 
 /* STAFF PAGE */
 .staff-link {
+  display: none;
   position: absolute;
-  top: 10px;
-  right: 5px;
+  top: 25px;
+  right: 10px;
   border-radius: 50%;
   font-size: 0.75em;
   padding: 0.5em;
   text-decoration: none;
   transition: all 0.2s ease;
-  background: linear-gradient(0deg, grey, silver, grey);
+  background: linear-gradient(-35deg, grey, silver, grey);
+}
+
+.mobile-staff-link {
+  background: linear-gradient(-35deg, grey, silver, grey);
 }
 
 .staff-link:hover {
@@ -423,7 +495,7 @@ nav a:hover {
   padding: 0.5em 10%;
   font-size: 20px;
   border-top: 1px solid black;
-  background: linear-gradient(-25deg, blue 0%, silver 20%, silver 80%, blue 100%);
+  background: linear-gradient(-35deg, blue 0%, silver 10%, silver 90%, blue 100%);
   margin: 0.5em auto;
   border-radius: 20px;
   box-shadow: 2px 2px 5px black;
@@ -482,13 +554,14 @@ nav a:hover {
     width: 80%;
   }
 
-  .staff-link {
-    font-size: 1em;
-    right: 10px;
-  }
 }
 
 @media (min-width: 640px) {
+  #nominations-list thead tr, .screenings-table thead tr {
+    background: var(--table-row2);
+    top: 64px;
+  }
+
   td img {
     max-height: 120px;
     max-width: 80px;
@@ -526,9 +599,32 @@ nav a:hover {
   .staff-member {
     font-size: 1.75em;
   }
+
+  .staff-link {
+    display: initial;
+    font-size: 1em;
+    right: 10px;
+  }
+
+  .hamburger {
+    display: none;
+  }
+
+  .full-nav {
+    display: flex;
+    font-size: 0.8em;
+  }
+
+  .mobile-nav {
+    display: none;
+  }
 }
 
 @media (min-width: 840px) {
+  #nominations-list thead tr, .screenings-table thead tr {
+    top: 70px;
+  }
+
   header a, #search-form {
     font-size: 1em;
   }
@@ -578,6 +674,10 @@ nav a:hover {
 }
 
 @media (min-width: 1080px) {
+  #nominations-list thead tr, .screenings-table thead tr {
+    top: 82px;
+  }
+
   header a, #search-form {
     font-size: 1.25em;
   }
@@ -614,4 +714,11 @@ nav a:hover {
   .staff-member {
     font-size: 2.25em;
   }
+}
+
+@media(min-width: 1382px) {
+  #nominations-list thead tr, .screenings-table thead tr {
+    top: 41px;
+  }
+
 }
