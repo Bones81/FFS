@@ -12,6 +12,8 @@ const maintenance = require('../models/maintenance')
 
 const genres = require('../models/genres')
 const nominators = require('../models/nominators')
+const ffsActors = require('../models/actors')
+
 const { trusted } = require('mongoose')
 
 //ADD SCREENINGS TO EXISTING MOVIES IN MOVIES COLLECTION
@@ -120,7 +122,8 @@ router.get('/', (req, res) => {
             tabTitle: 'The Fortnightly Film Society Website',
             movies: allMovies, 
             genres: genres,
-            nominators: nominators
+            nominators: nominators, 
+            actors: ffsActors
         })
         }).populate("nominations").populate("screening")
     }
@@ -268,6 +271,10 @@ router.post('/sort', async (req, res) => {
             let origNominator = req.body.origNominator
             allMovies = allMovies.filter(x => x.origNominator === origNominator)
             break;
+        case "includes-actor":
+            //filter for movies with the indicated actor
+            allMovies = allMovies.filter(x => x.cast.includes(req.body.actor))
+            break;
         default:
             console.log('There was an error retrieving a value for the filter variable moviesSet.');  
     }
@@ -275,6 +282,10 @@ router.post('/sort', async (req, res) => {
     //now apply any genre filter
     if(req.body.genresTypeChoice === "specific-genres") {
         // console.log(typeof req.body.genreChoice);
+        if(!req.body.genreChoice) { //if user forgot to select at least one genre
+            console.log('You must choose at least one genre.');
+            req.body.genreChoice = []
+        }
         if(typeof req.body.genreChoice === 'string') { //convert to array if only one genre submitted
             req.body.genreChoice = [req.body.genreChoice]
         }
@@ -288,8 +299,7 @@ router.post('/sort', async (req, res) => {
             }
             return false
         }
-
-        allMovies = allMovies.filter(x => movieContainsAnySelectedGenre(x))
+            allMovies = allMovies.filter(x => movieContainsAnySelectedGenre(x))
     }
 
     //now apply sorting choice
@@ -335,7 +345,22 @@ router.post('/sort', async (req, res) => {
                 }
             })
             break;
-        
+        case "num-noms":
+            allMovies.sort((a,b) => {
+                if(a.nominations.length === b.nominations.length) {
+                    //if same number of noms, sort by title
+                    if(a.title > b.title) {
+                        return 1
+                    } else {
+                        return -1
+                    } 
+                } else if (a.nominations.length > b.nominations.length) {
+                    return -1    
+                } else {
+                    return 1
+                }
+            })
+            break;
         default:
             console.log('There was a problem with the sorting choice.');
     }
@@ -343,15 +368,18 @@ router.post('/sort', async (req, res) => {
     req.body.reverse === "on" ? allMovies = allMovies.reverse() : null
 
     console.log('Number of movies matching filters: ' + allMovies.length);
-    console.log('first movie title: ' + allMovies[0].title);
-    console.log('last movie title: ' + allMovies[allMovies.length-1].title);
+    if(allMovies.length) {
+        console.log('first movie title: ' + allMovies[0].title);
+        console.log('last movie title: ' + allMovies[allMovies.length-1].title);
+    }
 
     //now that movies are filtered and sorted, render the page
     res.render('movies/index.ejs', {
         tabTitle: 'FFS movies sorted by ' + req.body.sortChoice,
         movies: allMovies,
         nominators: nominators,
-        genres: genres
+        genres: genres,
+        actors: ffsActors
     })
     // res.json(req.body)
     // if (req.body.sortChoice === 'cast') {

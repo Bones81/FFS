@@ -57,6 +57,16 @@
           <% } %>
         </select>
       </div>
+      <div class="moviesSet-option">
+        <input type="radio" name="moviesSet" id="includes-actor" value="includes-actor" />
+        <label for="includes-actor">Includes actor: </label>
+        <select name="actor" id="actor">
+          <option value="" disabled selected>--Actors in FFS database--</option>
+          <% for(let actor of actors) { %>
+          <option value="<%=actor%>" id="actor-<%=actors.indexOf(actor)%>"><%=actor%></option>
+          <% } %>
+        </select>
+      </div>
     </fieldset><br/>
     <fieldset id="genres-container">
       <legend>Genre Filter</legend>
@@ -93,10 +103,10 @@
         <input type="radio" id="sort-by-year" name="sortChoice" value="year">
         <label for="sort-by-year">Year of Release</label>
       </div>
-      <div class="sortChoice-option">
+      <!-- <div class="sortChoice-option">
         <input type="radio" id="sort-by-top-billing" name="sortChoice" value="cast">
         <label for="sort-by-top-billing">Actor with top billing (sorts by last name)</label>
-      </div>
+      </div> -->
       <div class="sortChoice-option">
         <input type="radio" id="sort-by-num-noms" name="sortChoice" value="num-noms">
         <label for="sort-by-num-noms"># of Nominations</label>
