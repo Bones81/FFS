@@ -11,6 +11,10 @@ const seedScreenings = require('../models/seed_screenings')
 const maintenance = require('../models/maintenance')
 
 const genres = require('../models/genres')
+const nominators = require('../models/nominators')
+const ffsActors = require('../models/actors')
+
+const { trusted } = require('mongoose')
 
 //ADD SCREENINGS TO EXISTING MOVIES IN MOVIES COLLECTION
 // router.get('/addscreenings', (req, res) => {
@@ -116,7 +120,10 @@ router.get('/', (req, res) => {
             // res.json(allMovies);
         res.render('movies/index.ejs', {
             tabTitle: 'The Fortnightly Film Society Website',
-            movies: allMovies
+            movies: allMovies, 
+            genres: genres,
+            nominators: nominators, 
+            actors: ffsActors
         })
         }).populate("nominations").populate("screening")
     }
@@ -231,97 +238,240 @@ router.post('/search', (req, res) => {
 })
   
 //SORT ROUTE
-router.post('/sort', (req, res) => {
-    if (req.body.sortChoice === 'cast') {
-        Movie.find({}, (err, allMovies) => {
-        //
-            const sortedMovies = allMovies.sort( (a, b) => {
-                // console.log(a.cast[0].split(' ')[1])
-                const namesOfA = a.cast[0].split(' ')
-                const namesOfB = b.cast[0].split(' ')
-                const lastNameA = namesOfA[namesOfA.length - 1]
-                const lastNameB = namesOfB[namesOfB.length - 1]
-
-                //below is the compare function that orders the list of movies by main actor's last name
-                if(lastNameA > lastNameB) {
-                return 1
-                } else if (lastNameA < lastNameB) {
-                return -1
-                } else {
-                return 0
-                }
-            })
-            // res.send(sortedMovies)
-            res.render('movies/index.ejs', {
-                tabTitle: 'Sorted By ' + req.body.sortChoice,
-                movies: sortedMovies
-            })
-        })
-    } else if (req.body.sortChoice === 'director') {
-        Movie.find({}, (err, allMovies) => {
-        const sortedMovies = allMovies.sort((a, b) => {
-            const aDirectorNames = a.director.split(' ')
-            const bDirectorNames = b.director.split(' ')
-            const lastNameOfDirA = aDirectorNames[aDirectorNames.length - 1]
-            const lastNameOfDirB = bDirectorNames[bDirectorNames.length - 1]
-
-            //below is the compare function that sorts the list of movies by director's last name
-            if (lastNameOfDirA > lastNameOfDirB) {
-            return 1
-            } else if (lastNameOfDirA < lastNameOfDirB) {
-            return -1
-            } else {
-            return 0
-            }
-        })
-        //now that movies are sorted, render the page
-        res.render('movies/index.ejs', {
-            tabTitle: 'Sorted By ' + req.body.sortChoice,
-            movies: sortedMovies
-        })
-        })
-    } else if (req.body.sortChoice === 'most_recent') { 
-        Movie.find({}).populate("screening").exec((err, allMovies) => {
-        err ? console.log(err.message) : console.log('Sorting movies by most recent...');;
-        const sortedMovies = allMovies.sort((a,b) => {
-            if (a.screening && b.screening && a.screening.date < b.screening.date) {
-            return 1
-            } else if (a.screening && b.screening && a.screening.date > b.screening.date) {
-            return -1 
-            } else {
-            return 0
-            }
-        })
-        res.render('movies/index.ejs', {
-            tabTitle: 'Sorted By ' + req.body.sortChoice,
-            movies: sortedMovies
-        })
-        })
-    } else if (req.body.sortChoice === 'screening_order') { 
-        Movie.find({}).populate("screening").exec((err, allMovies) => {
-            if(err) console.log(err.message);
-            const sortedMovies = allMovies.sort((a,b) => {
-                if (a.screening && b.screening && a.screening.date > b.screening.date) {
-                return 1
-                } else if (a.screening && b.screening && a.screening.date < b.screening.date) {
-                return -1 
-                } else {
-                return 0
-                }
-            })
-            res.render('movies/index.ejs', {
-                tabTitle: 'Sorted By ' + req.body.sortChoice,
-                movies: sortedMovies
-            })
-        })
-    } else {
-        Movie.find({}, null, {sort: req.body.sortChoice}, (err, sortedMovies) => {
-            res.render('movies/index.ejs', {
-                tabTitle: 'Sorted By ' + req.body.sortChoice,
-                movies: sortedMovies
-            })
-        })
+router.post('/sort', async (req, res) => {
+    console.log(req.body);
+    let allMovies = await Movie.find({})  
+    switch(req.body.moviesSet) {
+        case "all-movies":
+            //"allMovies" means no filtering of allMovies necessary
+            break;
+        case "all-winners":
+            //filter for only winning movies
+            allMovies = allMovies.filter(x => x.screened)
+            break;
+        case "all-unscreened":
+            //filter for only unscreened movies
+            allMovies = allMovies.filter(x => !x.screened)
+            break;
+        case "non-winners":
+            //filter for movies that have nominations but no wins
+            allMovies = allMovies.filter(x => x.nominations.length && !x.screened)
+            break;
+        case "never-nominated":
+            //filter for movies with 0 nominations
+            allMovies = allMovies.filter(x => x.nominations.length === 0)
+            break;
+        case "nominated-by":
+            //filter for movies nominated at any time by the specified nominator
+            let nominator = req.body.nominator
+            allMovies = allMovies.filter(x => x.allNominators.includes(nominator))
+            break;
+        case "orig-nom-by":
+            //filter for movies with the indicated original nominator
+            let origNominator = req.body.origNominator
+            allMovies = allMovies.filter(x => x.origNominator === origNominator)
+            break;
+        case "includes-actor":
+            //filter for movies with the indicated actor
+            allMovies = allMovies.filter(x => x.cast.includes(req.body.actor))
+            break;
+        default:
+            console.log('There was an error retrieving a value for the filter variable moviesSet.');  
     }
+
+    //now apply any genre filter
+    if(req.body.genresTypeChoice === "specific-genres") {
+        // console.log(typeof req.body.genreChoice);
+        if(!req.body.genreChoice) { //if user forgot to select at least one genre
+            console.log('You must choose at least one genre.');
+            req.body.genreChoice = []
+        }
+        if(typeof req.body.genreChoice === 'string') { //convert to array if only one genre submitted
+            req.body.genreChoice = [req.body.genreChoice]
+        }
+        //function to determine if movie contains any of the selected genres
+        const movieContainsAnySelectedGenre = (movie) => {
+            for (let genre of req.body.genreChoice) {
+                if(movie.genre.includes(genre)) {
+                    // console.log(genre + ' found in genres of ' + movie.title);
+                    return true
+                }
+            }
+            return false
+        }
+            allMovies = allMovies.filter(x => movieContainsAnySelectedGenre(x))
+    }
+
+    //now apply sorting choice
+    switch(req.body.sortChoice) {
+        case "title":
+            allMovies.sort((a,b) => {
+                if(a.title > b.title) {
+                    return 1
+                } else {
+                    return -1
+                }
+            })
+            break;
+        case "director":
+            allMovies.sort((a,b) => {
+                const aDirectorNames = a.director.split(' ')
+                const bDirectorNames = b.director.split(' ')
+                const lastNameOfDirA = aDirectorNames[aDirectorNames.length - 1]
+                const lastNameOfDirB = bDirectorNames[bDirectorNames.length - 1]
+                
+                //below is the compare function that sorts the list of movies by director's last name
+                if (lastNameOfDirA > lastNameOfDirB) {
+                    return 1
+                } else if (lastNameOfDirA < lastNameOfDirB) {
+                    return -1
+                } else {
+                    return 0
+                }
+            })
+            break;
+        case "year": 
+            allMovies.sort((a,b) => {
+                if(a.year > b.year) {
+                    return 1
+                } else if (b.year > a.year) {
+                    return -1
+                } else { //if year is the same, sort by title
+                    if(a.title > b.title) {
+                        return 1
+                    } else {
+                        return -1
+                    }
+                }
+            })
+            break;
+        case "num-noms":
+            allMovies.sort((a,b) => {
+                if(a.nominations.length === b.nominations.length) {
+                    //if same number of noms, sort by title
+                    if(a.title > b.title) {
+                        return 1
+                    } else {
+                        return -1
+                    } 
+                } else if (a.nominations.length > b.nominations.length) {
+                    return -1    
+                } else {
+                    return 1
+                }
+            })
+            break;
+        default:
+            console.log('There was a problem with the sorting choice.');
+    }
+
+    req.body.reverse === "on" ? allMovies = allMovies.reverse() : null
+
+    console.log('Number of movies matching filters: ' + allMovies.length);
+    if(allMovies.length) {
+        console.log('first movie title: ' + allMovies[0].title);
+        console.log('last movie title: ' + allMovies[allMovies.length-1].title);
+    }
+
+    //now that movies are filtered and sorted, render the page
+    res.render('movies/index.ejs', {
+        tabTitle: 'FFS movies sorted by ' + req.body.sortChoice,
+        movies: allMovies,
+        nominators: nominators,
+        genres: genres,
+        actors: ffsActors
+    })
+    // res.json(req.body)
+    // if (req.body.sortChoice === 'cast') {
+    //     Movie.find({}, (err, allMovies) => {
+    //     //
+    //         const sortedMovies = allMovies.sort( (a, b) => {
+    //             // console.log(a.cast[0].split(' ')[1])
+    //             const namesOfA = a.cast[0].split(' ')
+    //             const namesOfB = b.cast[0].split(' ')
+    //             const lastNameA = namesOfA[namesOfA.length - 1]
+    //             const lastNameB = namesOfB[namesOfB.length - 1]
+
+    //             //below is the compare function that orders the list of movies by main actor's last name
+    //             if(lastNameA > lastNameB) {
+    //             return 1
+    //             } else if (lastNameA < lastNameB) {
+    //             return -1
+    //             } else {
+    //             return 0
+    //             }
+    //         })
+    //         // res.send(sortedMovies)
+    //         res.render('movies/index.ejs', {
+    //             tabTitle: 'Sorted By ' + req.body.sortChoice,
+    //             movies: sortedMovies
+    //         })
+    //     })
+    // } else if (req.body.sortChoice === 'director') {
+    //     Movie.find({}, (err, allMovies) => {
+    //     const sortedMovies = allMovies.sort((a, b) => {
+    //         const aDirectorNames = a.director.split(' ')
+    //         const bDirectorNames = b.director.split(' ')
+    //         const lastNameOfDirA = aDirectorNames[aDirectorNames.length - 1]
+    //         const lastNameOfDirB = bDirectorNames[bDirectorNames.length - 1]
+
+    //         //below is the compare function that sorts the list of movies by director's last name
+    //         if (lastNameOfDirA > lastNameOfDirB) {
+    //         return 1
+    //         } else if (lastNameOfDirA < lastNameOfDirB) {
+    //         return -1
+    //         } else {
+    //         return 0
+    //         }
+    //     })
+    //     //now that movies are sorted, render the page
+    //     res.render('movies/index.ejs', {
+    //         tabTitle: 'Sorted By ' + req.body.sortChoice,
+    //         movies: sortedMovies
+    //     })
+    //     })
+    // } else if (req.body.sortChoice === 'most_recent') { 
+    //     Movie.find({}).populate("screening").exec((err, allMovies) => {
+    //     err ? console.log(err.message) : console.log('Sorting movies by most recent...');;
+    //     const sortedMovies = allMovies.sort((a,b) => {
+    //         if (a.screening && b.screening && a.screening.date < b.screening.date) {
+    //         return 1
+    //         } else if (a.screening && b.screening && a.screening.date > b.screening.date) {
+    //         return -1 
+    //         } else {
+    //         return 0
+    //         }
+    //     })
+    //     res.render('movies/index.ejs', {
+    //         tabTitle: 'Sorted By ' + req.body.sortChoice,
+    //         movies: sortedMovies
+    //     })
+    //     })
+    // } else if (req.body.sortChoice === 'screening_order') { 
+    //     Movie.find({}).populate("screening").exec((err, allMovies) => {
+    //         if(err) console.log(err.message);
+    //         const sortedMovies = allMovies.sort((a,b) => {
+    //             if (a.screening && b.screening && a.screening.date > b.screening.date) {
+    //             return 1
+    //             } else if (a.screening && b.screening && a.screening.date < b.screening.date) {
+    //             return -1 
+    //             } else {
+    //             return 0
+    //             }
+    //         })
+    //         res.render('movies/index.ejs', {
+    //             tabTitle: 'Sorted By ' + req.body.sortChoice,
+    //             movies: sortedMovies
+    //         })
+    //     })
+    // } else {
+    //     Movie.find({}, null, {sort: req.body.sortChoice}, (err, sortedMovies) => {
+    //         res.render('movies/index.ejs', {
+    //             tabTitle: 'Sorted By ' + req.body.sortChoice,
+    //             movies: sortedMovies
+    //         })
+    //     })
+    // }
 })
   
 //EDIT ROUTES
@@ -463,10 +613,4 @@ const findWinningMoviesNoms = () => {
 // findWinningMoviesNoms()
 
 
-const fixTroll2 = () => {
-    Movie.findOneAndUpdate({title: "Troll 2"}, {$set: {nominations: [], origNominator: "", allNominators: []}}, {new: true}, (err, updatedMovie) => {
-        console.log(updatedMovie);
-    })
-}
-// fixTroll2()
 module.exports = router
