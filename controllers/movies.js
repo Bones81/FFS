@@ -613,10 +613,4 @@ const findWinningMoviesNoms = () => {
 // findWinningMoviesNoms()
 
 
-const fixTroll2 = () => {
-    Movie.findOneAndUpdate({title: "Troll 2"}, {$set: {nominations: [], origNominator: "", allNominators: []}}, {new: true}, (err, updatedMovie) => {
-        console.log(updatedMovie);
-    })
-}
-// fixTroll2()
 module.exports = router

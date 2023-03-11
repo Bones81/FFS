@@ -529,7 +529,7 @@ nav a:hover {
 }
 
 #moviesSet-container, #sortChoice-container {
-  max-height: 200px;
+  max-height: 250px;
   max-width: 400px;
 }
 
@@ -623,7 +623,7 @@ nav a:hover {
   .data-title {
     font-size: 1.25em;
     position: relative;
-    z-index: 0;
+    z-index: 1;
   }
 
   .staff-title {

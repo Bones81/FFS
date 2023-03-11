@@ -13,8 +13,8 @@
   <% if (movies.length === 0) { %>
     <h2 class="no-results-text">Your search returned zero results.</h2>
   <% } %>
+  <h2 id="sort-header">Sort options</h2>
   <form action="/movies/sort" id="sort-box" method="POST">
-    <h2 id="sort-header">Sort options (Needs attention; refined options hopefully available in a future update):</h2>
     <fieldset id="moviesSet-container">
       <legend>Movies Filter</legend>
       <div class="moviesSet-option">
@@ -83,7 +83,7 @@
         <hr/>
         <% for (let genre of genres) { %>
           <div class="genre-option">
-            <input type="checkbox" name="genreChoice" id="genre-<%=genre%>" value=<%=genre%> />
+            <input type="checkbox" name="genreChoice" id="genre-<%=genre%>" value="<%=genre%>" />
             <label for="genre-<%=genre%>"><%=genre%></label>
           </div>
         <% } %>
