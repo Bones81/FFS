@@ -40,7 +40,7 @@
       <div class="moviesSet-option">
         <input type="radio" name="moviesSet" id="only-nominatedBy" value="nominated-by" />
         <label for="only-nominatedBy">Only Movies Nominated By:</label>
-        <select name="nominator" id="nominator">
+        <select name="nominator" id="nominator-select">
           <option value="" disabled selected>--List of Nominators--</option>
           <% for (let nominator of nominators) { %>
             <option value="<%=nominator%>"><%=nominator%></option>
