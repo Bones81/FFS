@@ -15,4 +15,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     })
 
+    const genreOptionsDiv = document.querySelector('.genre-options-div')
+    const genresTypeChoiceBtns = document.querySelectorAll('.genres-type-choice')
+    const specificGenresBtn = document.querySelector('#specific-genres-choice')
+
+    const showGenreOptionsDiv = () => {
+        if(specificGenresBtn.checked) {
+            genreOptionsDiv.classList.add('active')
+        } else {
+            genreOptionsDiv.classList.remove('active')
+        }
+    }
+
+    for (let btn of genresTypeChoiceBtns) {
+        btn.addEventListener('change', showGenreOptionsDiv)
+    }
+
+    
+
 })

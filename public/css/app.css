@@ -329,6 +329,14 @@ td img {
   flex: 1 0;
 }
 
+.genre-options-div { /* Used on movies index page filter options */
+  display: none;
+}
+
+.genre-options-div.active {
+  display: block;
+}
+
 .new-nomination-note {
   padding: 1em 25%;
   border-top: 1px dotted black;
