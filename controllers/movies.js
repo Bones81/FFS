@@ -320,6 +320,22 @@ router.post('/sort', async (req, res) => {
                 }
             })
             break;
+        case "year": 
+            allMovies.sort((a,b) => {
+                if(a.year > b.year) {
+                    return 1
+                } else if (b.year > a.year) {
+                    return -1
+                } else { //if year is the same, sort by title
+                    if(a.title > b.title) {
+                        return 1
+                    } else {
+                        return -1
+                    }
+                }
+            })
+            break;
+        
         default:
             console.log('There was a problem with the sorting choice.');
     }
