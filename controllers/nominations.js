@@ -299,7 +299,7 @@ router.get('/:id', (req, res) => {
     Nomination.findById(req.params.id, (err, foundNomination) => {
       res.render('nominations/show.ejs', {
         nomination: foundNomination,
-        tabTitle: foundNomination.title + ' | Nomination' 
+        tabTitle: foundNomination.nominee.title + ' | Nomination' 
       })
     }).populate("screening").populate("nominee")
   }
