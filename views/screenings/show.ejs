@@ -48,22 +48,24 @@
           </td>
         </tr>
       </table>
-      <h3>
-        <a href="/screenings/<%=screening._id%>/edit"
-          ><button class="btn edit-btn">Edit Screening Details</button></a
-        >
-      </h3>
+      <% if (user && user.role === 'admin') { %> 
+        <h3>
+          <a href="/screenings/<%=screening._id%>/edit"
+            ><button class="btn edit-btn">Edit Screening Details</button></a
+          >
+        </h3>
 
-      <form
-        action="/screenings/<%=screening._id%>/confirm-delete"
-        class="show-form"
-      >
-        <input
-          type="submit"
-          class="btn delete-btn"
-          value="DELETE FFS Screening from database (CAUTION)"
-        />
-      </form>
+        <form
+          action="/screenings/<%=screening._id%>/confirm-delete"
+          class="show-form"
+        >
+          <input
+            type="submit"
+            class="btn delete-btn"
+            value="DELETE FFS Screening from database (CAUTION)"
+          />
+        </form>
+      <% } %>
     </div>
   </body>
   <%- include('../partials/script.ejs') %>
