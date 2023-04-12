@@ -1,6 +1,14 @@
 const express = require('express')
 const router = express.Router()
+const passport = require('passport')
+const LocalStrategy = require('passport-local').Strategy
 
+const User = require('../models/users')
+
+passport.use(new LocalStrategy(User.authenticate()))
+
+passport.serializeUser(User.serializeUser())
+passport.deserializeUser(User.deserializeUser())
 
 // DEFAULT ROUTE - render login page
 router.get('/', (req, res) => {
