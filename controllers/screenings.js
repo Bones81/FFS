@@ -171,6 +171,8 @@ const updateWeekIDs = () => {
 
 //INDEX
 router.get('/', (req, res) => {
+    const user = req.user || null
+    const sessionID = req.sessionID || "No sessionID found"
     if (maintenance) {
         res.render('maintenance.ejs', {tabTitle: 'FFS Maintenance Mode'})
     } else {
@@ -198,6 +200,8 @@ router.get('/', (req, res) => {
                 tabTitle: 'FFS Screenings',
                 screenings: allScreenings,
                 screeningWeeks: screeningWeeks,
+                user: user,
+                sessionID: sessionID
                 
             })
         })
@@ -233,10 +237,16 @@ router.get('/:id/json', (req, res) => {
 //NEW
 router.get('/new', (req, res) => {
     if (maintenance) {
-        res.render('maintenance.ejs', {tabTitle: 'FFS Maintenance Mode'})
+        res.render('maintenance.ejs', {
+            user: req.user,
+            sessionID: req.sessionID,
+            tabTitle: 'FFS Maintenance Mode'
+        })
     } else {
 
         res.render('screenings/new.ejs', {
+            user: req.user,
+            sessionID: req.sessionID,
             tabTitle: 'Add New Screening Info',
             weeks: screeningWeeksSeed
         })
@@ -312,6 +322,8 @@ router.get('/:id', (req, res) => {
             }
         ]).exec((err, foundScreening) => {
             res.render('screenings/show.ejs', {
+                user: req.user,
+                sessionID: req.sessionID,
                 tabTitle: foundScreening.date.toString().slice(3,15) + " FFS Screening",
                 screening: foundScreening
             })
@@ -349,6 +361,8 @@ router.get('/:id/edit', (req, res) => {
             console.log('screening.selection = ' + foundScreening.selection);
             console.log('screening.nominations = ' + foundScreening.nominations);
             res.render('screenings/edit.ejs', {
+                user: req.user,
+                sessionID: req.sessionID,
                 tabTitle: "Edit " + foundScreening.date.toString().slice(3,15) + " Screening",
                 screening: foundScreening,
                 date: date
@@ -391,6 +405,8 @@ router.put('/:id', (req, res) => {
 router.get('/:id/confirm-delete', (req, res) => {
     Screening.findById(req.params.id, (err, foundScreening) => {
         res.render('screenings/confirm_delete.ejs', {
+        user: req.user,
+        sessionID: req.sessionID,
         tabTitle: 'Confirm delete of Screening?',
         screening: foundScreening
         })

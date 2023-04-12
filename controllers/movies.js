@@ -119,6 +119,8 @@ router.get('/', (req, res) => {
             err ? console.log(err) : console.log('All movies found');
             // res.json(allMovies);
         res.render('movies/index.ejs', {
+            user: req.user,
+            sessionID: req.sessionID,
             tabTitle: 'The Fortnightly Film Society Website',
             movies: allMovies, 
             genres: genres,
@@ -133,9 +135,15 @@ router.get('/', (req, res) => {
 //NEW
 router.get('/new', (req, res) => {
     if (maintenance) {
-        res.render('maintenance.ejs', {tabTitle: 'FFS Maintenance Mode'})
+        res.render('maintenance.ejs', { 
+            user: req.user,
+            sessionID: req.sessionID,
+            tabTitle: 'FFS Maintenance Mode'
+        })
     } else {
         res.render('movies/new.ejs', {
+        user: req.user,
+        sessionID: req.sessionID,
         tabTitle: 'Add Movie',
         genres: genres
         })
@@ -172,6 +180,8 @@ router.post('/', (req, res) => {
 router.get('/:id/confirm-delete', (req, res) => {
     Movie.findById(req.params.id, (err, foundMovie) => {
         res.render('movies/confirm_delete.ejs', {
+        user: req.user,
+        sessionID: req.sessionID,        
         tabTitle: 'Confirm delete?',
         movie: foundMovie
         })
@@ -216,6 +226,8 @@ router.get('/:id', (req, res) => {
             Nomination.find({nominee: foundMovie._id}, (err, foundNoms) => {
                 Screening.findOne({selection: foundMovie._id}, (err, foundScreening) => {    
                     res.render('movies/show.ejs', {
+                        user: req.user,
+                        sessionID: req.sessionID,
                         movie: foundMovie,
                         screening: foundScreening,
                         nominations: foundNoms,
@@ -231,6 +243,8 @@ router.get('/:id', (req, res) => {
 router.post('/search', (req, res) => {
     Movie.find({title: req.body.searchString}, (err, foundMovies) => {
         res.render('movies/index.ejs', { 
+            user: req.user,
+            sessionID: req.sessionID,
             movies: foundMovies,
             tabTitle: 'Search results'
         })
@@ -375,6 +389,8 @@ router.post('/sort', async (req, res) => {
 
     //now that movies are filtered and sorted, render the page
     res.render('movies/index.ejs', {
+        user: req.user,
+        sessionID: req.sessionID,
         tabTitle: 'FFS movies sorted by ' + req.body.sortChoice,
         movies: allMovies,
         nominators: nominators,
@@ -485,6 +501,8 @@ router.get('/:id/edit', (req, res) => {
                     if(a.date > b.date) { return 1 } else { return -1 }
                 })
                 res.render('movies/edit.ejs', {
+                    user: req.user,
+                    sessionID: req.sessionID,
                     tabTitle: foundMovie.title + " | Edit Page",
                     movie: foundMovie,
                     screenings: allScreenings,

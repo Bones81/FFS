@@ -75,6 +75,8 @@ router.get('/', (req, res) => {
             }
           })
           res.render('nominations/index.ejs', {
+            user: req.user,
+            sessionID: req.sessionID,
             tabTitle: 'FFS Nominations',
             nominations: nominations,
             screenings: screenings,
@@ -97,6 +99,8 @@ router.get('/new', (req, res) => {
       })
       Movie.find({}, (err, movies) => {
         res.render('nominations/create_nomination.ejs', {
+          user: req.user,
+          sessionID: req.sessionID,
           tabTitle: 'Create Nomination',
           screenings: screenings,
           movies: movies,
@@ -280,6 +284,8 @@ router.post('/initial-info', (req, res) => {
         }
       })
       res.render('nominations/new.ejs', {
+        user: req.user,
+        sessionID: req.sessionID,
         tabTitle: 'Continue Nomination',
         screening: screening,
         movies: movies,
@@ -298,6 +304,8 @@ router.get('/:id', (req, res) => {
   } else {
     Nomination.findById(req.params.id, (err, foundNomination) => {
       res.render('nominations/show.ejs', {
+        user: req.user,
+        sessionID: req.sessionID,
         nomination: foundNomination,
         tabTitle: foundNomination.nominee.title + ' | Nomination' 
       })
@@ -314,6 +322,8 @@ router.get('/:id/edit', (req, res) => {
     Screening.find({}, (err, allScreenings) => { 
       Nomination.findById(req.params.id, (err, foundNom) => {
         res.render('nominations/edit.ejs', {
+          user: req.user,
+          sessionID: req.sessionID,
           tabTitle: foundNom.nominee.title + " | Edit Nomination",
           nomination: foundNom,
           screenings: allScreenings,
@@ -328,6 +338,8 @@ router.get('/:id/edit', (req, res) => {
 router.get('/:id/confirm-delete', (req, res) => {
     Nomination.findById(req.params.id, (err, foundNom) => {
       res.render('nominations/confirm_delete.ejs', {
+        user: req.user,
+        sessionID: req.sessionID,
         tabTitle: 'Confirm delete?',
         nomination: foundNom
       })

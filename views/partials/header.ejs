@@ -1,3 +1,9 @@
+<% if (user) { %> 
+  <h3>Hello, <%=user.username%>!</h3>
+<% } else { %>
+  <a href="/register">Register FFS Member Info</a>
+  <a href="/login">Login Existing FFS Member</a>
+<% } %>
 <nav class="full-nav">
   <a class="screening-bgcolor data-link" href="/screenings">FFS Selections</a>
   <a class="screening-bgcolor data-link" href="/screenings/new">Add a Screening</a>

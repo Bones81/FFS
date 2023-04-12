@@ -87,6 +87,8 @@ app.get('/', (req, res) => {
 
 app.get('/staff', (req, res) => {
   res.render('staff.ejs', {
+    user: req.user,
+    sessionID: req.sessionID,
     tabTitle: 'FFS Staff'
   }) 
 })
