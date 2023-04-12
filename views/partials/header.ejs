@@ -1,16 +1,28 @@
 <% if (user) { %> 
-  <h3>Hello, <%=user.username%>!</h3>
+  <aside class="user-greeting">
+    <h3>Hello, <%=user.username%>!</h3>
+    <a href="/logout">Logout</a>
+  </aside>
 <% } else { %>
-  <a href="/register">Register FFS Member Info</a>
-  <a href="/login">Login Existing FFS Member</a>
+  <aside class="user-greeting">
+    <a href="/register">Create New User</a>
+    <a href="/login">Login Existing FFS Member</a>
+  </aside>
 <% } %>
 <nav class="full-nav">
   <a class="screening-bgcolor data-link" href="/screenings">FFS Selections</a>
-  <a class="screening-bgcolor data-link" href="/screenings/new">Add a Screening</a>
+  <% if (user && user.role === 'admin') { %> 
+    <a class="screening-bgcolor data-link" href="/screenings/new">Add a Screening</a>
+  <% } %>
   <a class="nomination-bgcolor data-link" href="/nominations">Nomination Archive</a>
-  <a class="nomination-bgcolor data-link" href="/nominations/new">Submit a Nomination</a>
+  <% if (user && user.role === 'admin' || user && user.role === 'member') { %> 
+    <a class="nomination-bgcolor data-link" href="/nominations/new">Submit a Nomination</a>
+  <% } %>
   <a class="movie-bgcolor data-link" href="/movies">Movies Database</a>
-  <a class="movie-bgcolor data-link" href="/movies/new">Add Movie to Database</a>
+  <% if (user && user.role === 'admin' || user && user.role === 'member') { %> 
+    <a class="movie-bgcolor data-link" href="/movies/new">Add Movie to Database</a>
+  <% } %>
+    
   <!-- <form action="/movies/search" method="POST" id="search-form">
     <label for="searchbar">Search selections by title: </label><input type="search" name="searchString" id="searchbar" size="30">
   </form> -->
@@ -18,11 +30,28 @@
 <button class="hamburger" type="button"><i class="fa-sharp fa-solid fa-bars"></i></button>
 <nav class="mobile-nav">
   <a class="mobile-link mobile-screening-bgcolor data-link" href="/screenings">FFS Selections</a>
-  <a class="mobile-link mobile-screening-bgcolor data-link" href="/screenings/new">Add a Screening</a>
+  <% if (user && user.role === 'admin') { %> 
+    <a class="mobile-link mobile-screening-bgcolor data-link" href="/screenings/new">Add a Screening</a>
+  <% } %>
   <a class="mobile-link mobile-nomination-bgcolor data-link" href="/nominations">Nomination Archive</a>
-  <a class="mobile-link mobile-nomination-bgcolor data-link" href="/nominations/new">Submit a Nomination</a>
+  <% if (user && user.role === 'admin' || user && user.role === 'member') { %> 
+    <a class="mobile-link mobile-nomination-bgcolor data-link" href="/nominations/new">Submit a Nomination</a>
+  <% } %>
   <a class="mobile-link mobile-movie-bgcolor data-link" href="/movies">Movies Database</a>
-  <a class="mobile-link mobile-movie-bgcolor data-link" href="/movies/new">Add Movie to Database</a>
+  <% if (user && user.role === 'admin' || user && user.role === 'member') { %> 
+    <a class="mobile-link mobile-movie-bgcolor data-link" href="/movies/new">Add Movie to Database</a>
+  <% } %>
   <a class="mobile-link mobile-staff-link data-link" href="/staff">FFS Staff</a>
+  <% if (user) { %> 
+    <div class="mobile-greeting">
+      <h3 class="mobile-link data-link">Hello, <%=user.username%>!</h3>
+      <a class="mobile-link data-link" href="/logout">Logout</a>
+    </div>
+  <% } else { %>
+    <div class="mobile-greeting">
+      <a class="mobile-link data-link" href="/register">Create New User</a>
+      <a class="mobile-link data-link" href="/login">Login Existing FFS Member</a>
+    </div>
+  <% } %>
 </nav>
 <a class="staff-link data-link" href="/staff">FFS Staff</a>

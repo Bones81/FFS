@@ -69,6 +69,8 @@ router.post('/login',
 router.get('/login-failure', (req, res, next) => {
     console.log(req.session);
     res.render('login-failure.ejs', {
+        user: req.user,
+        sessionID: req.sessionID,
         tabTitle: 'Login Failed'
     }) 
 })

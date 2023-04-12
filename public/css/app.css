@@ -409,7 +409,34 @@ header {
   position: sticky;
   top: 0;
   z-index: 999;
+}
 
+.user-greeting {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: none;
+  flex-flow: column nowrap;
+  gap: 1em;
+  background-color: olivedrab;
+  padding: 1em;
+  border:rgba(192,192,192, 1) solid 5px;
+  border-radius: 20px;
+  align-items: flex-start;
+  box-shadow: -2px 2px 5px black;
+  font-size: 10px;
+}
+
+.mobile-greeting {
+  display: block;
+  margin: 1em auto;
+
+}
+
+.mobile-greeting a {
+  color: whitesmoke;
+  font-size: 10px;
+  background: rgba(192,192,192, 1);
 }
 
 .full-nav {
@@ -424,7 +451,7 @@ header {
   background: goldenrod;
   border-bottom-left-radius: 25px;
   border-bottom-right-radius: 25px;
-
+  box-shadow: 0 2px 5px black;
 }
 
 .mobile-nav {
@@ -633,6 +660,10 @@ nav a:hover {
 }
 
 @media (min-width: 640px) {
+  .user-greeting {
+    display: flex;
+  }
+
   #nominations-list thead tr, .screenings-table thead tr {
     background: var(--table-row2);
     top: 64px;

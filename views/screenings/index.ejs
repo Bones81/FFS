@@ -8,6 +8,10 @@
     <h1 class="page-title" id="home-title">
       Fortnightly Film Society Screenings
     </h1>
+    <% if (user && user.role) { %>
+      <h2 class="mobile-greeting">Greetings, FFS <%=user.role%> <%=user.username%>!</h2>
+    <% } %>
+
     <h3 class="blurb">
       <span class="blurb-first-lines">
         Major flops, sci-fi shlock, video game adaptations, high camp, oddball
