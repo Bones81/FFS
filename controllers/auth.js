@@ -4,13 +4,17 @@ const router = express.Router()
 
 // DEFAULT ROUTE - render login page
 router.get('/', (req, res) => {
-    res.render('login.ejs') 
+    res.render('login.ejs', {
+        tabTitle: 'FFS Login'
+    }) 
 })
 
 
 // REGISTER ROUTE - render registration page
 router.get('/register', (req, res) => {
-    res.render('register.ejs') 
+    res.render('register.ejs', {
+        tabTitle: 'FFS Register New User'
+    }) 
 })
 
 // REGISTER USER ROUTE

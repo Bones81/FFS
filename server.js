@@ -33,7 +33,7 @@ const authController = require('./controllers/auth.js')
 app.use('/movies', moviesController)
 app.use('/screenings', screeningsController)
 app.use('/nominations', nominationsController)
-app.use('/auth', authController)
+app.use('/', authController)
 
 const maintenance = require('./models/maintenance.js') // Boolean indicating whether maintenance mode is on or not; initial page will render maintenance.ejs if true
 
