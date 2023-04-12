@@ -29,9 +29,11 @@ const { application } = require('express')
 const moviesController = require('./controllers/movies.js')
 const screeningsController = require('./controllers/screenings.js')
 const nominationsController = require('./controllers/nominations.js')
+const authController = require('./controllers/auth.js')
 app.use('/movies', moviesController)
 app.use('/screenings', screeningsController)
 app.use('/nominations', nominationsController)
+app.use('/auth', authController)
 
 const maintenance = require('./models/maintenance.js') // Boolean indicating whether maintenance mode is on or not; initial page will render maintenance.ejs if true
 
@@ -44,7 +46,7 @@ app.get('/', (req, res) => {
       tabTitle: 'FFS Maintenance Mode'
     })
   } else {
-    res.redirect('/screenings')
+    res.redirect('/auth')
   }
 })
 
@@ -76,7 +78,7 @@ app.get('/staff', (req, res) => {
 
 
 
-mongoose.connect(mongoURI, () => {
+mongoose.connect(mongoLOC, () => {
   console.log('The connection with mongod is established')
 })
 
