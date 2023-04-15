@@ -49,6 +49,10 @@ body {
   font-size: 0.75em;
 }
 
+.screenings-title {
+  
+}
+
 .flex-container {
   display: flex;
   flex-flow: row wrap;
@@ -546,7 +550,7 @@ nav a:hover {
   margin: 1em auto;
 }
 
-.page-title {
+.page-title, .screenings-title {
   background-image: url(/img/film-negative-brown.jpeg);
   background-size: cover;
   background-position: center;
@@ -559,6 +563,14 @@ nav a:hover {
   font-size: 1em;
   margin: 0 auto 1em;
   text-shadow: black 2px 2px 5px;
+}
+
+.screenings-title {
+  max-width: 450px;
+  min-height: 75px;
+  max-height: 150px;
+  background-size: contain;
+  font-size: 1.5em;
 }
 
 .red {

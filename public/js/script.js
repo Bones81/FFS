@@ -21,7 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const makeTheadTrStickToBottomOfHeader = () => {
         const header = document.querySelector('header')
         const headerHeight = header.offsetHeight
-        console.log(headerHeight);
 
         const tableTheadTrs = document.querySelectorAll('#nominations-list thead tr, .screenings-table thead tr');
 
