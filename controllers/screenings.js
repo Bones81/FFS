@@ -237,13 +237,18 @@ router.get('/:id/json', (req, res) => {
 //NEW
 router.get('/new', (req, res) => {
     if (maintenance) {
-        res.render('maintenance.ejs', {
+        res.render('maintenance.ejs', { 
             user: req.user,
             sessionID: req.sessionID,
             tabTitle: 'FFS Maintenance Mode'
         })
-    } else {
-
+      } else if(!req.isAuthenticated() || req.user.role !== 'admin') { // only admins are allowed to create new screenings
+          res.render('no_access.ejs', {
+              user: req.user,
+              sessionID: req.sessionID,
+              tabTitle: 'Not Authorized'
+          })
+      } else {
         res.render('screenings/new.ejs', {
             user: req.user,
             sessionID: req.sessionID,
@@ -255,41 +260,55 @@ router.get('/new', (req, res) => {
 
 //CREATE
 router.post('/', (req, res) => {
-    const screenObj = {...req.body}
-    //figure out date
-    let date = new Date(screenObj.date)
-    let dateTimeAt830 = date.getTime() + (1000*60*60*24.5)
-    date = new Date(dateTimeAt830)
-    screenObj.date = date
-    Screening.find({}, (err, allScreenings) => {
-        const dates = [screenObj.date]
-        for(let screening of allScreenings) { // for each screening, add its date to a list of all screening dates
-            dates.push(screening.date)
-        }
-        // sort the dates chronologically
-        dates.sort((a, b) => {
-            if (a>b) {
-                return 1
-            } else {
-                return -1
+    if (maintenance) {
+        res.render('maintenance.ejs', { 
+            user: req.user,
+            sessionID: req.sessionID,
+            tabTitle: 'FFS Maintenance Mode'
+        })
+    } else if(!req.isAuthenticated() || req.user.role !== 'admin') { // only admins are allowed to create new screenings
+        res.render('no_access.ejs', {
+            user: req.user,
+            sessionID: req.sessionID,
+            tabTitle: 'Not Authorized'
+        })
+    } else {        
+        const screenObj = {...req.body}
+        //figure out date
+        let date = new Date(screenObj.date)
+        let dateTimeAt830 = date.getTime() + (1000*60*60*24.5)
+        date = new Date(dateTimeAt830)
+        screenObj.date = date
+        Screening.find({}, (err, allScreenings) => {
+            const dates = [screenObj.date]
+            for(let screening of allScreenings) { // for each screening, add its date to a list of all screening dates
+                dates.push(screening.date)
             }
-        })
-
-        // console.log(dates.indexOf(screenObj.date) + 1);
-        for (let screening of allScreenings) {
-            Screening.findByIdAndUpdate(screening._id, {$set: {weekID: dates.indexOf(screening.date) + 1}}, {new: true}, (err, updatedScreening) => {
-                console.log('weekID ' + updatedScreening.weekID + ' assigned to ' + screening.date) ;
+            // sort the dates chronologically
+            dates.sort((a, b) => {
+                if (a>b) {
+                    return 1
+                } else {
+                    return -1
+                }
             })
-        }
-
-        // assign the correct weekID to the new screening object
-        screenObj.weekID = dates.indexOf(screenObj.date) + 1
-        //finally, create the new screening
-        Screening.create(screenObj, (err, createdScreening) => {
-            err ? console.log(err) : console.log(createdScreening)
-            res.redirect('/screenings')
+    
+            // console.log(dates.indexOf(screenObj.date) + 1);
+            for (let screening of allScreenings) {
+                Screening.findByIdAndUpdate(screening._id, {$set: {weekID: dates.indexOf(screening.date) + 1}}, {new: true}, (err, updatedScreening) => {
+                    console.log('weekID ' + updatedScreening.weekID + ' assigned to ' + screening.date) ;
+                })
+            }
+    
+            // assign the correct weekID to the new screening object
+            screenObj.weekID = dates.indexOf(screenObj.date) + 1
+            //finally, create the new screening
+            Screening.create(screenObj, (err, createdScreening) => {
+                err ? console.log(err) : console.log(createdScreening)
+                res.redirect('/screenings')
+            })
         })
-    })
+    }
 
     // Screening.findOne({}).sort({weekID: -1}).exec((err, foundScreening) => { //find screening w/ highest weekID, then +1 to create new weekID; this assumes user is only adding new screenings in chronological order
     //     // need to change to dynamically assign weekID based on when new screening falls. If it falls before any existing screening, reassign weekIDs to all screenings that come after the new screening chronologically.
@@ -334,7 +353,17 @@ router.get('/:id', (req, res) => {
 //EDIT
 router.get('/:id/edit', (req, res) => {
     if (maintenance) {
-        res.render('maintenance.ejs', {tabTitle: 'FFS Maintenance Mode'})
+        res.render('maintenance.ejs', { 
+            user: req.user,
+            sessionID: req.sessionID,
+            tabTitle: 'FFS Maintenance Mode'
+        })
+    } else if(!req.isAuthenticated() || req.user.role !== 'admin') { // only admins are allowed to edit screenings
+        res.render('no_access.ejs', {
+            user: req.user,
+            sessionID: req.sessionID,
+            tabTitle: 'Not Authorized'
+        })
     } else {
         Screening.findById(req.params.id).populate(
             [
@@ -373,99 +402,121 @@ router.get('/:id/edit', (req, res) => {
 
 //UPDATE
 router.put('/:id', (req, res) => {
-    let date = new Date(req.body.date)
-    let dateTime = date.getTime() + (3600000 * 24.5)
-    date = new Date(dateTime)
-    req.body.date = date
-    req.body.weekID = Number(req.body.weekID)
-    if (req.body.selection === "") {
-        req.body.selection = null
-    }
-    Screening.findById(req.params.id, (err, foundScreening) => {
-        req.body.nominations = foundScreening.nominations;
-        // res.json(req.body)
-        Screening.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, updatedScreening) => {
-            // if there is a new selection value, update the related nominations and movies
-            // THIS AREA NEEDS ATTENTION; NEED TO REMOVE WINNING NOMINATION STATUS FROM PREVIOUSLY MARKED WINNING NOM AND MOVIE THEN
-            // WOULD NEED TO UPDATE THE WINNING NOM AND MOVIE AS WELL
-            
-            console.log('Screening updated: ' + updatedScreening);
-            //now adjust weekIDs to reflect any updated dates
-            updateWeekIDs();
-            res.redirect('/screenings')
+    if (maintenance) {
+        res.render('maintenance.ejs', { 
+            user: req.user,
+            sessionID: req.sessionID,
+            tabTitle: 'FFS Maintenance Mode'
         })
-    })
-    // Screening.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, updatedScreening) => {
-    //     res.redirect('/screenings')
-    // })
-
+    } else if(!req.isAuthenticated() || req.user.role !== 'admin') { // only admins are allowed to edit screenings
+        res.render('no_access.ejs', {
+            user: req.user,
+            sessionID: req.sessionID,
+            tabTitle: 'Not Authorized'
+        })
+    } else {
+        let date = new Date(req.body.date)
+        let dateTime = date.getTime() + (3600000 * 24.5)
+        date = new Date(dateTime)
+        req.body.date = date
+        req.body.weekID = Number(req.body.weekID)
+        if (req.body.selection === "") {
+            req.body.selection = null
+        }
+        Screening.findById(req.params.id, (err, foundScreening) => {
+            req.body.nominations = foundScreening.nominations;
+            // res.json(req.body)
+            Screening.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, updatedScreening) => {
+                // if there is a new selection value, update the related nominations and movies
+                // THIS AREA NEEDS ATTENTION; NEED TO REMOVE WINNING NOMINATION STATUS FROM PREVIOUSLY MARKED WINNING NOM AND MOVIE THEN
+                // WOULD NEED TO UPDATE THE WINNING NOM AND MOVIE AS WELL
+                
+                console.log('Screening updated: ' + updatedScreening);
+                //now adjust weekIDs to reflect any updated dates
+                updateWeekIDs();
+                res.redirect('/screenings')
+            })
+        })
+    }
 })
 
 //CONFIRM DELETE
 router.get('/:id/confirm-delete', (req, res) => {
-    Screening.findById(req.params.id, (err, foundScreening) => {
-        res.render('screenings/confirm_delete.ejs', {
-        user: req.user,
-        sessionID: req.sessionID,
-        tabTitle: 'Confirm delete of Screening?',
-        screening: foundScreening
+    if (maintenance) {
+        res.render('maintenance.ejs', { 
+            user: req.user,
+            sessionID: req.sessionID,
+            tabTitle: 'FFS Maintenance Mode'
         })
-    })
+    } else if(!req.isAuthenticated() || req.user.role !== 'admin') { // only admins are allowed to edit screenings
+        res.render('no_access.ejs', {
+            user: req.user,
+            sessionID: req.sessionID,
+            tabTitle: 'Not Authorized'
+        })
+    } else {
+        Screening.findById(req.params.id, (err, foundScreening) => {
+            res.render('screenings/confirm_delete.ejs', {
+            user: req.user,
+            sessionID: req.sessionID,
+            tabTitle: 'Confirm delete of Screening?',
+            screening: foundScreening
+            })
+        })
+    }
 })
 
 //DELETE
 router.delete('/:id', (req, res) => {
-    console.log('screening id: ' + req.params.id);
-    Screening.findByIdAndRemove(req.params.id, (err, deletedScreening) => {
-        // find and delete any related nominations with this screening
-        for (let nomination of deletedScreening.nominations) {
-            Nomination.findByIdAndRemove(nomination._id, (err, deletedNom) => {
-                if (err) console.log(err);
-                console.log('Deleted nomination associated with deleted screening: ' + deletedNom);
-                if (deletedNom && deletedNom.winner) { //if nominee was a winner, reset the movie to not be a winner; also remove nominee and nominator from respective arrays.
-                    Movie.findByIdAndUpdate(deletedNom.nominee, {$set: {screened: false}}, {$unset: {screening: null}}, {$pull: {nominations: deletedNom._id}}, {$pull: {allNominators: deletedNom.nominator}}, {new: true}, (err, updatedMovie) => {
-                        if (err) console.log(err);
-                        console.log('Nomination removed for movie: ' + updatedMovie);
-                    })
-                } else if (deletedNom) { //remove nomination and nominator from respective lists, and check if any noms/nominators remain
-                    console.log(deletedNom.nominee);
-                    Movie.findByIdAndUpdate(deletedNom.nominee, {$pull: {nominations: deletedNom._id}}, {$pull: {allNominators: deletedNom.nominator}}, {new: true}, (err, updatedMovie) => {
-                        if (err) console.log(err);
-                        if(!updatedMovie.allNominators) { // if this update removed the last remaining nomination, remove the origNominator as well
-                            Movie.findByIdAndUpdate(deletedNom.nominee, {$set: {origNominator: ""}}, {new: true}, (err, updatedMovie2) => {
-                                console.log('Nomination and origNominator removed for movie: ' + updatedMovie2);
-                            })
-                        } else {
+    if (maintenance) {
+        res.render('maintenance.ejs', { 
+            user: req.user,
+            sessionID: req.sessionID,
+            tabTitle: 'FFS Maintenance Mode'
+        })
+    } else if(!req.isAuthenticated() || req.user.role !== 'admin') { // only admins are allowed to edit screenings
+        res.render('no_access.ejs', {
+            user: req.user,
+            sessionID: req.sessionID,
+            tabTitle: 'Not Authorized'
+        })
+    } else {
+        console.log('screening id: ' + req.params.id);
+        Screening.findByIdAndRemove(req.params.id, (err, deletedScreening) => {
+            // find and delete any related nominations with this screening
+            for (let nomination of deletedScreening.nominations) {
+                Nomination.findByIdAndRemove(nomination._id, (err, deletedNom) => {
+                    if (err) console.log(err);
+                    console.log('Deleted nomination associated with deleted screening: ' + deletedNom);
+                    if (deletedNom && deletedNom.winner) { //if nominee was a winner, reset the movie to not be a winner; also remove nominee and nominator from respective arrays.
+                        Movie.findByIdAndUpdate(deletedNom.nominee, {$set: {screened: false}}, {$unset: {screening: null}}, {$pull: {nominations: deletedNom._id}}, {$pull: {allNominators: deletedNom.nominator}}, {new: true}, (err, updatedMovie) => {
+                            if (err) console.log(err);
                             console.log('Nomination removed for movie: ' + updatedMovie);
-                        }
-                    })
-                } else {
-                    console.log('The found nomination was no longer valid.');
-                }
-            })
-        }
-        //adjust weekIDs of remaining screenings as necessary using updateWeekIDs
-        updateWeekIDs();
-        if (err) console.log(err);
-        console.log('Deleted screening: ' + deletedScreening);
-        res.redirect('/screenings')
-    })
+                        })
+                    } else if (deletedNom) { //remove nomination and nominator from respective lists, and check if any noms/nominators remain
+                        console.log(deletedNom.nominee);
+                        Movie.findByIdAndUpdate(deletedNom.nominee, {$pull: {nominations: deletedNom._id}}, {$pull: {allNominators: deletedNom.nominator}}, {new: true}, (err, updatedMovie) => {
+                            if (err) console.log(err);
+                            if(!updatedMovie.allNominators) { // if this update removed the last remaining nomination, remove the origNominator as well
+                                Movie.findByIdAndUpdate(deletedNom.nominee, {$set: {origNominator: ""}}, {new: true}, (err, updatedMovie2) => {
+                                    console.log('Nomination and origNominator removed for movie: ' + updatedMovie2);
+                                })
+                            } else {
+                                console.log('Nomination removed for movie: ' + updatedMovie);
+                            }
+                        })
+                    } else {
+                        console.log('The found nomination was no longer valid.');
+                    }
+                })
+            }
+            //adjust weekIDs of remaining screenings as necessary using updateWeekIDs
+            updateWeekIDs();
+            if (err) console.log(err);
+            console.log('Deleted screening: ' + deletedScreening);
+            res.redirect('/screenings')
+        })
+    }
 })
-
-
-// Movie.findByIdAndUpdate('63decff8a0d90f533efbf60e', {$set: {screened: false, screening: null, nominations: [], allNominators: []}}, {new: true}, (err, updatedM) => {
-//     if(err) console.log(err);
-//     console.log(updatedM); 
-// })
-
-// Screening.findOneAndUpdate({weekID: 72}, {nominations: [
-//         "63fa7568326f87599acfbddb",
-//         "63fa92fe3de81b4b019fe193",
-//         "63fa94703de81b4b019fe1b4",
-//         "63fa95103de81b4b019fe1c5",
-//         "63fa95643de81b4b019fe1d6"
-//     ]}, {new: true}, (err, foundScreening) => {
-//         console.log(foundScreening);
-// })
 
 module.exports = router
