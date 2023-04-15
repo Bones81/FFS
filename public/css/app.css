@@ -22,21 +22,31 @@ body {
   font-family: 'Rowdies', cursive;
 }
 
-#registration-form {
-  width: 60%;
-  margin: 0 auto;
+#registration-form, #login-form {
+  width: 80%;
+  margin: 1em auto;
   padding: 1em;
   border-radius: 1em;
+  border: 1px solid black;
+  box-shadow: 2px 2px 5px black;
   background: linear-gradient(-15deg, silver, rgba(192,192,192,1), silver);
 }
 
 .form-field {
   display: flex;
   flex-flow: row wrap;
+  gap: 0.5em;
 }
 
 .form-field > label, .form-field > input {
-  flex: 1 0 50%;
+  flex: 1 0 45%;
+  text-align: left;
+}
+
+.form-field ~ p {
+  max-width: 90%;
+  margin: 0 auto;
+  font-size: 0.75em;
 }
 
 .flex-container {
@@ -644,6 +654,10 @@ select {
 }
 
 @media (min-width: 480px) {
+  .form-field ~ p {
+    max-width: 80%;
+  }
+
   td img {
     max-height: 120px;
     max-width: 80px;
@@ -682,6 +696,18 @@ select {
 }
 
 @media (min-width: 640px) {
+  #registration-form {
+    width: 70%;
+  }
+  
+  #login-form {
+    width: 40%;
+  }
+
+  .form-field ~ p {
+    max-width: 70%;
+  }
+
   .user-greeting {
     display: flex;
   }
@@ -754,6 +780,14 @@ select {
     top: 70px;
   } */
 
+  #registration-form {
+    width: 50%;
+  }
+  
+  #login-form {
+    width: 30%;
+  }
+
   header a, #search-form {
     font-size: 1em;
   }
@@ -806,6 +840,13 @@ select {
   /* #nominations-list thead tr, .screenings-table thead tr {
     top: 82px;
   } */
+  #registration-form {
+    width: 50%;
+  }
+  
+  #login-form {
+    width: 25%;
+  }
 
   header a, #search-form {
     font-size: 1.25em;
@@ -842,6 +883,16 @@ select {
 
   .staff-member {
     font-size: 2.25em;
+  }
+}
+
+@media(min-width: 1200px) {
+  #registration-form {
+    width: 40%;
+  }
+  
+  #login-form {
+    width: 20%;
   }
 }
 

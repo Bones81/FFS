@@ -5,8 +5,8 @@
 </head>
 <body>
     <header><%- include('./partials/header.ejs') %></header>
-    <h1>Login to FFS</h1>
-    <form action="/login" method="POST">
+    <h1 class="page-title">Login to FFS</h1>
+    <form action="/login" method="POST" id="login-form">
         <div class="form-field">
             <label for="username">Username: </label>
             <input type="text" name="username" id="username" required/>
@@ -16,6 +16,7 @@
             <label for="password">Password: </label>
             <input type="password" name="password" id="password" required/>
         </div>
+        <hr>
         <button type="submit">Login</button>
     </form>
 
