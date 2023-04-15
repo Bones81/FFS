@@ -91,8 +91,18 @@ router.get('/', (req, res) => {
 //NEW
 router.get('/new', (req, res) => {
   if (maintenance) {
-    res.render('maintenance.ejs', {tabTitle: 'FFS Maintenance Mode'})
-} else {
+    res.render('maintenance.ejs', { 
+        user: req.user,
+        sessionID: req.sessionID,
+        tabTitle: 'FFS Maintenance Mode'
+    })
+  } else if(!req.isAuthenticated() || req.user.role === 'visitor') {
+    res.render('no_access.ejs', {
+        user: req.user,
+        sessionID: req.sessionID,
+        tabTitle: 'Not Authorized'
+    })
+  } else {
     Screening.find({}, (err, screenings) => { //show screenings in reverse date order
       screenings.sort((a,b) => {
         if (a.date > b.date) { return 1 } else { return -1 };
@@ -198,6 +208,19 @@ const createNominationFromDB = (nomObj, movie, screening, res) => { //create a n
 
 //CREATE
 router.post('/', (req, res) => {
+  if (maintenance) {
+    res.render('maintenance.ejs', { 
+        user: req.user,
+        sessionID: req.sessionID,
+        tabTitle: 'FFS Maintenance Mode'
+    })
+} else if(!req.isAuthenticated() || req.user.role === 'visitor') {
+    res.render('no_access.ejs', {
+        user: req.user,
+        sessionID: req.sessionID,
+        tabTitle: 'Not Authorized'
+    })
+} else {
   // console.log(req.body)
   let nomObj = {} // build a properly formatted nomination prior to calling Nomination.create
   // all Nominations conform to model with keys that include screening, nominee, nominator, blurb, and winner.
@@ -265,42 +288,61 @@ router.post('/', (req, res) => {
       })
     })
   }
+}
     
 })
 
 router.post('/initial-info', (req, res) => {
-  let nominator = req.body.nominator
-  let screeningID = req.body.screening
-  let nomination_type = req.body.nomination_type
-  // console.log(nomination_type)
-  Screening.find({weekID: screeningID}, (err, screening) => {
-    screening = screening[0]
-    Movie.find({}, (err, movies) => {
-      movies.sort((a,b) => {
-        if(a.title > b.title) {
-          return 1
-        } else {
-          return -1
-        }
-      })
-      res.render('nominations/new.ejs', {
+  if (maintenance) {
+    res.render('maintenance.ejs', { 
         user: req.user,
         sessionID: req.sessionID,
-        tabTitle: 'Continue Nomination',
-        screening: screening,
-        movies: movies,
-        genres: genres,
-        nominator: nominator,
-        nomination_type: nomination_type
+        tabTitle: 'FFS Maintenance Mode'
+    })
+  } else if(!req.isAuthenticated() || req.user.role === 'visitor') {
+      res.render('no_access.ejs', {
+          user: req.user,
+          sessionID: req.sessionID,
+          tabTitle: 'Not Authorized'
+      })
+  } else {
+    let nominator = req.body.nominator
+    let screeningID = req.body.screening
+    let nomination_type = req.body.nomination_type
+    // console.log(nomination_type)
+    Screening.find({weekID: screeningID}, (err, screening) => {
+      screening = screening[0]
+      Movie.find({}, (err, movies) => {
+        movies.sort((a,b) => {
+          if(a.title > b.title) {
+            return 1
+          } else {
+            return -1
+          }
+        })
+        res.render('nominations/new.ejs', {
+          user: req.user,
+          sessionID: req.sessionID,
+          tabTitle: 'Continue Nomination',
+          screening: screening,
+          movies: movies,
+          genres: genres,
+          nominator: nominator,
+          nomination_type: nomination_type
+        })
       })
     })
-  })
+  }
 })
 
 //SHOW
 router.get('/:id', (req, res) => {
   if (maintenance) {
-    res.render('maintenance.ejs', {tabTitle: 'FFS Maintenance Mode'})
+    res.render('maintenance.ejs', { 
+        user: req.user,
+        sessionID: req.sessionID,
+        tabTitle: 'FFS Maintenance Mode'
+    })
   } else {
     Nomination.findById(req.params.id, (err, foundNomination) => {
       res.render('nominations/show.ejs', {
@@ -317,7 +359,17 @@ router.get('/:id', (req, res) => {
 //EDIT
 router.get('/:id/edit', (req, res) => {
   if (maintenance) {
-    res.render('maintenance.ejs', {tabTitle: 'FFS Maintenance Mode'})
+    res.render('maintenance.ejs', { 
+        user: req.user,
+        sessionID: req.sessionID,
+        tabTitle: 'FFS Maintenance Mode'
+    })
+  } else if(!req.isAuthenticated() || req.user.role === 'visitor') {
+      res.render('no_access.ejs', {
+          user: req.user,
+          sessionID: req.sessionID,
+          tabTitle: 'Not Authorized'
+      })
   } else {
     Screening.find({}, (err, allScreenings) => { 
       Nomination.findById(req.params.id, (err, foundNom) => {
@@ -336,6 +388,19 @@ router.get('/:id/edit', (req, res) => {
 
 //CONFIRM DELETE
 router.get('/:id/confirm-delete', (req, res) => {
+  if (maintenance) {
+    res.render('maintenance.ejs', { 
+        user: req.user,
+        sessionID: req.sessionID,
+        tabTitle: 'FFS Maintenance Mode'
+    })
+  } else if(!req.isAuthenticated() || req.user.role === 'visitor') {
+      res.render('no_access.ejs', {
+          user: req.user,
+          sessionID: req.sessionID,
+          tabTitle: 'Not Authorized'
+      })
+  } else {
     Nomination.findById(req.params.id, (err, foundNom) => {
       res.render('nominations/confirm_delete.ejs', {
         user: req.user,
@@ -344,10 +409,24 @@ router.get('/:id/confirm-delete', (req, res) => {
         nomination: foundNom
       })
     }).populate("screening").populate("nominee")
+  }
 })
   
 //DELETE
 router.delete('/:id', (req, res) => {
+  if (maintenance) {
+    res.render('maintenance.ejs', { 
+        user: req.user,
+        sessionID: req.sessionID,
+        tabTitle: 'FFS Maintenance Mode'
+    })
+  } else if(!req.isAuthenticated() || req.user.role === 'visitor') {
+      res.render('no_access.ejs', {
+          user: req.user,
+          sessionID: req.sessionID,
+          tabTitle: 'Not Authorized'
+      })
+  } else {
     Nomination.findByIdAndRemove(req.params.id, (err, deletedNomination) => {
       //Find and remove that nomination from its related screening
       Screening.findOneAndUpdate({weekID: deletedNomination.screening}, {$pull: {nominations: deletedNomination}}, {new: true}, (err, updatedScreening) => {
@@ -408,15 +487,28 @@ router.delete('/:id', (req, res) => {
         }
       })
     })
+  }
 })
 
 //UPDATE
 router.put('/:id', (req, res) => {
-    
+  if (maintenance) {
+    res.render('maintenance.ejs', { 
+        user: req.user,
+        sessionID: req.sessionID,
+        tabTitle: 'FFS Maintenance Mode'
+    })
+  } else if(!req.isAuthenticated() || req.user.role === 'visitor') {
+      res.render('no_access.ejs', {
+          user: req.user,
+          sessionID: req.sessionID,
+          tabTitle: 'Not Authorized'
+      })
+  } else {
     console.log(req.body)
     let checked = req.body.winner === "on" ? true : false
     req.body.winner = checked
-
+  
     Nomination.findById(req.params.id).populate("screening").populate("nominee").exec((err, preUpdateNom) => {
       if(err) console.log(err.message);
       console.log(preUpdateNom);
@@ -433,7 +525,7 @@ router.put('/:id', (req, res) => {
             }
           })
           let earliestNom = movieNominations[0]
-
+  
           if (earliestNom.screening.weekID === preUpdateNom.screening.weekID) { 
             earliestNom = movieNominations[1] // if the nomination we are updating the screening date for is the earliest current nomination, we now need to find the next earliest nomination, i.e. movieNominations[1]. Otherwise, we will be including the old screening date in the comparison that follows.
           }
@@ -442,7 +534,7 @@ router.put('/:id', (req, res) => {
           if (earliestNom.screening.weekID < req.body.screening) { // Check whether the updating nom is in fact earliest.
               isEarliestNom = false
           }
-
+  
           if (isEarliestNom) { //if the updating nom is the earliest nom, update the origNominator field in the movie with the nominator provided in the edit form
             Movie.findByIdAndUpdate(preUpdateNom.nominee._id, {$set: {origNominator: req.body.nominator}}, {new: true}, (err, updatedMovie) => {
               console.log('New earliest nomination for movie, origNominator updated: ' + updatedMovie);
@@ -455,7 +547,7 @@ router.put('/:id', (req, res) => {
           // 
         })
       }
-
+  
       
         
         //what to do if updated nom is for different nominator. must splice nominator name into allNominators of the movie, removing oldNominator in the process.
@@ -468,7 +560,7 @@ router.put('/:id', (req, res) => {
             }) 
           })
         }
-
+  
         if(preUpdateNom.winner !== req.body.winner) { //if winner status has changed, update appropriately based on which way it changed
           Screening.findOne({weekID: req.body.screening}, (err, nominatedScreening) => {
             req.body.screening = nominatedScreening._id 
@@ -505,6 +597,8 @@ router.put('/:id', (req, res) => {
           })
         }
     })
+  }
+    
   })
 
 // DELETE APP-BREAKING NOMS BY ID, USE WITH CAUTION
