@@ -392,7 +392,7 @@ ol {
 
 #nominations-list thead tr, .screenings-table thead tr {
   position: sticky;
-  top: 0;
+  /* top: 0; */
   background: var(--table-row2);
 }
 
@@ -671,7 +671,7 @@ select {
 
   #nominations-list thead tr, .screenings-table thead tr {
     background: var(--table-row2);
-    top: 64px;
+    /* top: 64px; */
   }
 
   td img {
@@ -733,9 +733,9 @@ select {
 }
 
 @media (min-width: 840px) {
-  #nominations-list thead tr, .screenings-table thead tr {
+  /* #nominations-list thead tr, .screenings-table thead tr {
     top: 70px;
-  }
+  } */
 
   header a, #search-form {
     font-size: 1em;
@@ -786,9 +786,9 @@ select {
 }
 
 @media (min-width: 1080px) {
-  #nominations-list thead tr, .screenings-table thead tr {
+  /* #nominations-list thead tr, .screenings-table thead tr {
     top: 82px;
-  }
+  } */
 
   header a, #search-form {
     font-size: 1.25em;

@@ -18,14 +18,19 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     // Update the position at which Nominations table sticks to bottom of dynamic height header
-    const header = document.querySelector('header')
-    const headerHeight = header.offsetHeight
+    const makeTheadTrStickToBottomOfHeader = () => {
+        const header = document.querySelector('header')
+        const headerHeight = header.offsetHeight
+        console.log(headerHeight);
 
-    const tableTheadTrs = document.querySelectorAll('#nominations-list thead tr, .screenings-table thead tr');
+        const tableTheadTrs = document.querySelectorAll('#nominations-list thead tr, .screenings-table thead tr');
 
-    tableTheadTrs.forEach( el => {
-        el.style.top = headerHeight
-    })
+        tableTheadTrs.forEach( el => {
+            el.style.top = headerHeight + 'px'
+        })
+    }
+
+    window.addEventListener('resize', makeTheadTrStickToBottomOfHeader)
 
 
     //Show/Hide Specific Genres Div
