@@ -236,7 +236,6 @@ label {
   font-size: 0.75em;
 }
 
-
 table {
   position: relative;
   background: var(--table-row2);
@@ -552,19 +551,18 @@ nav a:hover {
   display: flex;
   flex-flow: column nowrap;
   justify-content: flex-start;
-
+  flex: 1 0 33%;
+  min-width: 300px;
+  max-width: 4200px;
 }
 
 #moviesSet-container, #sortChoice-container {
   max-height: 250px;
-  max-width: 400px;
 }
 
 #genres-container {
   height: 200px;
-  max-width: 300px;
   overflow-y: scroll;
-  flex: 1 0;
 }
 
 #genres-container input[type="checkbox"], #moviesSet-container input {
@@ -573,12 +571,19 @@ nav a:hover {
 }
 
 #sort-database-btn {
-  flex: 0 0 50%;
+  flex: 1 0 20%;
   align-self: center;
   justify-self: center;
   margin: 0.5em;
   font-size: 1em;
   height: fit-content;
+  max-width: 300px;
+}
+
+select {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* STAFF PAGE */
