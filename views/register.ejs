@@ -5,8 +5,8 @@
 </head>
 <body>
     <header><%- include('./partials/header.ejs') %></header>
-    <h1>Register</h1>
-    <form action="/register" method="POST">
+    <h1 class="page-title">Register</h1>
+    <form action="/register" method="POST" id="registration-form">
         <div class="form-field">
             <label for="username">Desired Username: </label>
             <input type="text" id="username" name="username" required/>
@@ -15,9 +15,15 @@
             <label for="password">Desired Password: </label>
             <input type="password" id="password" name="password" required/>
         </div>
+        <div class="form-field">
+            <label for="memberPW">FFS Membership Password (i.e. The FFS Zoom password): </label>
+            <input type="password" id="memberPW" name="memberPW" />
+            <p>Members have the ability to add, edit, and delete films and nomination info. Prospective members should contact an existing member and submit to invasive brain parasites to be applied with extreme prejudice by the Fortnightly Film Society's Shadowy Governing Brain Trust &trade; (Pat. Pending).</p>
+        </div>
+
         <button type="submit">Register New User</button>
     </form>
-    <a href="/login">Login</a>
+    <!-- <a href="/login">Login</a> -->
 </body>
 <%- include('./partials/script.ejs') %>
 </html>

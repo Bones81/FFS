@@ -22,6 +22,23 @@ body {
   font-family: 'Rowdies', cursive;
 }
 
+#registration-form {
+  width: 60%;
+  margin: 0 auto;
+  padding: 1em;
+  border-radius: 1em;
+  background: linear-gradient(-15deg, silver, rgba(192,192,192,1), silver);
+}
+
+.form-field {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.form-field > label, .form-field > input {
+  flex: 1 0 50%;
+}
+
 .flex-container {
   display: flex;
   flex-flow: row wrap;

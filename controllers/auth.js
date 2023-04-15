@@ -40,6 +40,10 @@ router.get('/login', (req, res) => {
 
 // REGISTER USER ROUTE
 router.post('/register', (req, res) => {
+    if(req.body.memberPW === process.env.MEMBER_SECRET) {
+        // update role to be 'member'
+        req.body.role === 'member'
+    }
     User.register(
         new User({
             username: req.body.username,

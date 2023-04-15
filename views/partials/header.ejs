@@ -5,8 +5,8 @@
   </aside>
 <% } else { %>
   <aside class="user-greeting">
-    <a href="/register">Create New User</a>
-    <a href="/login">Login Existing FFS Member</a>
+    <span class="auth-span">New to the site? </span><a href="/register">Register</a>
+    <span class="auth-span">Already registered? </span><a href="/login">Login</a>
   </aside>
 <% } %>
 <nav class="full-nav">
@@ -29,6 +29,17 @@
 </nav>
 <button class="hamburger" type="button"><i class="fa-sharp fa-solid fa-bars"></i></button>
 <nav class="mobile-nav">
+  <% if (user) { %> 
+    <div class="mobile-greeting">
+      <h3 class="mobile-link data-link">Hello, <%=user.role%> <%=user.username%>!</h3>
+      <a class="mobile-link data-link" href="/logout">Logout</a>
+    </div>
+  <% } else { %>
+    <div class="mobile-greeting">
+      <span class="auth-span">New to the site? </span><a class="mobile-link data-link" href="/register">Register</a><hr>
+      <span class="auth-span">Already registered? </span><a class="mobile-link data-link" href="/login">Login</a>
+    </div>
+  <% } %>
   <a class="mobile-link mobile-screening-bgcolor data-link" href="/screenings">FFS Selections</a>
   <% if (user && user.role === 'admin') { %> 
     <a class="mobile-link mobile-screening-bgcolor data-link" href="/screenings/new">Add a Screening</a>
@@ -42,16 +53,6 @@
     <a class="mobile-link mobile-movie-bgcolor data-link" href="/movies/new">Add Movie to Database</a>
   <% } %>
   <a class="mobile-link mobile-staff-link data-link" href="/staff">FFS Staff</a>
-  <% if (user) { %> 
-    <div class="mobile-greeting">
-      <h3 class="mobile-link data-link">Hello, <%=user.username%>!</h3>
-      <a class="mobile-link data-link" href="/logout">Logout</a>
-    </div>
-  <% } else { %>
-    <div class="mobile-greeting">
-      <a class="mobile-link data-link" href="/register">Create New User</a>
-      <a class="mobile-link data-link" href="/login">Login Existing FFS Member</a>
-    </div>
-  <% } %>
+
 </nav>
 <a class="staff-link data-link" href="/staff">FFS Staff</a>
