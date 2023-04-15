@@ -134,6 +134,13 @@ router.get('/', (req, res) => {
 
 //NEW
 router.get('/new', (req, res) => {
+    if(!req.isAuthenticated() || req.user.role === 'visitor') {
+        res.render('no_access.ejs', {
+            tabTitle: 'Not Authorized',
+            user: req.user,
+            sessionID: req.sessionID
+        })
+    }
     if (maintenance) {
         res.render('maintenance.ejs', { 
             user: req.user,
