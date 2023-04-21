@@ -62,7 +62,7 @@ body {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
-  align-items: center;
+  align-items: stretch;
   gap: 1em;
   width: 90%;
   margin: 1em auto;
@@ -72,10 +72,16 @@ body {
   gap: 1em;
 }
 
+
 .card-link {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   text-decoration: none;
   color: black;
   border-radius: 25px;
+  min-height: 100%;
+  position: relative;
 }
 
 .card {
@@ -83,6 +89,7 @@ body {
   border-radius: 25px;
   box-shadow: 2px 0 5px navy;
   width: 200px;
+  height: 100%;
   margin: 0.5em auto;
   text-align: center;
   padding: 1em;
@@ -97,6 +104,11 @@ body {
   gap: 0;
   padding: 0.25em;
   margin: 0;
+}
+
+.nom-card {
+  display: grid;
+  place-items: center;
 }
 
 .card-number {
@@ -889,11 +901,11 @@ select {
   }
 
   .card h3, h3 {
-    font-size: 1.25em;;
+    font-size: 1.5em;;
   }
 
   .card .winning-nom-text {
-    font-size: 0.9em;
+    font-size: 0.8em;
   }
 
   td, label {

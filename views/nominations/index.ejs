@@ -32,10 +32,10 @@
         <% } %>
       </tbody>
     </table>
-    <div class="flex-container">
+    <div class="flex-container nominations-container">
         <% for (let nomination of nominations) { %>
           <a href="/nominations/<%=nomination.id%>" class="card-link">
-            <div class="card">             
+            <div class="card nom-card">             
               <img src="<%=nomination.nominee.poster%>" alt="pic of <%=nomination.nominee.title%>"></br>
               <% if (nomination.winner) { %><h3 class="winning-nom-text"> ⭐ Winning Nomination ⭐</h3><% } %>
               <h3><%=nomination.title%></h3>
