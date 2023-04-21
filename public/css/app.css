@@ -7,6 +7,10 @@
   --mobile-movie-bg: linear-gradient(-35deg, rgba(192,192,192,1) 0%, blue 20%, blue 80%, rgba(192,192,192,1) 100%);
   --table-row1: linear-gradient(35deg, rgba(192,192,192,0.2) 0%, lightgray 25%, lightgray 75%, rgba(192,192,192,0.2) 100%);
   --table-row2: linear-gradient(35deg, rgba(192,192,192, 1) 0%, #bbc 25%, #bbc 75%, rgba(192,192,192,1) 100%);
+
+  --font1: 'Cabin', sans-serif;
+  --font2: 'Raleway', sans-serif;
+  --font3: 'Rowdies', cursive;
 }
 
 *, *:before, *:after {
@@ -18,8 +22,8 @@ body {
   background: radial-gradient(lime, green, olive, lime, green, olive, lime, green, olive);
   min-height: 100vh;
   margin: 0;
-  font-family: 'Cabin', sans-serif;
-  font-family: 'Rowdies', cursive;
+  font-family: var(--font1);
+  font-family: var(--font3);
 }
 
 #registration-form, #login-form {
@@ -203,7 +207,7 @@ h1 {
   border-bottom-right-radius: 25%;
   border-top-right-radius: 5px;
   border-bottom-left-radius: 5px;
-  font-family: 'Cabin', sans-serif;
+  font-family: var(--font1);
 }
 
 .blurb-first-lines {
@@ -223,7 +227,7 @@ h2 {
   margin: 1em auto;
   padding: 0.5em;
   background: radial-gradient(whitesmoke, orange);
-  font-family: 'Raleway', sans-serif;
+  font-family: var(--font2);
   font-size: 0.83em;
 }
 
@@ -245,7 +249,7 @@ button {
   padding: 0.5em;
   background: blue;
   color: white;
-  font-family: 'Cabin', sans-serif;
+  font-family: var(--font1);
   cursor: pointer;
 }
 
@@ -256,7 +260,7 @@ button {
 .delete-btn {
   background: linear-gradient(to top, red, coral, red);
   font-size: 0.5em;
-  /* font-family: 'Cabin', sans-serif; */
+  /* font-family: var(--font1); */
 }
 
 ul {
@@ -292,7 +296,7 @@ td {
   padding: 0.25em 0.5em;
   /* border: 1px solid grey; */
   font-size: 0.5em;
-  font-family: 'Raleway', sans-serif;
+  font-family: var(--font2);
   text-align: center;
 }
 
@@ -404,7 +408,7 @@ ol {
 }
 
 #create-btn, .submit-btn {
-  font-family: 'Raleway', sans-serif;
+  font-family: var(--font2);
   font-size: 1.5em;
   margin: 1em auto;
   background: lightgreen;
@@ -531,7 +535,7 @@ header {
 }
 
 nav a {
-  font-family: 'Rowdies', cursive;
+  font-family: var(--font3);
   font-size: 0.83em;
   text-decoration: none;
   color: black;
@@ -574,8 +578,19 @@ nav a:hover {
   font-size: 1.5em;
 }
 
+.err-msg {
+  font-size: 1.5em;
+  background:rgba(192,192,192, 1);
+  border-radius: 10px;
+  border: 1px solid black;
+  font-family: var(--font2);
+  width: min(50%, 480px);
+  margin: 0 auto;
+}
+
 .red {
   color: red;
+
 }
 
 #sort-box {
@@ -661,7 +676,7 @@ select {
 
 .staff-member {
   font-size: 1.5em;
-  font-family: 'Raleway', sans-serif;
+  font-family: var(--font2);
   margin-top: 0.5em;
   text-shadow: 1px 1px 10px whitesmoke;
 }

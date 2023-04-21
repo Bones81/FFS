@@ -35,7 +35,7 @@ router.get('/login', (req, res) => {
     res.render('login.ejs', {
         tabTitle: 'FFS Login Existing User',
         user: user,
-        sessionID: sessionID
+        sessionID: sessionID,
     }) 
 })
 
@@ -52,7 +52,11 @@ router.post('/register', (req, res) => {
             role: role
         }), req.body.password, (err, msg) => {
             if(err) {
+                console.log(err.message);
                 res.render('register.ejs', {
+                    tabTitle: 'An error occurred.',
+                    user: null,
+                    sessionID: null,
                     errorMessage: err.message
                 })
             } else {
@@ -67,10 +71,10 @@ router.post('/register', (req, res) => {
 router.post('/login', 
     passport.authenticate('local', {
         failureRedirect: '/login-failure',
-        successRedirect: '/screenings'
+        successRedirect: '/screenings',
     }), (err, req, res, next) => {
         console.log(req.user);
-        if(err) next(err)
+        if(err) return next(err)
     }
 )
 
@@ -80,7 +84,7 @@ router.get('/login-failure', (req, res, next) => {
     res.render('login-failure.ejs', {
         user: req.user,
         sessionID: req.sessionID,
-        tabTitle: 'Login Failed'
+        tabTitle: 'Login Failed',
     }) 
 })
 

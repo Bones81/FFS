@@ -26,6 +26,20 @@ const { application } = require('express')
 require('dotenv').config()
 
 //MIDDLEWARE
+const maintenance = require('./models/maintenance.js') // Boolean indicating whether maintenance mode is on or not; initial page will render maintenance.ejs if true
+
+const maintenanceMiddleware = (req, res, next) => {
+  if(maintenance) {
+    res.render('maintenance.ejs', {
+      tabTitle: 'FFS Maintenance In Progress'
+    })
+  } else {
+    next()
+  }
+}
+
+app.use(maintenanceMiddleware) // renders maintenance ahead of all other routes
+
 app.use(express.static('public'))
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
@@ -37,6 +51,7 @@ app.use(session({
   cookie: { maxAge: 1000 * 60 * 60 * 2 },
   store: MongoStore.create({ mongoUrl: mongoLOC })
 }))
+
 
 app.use(passport.initialize())
 app.use(passport.session())
@@ -50,39 +65,15 @@ app.use('/screenings', screeningsController)
 app.use('/nominations', nominationsController)
 app.use('/', authController)
 
-const maintenance = require('./models/maintenance.js') // Boolean indicating whether maintenance mode is on or not; initial page will render maintenance.ejs if true
 
-//JSON routes
-
-//HOME ROUTE
-app.get('/', (req, res) => {
-  if(maintenance) {
-    res.render('maintenance.ejs', {
-      tabTitle: 'FFS Maintenance Mode'
-    })
-  } else {
-    res.redirect('/auth')
-  }
-})
-
-//FIX DATES ROUTE
-//I think this route was used to convert previously entered text dates to proper date format. Shouldn't be necessary any more... I think.
-// app.get('/movies/fixdates', (req, res) => {
-//   Movie.find({}, (err, allMovies) => {
-//     if (err) {
-//       console.log(err)
-//     }
-//     for (const movie of allMovies) {
-//       //convert movie.dateScreened into date format and res.json into new seed data
-//       // console.log(new Date(movie.dateScreened));
-//       let newDateData = new Date(movie.dateScreened)
-//       Movie.findOneAndUpdate({title: movie.title}, {$set: {dateScreened: newDateData}}, (err, updatedMovie) => {
-//         console.log(updatedMovie);
-//       } )
-//       //then, if possible, PUT new date data into dateScreened property for each movie
-//     }
-//     res.json(allMovies)
-//   })
+// app.get('/', (req, res) => {
+//   if(maintenance) {
+//     res.render('maintenance.ejs', {
+//       tabTitle: 'FFS Maintenance Mode'
+//     })
+//   } else {
+//     res.redirect('/auth')
+//   }
 // })
 
 app.get('/staff', (req, res) => {
@@ -93,7 +84,10 @@ app.get('/staff', (req, res) => {
   }) 
 })
 
-
+app.use((err, req, res, next) => {
+  console.error(err.stack)
+  res.status(500).send('Something broke!')
+})
 
 
 app.listen(PORT, () => {
