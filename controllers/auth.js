@@ -23,7 +23,8 @@ router.get('/register', (req, res) => {
     res.render('register.ejs', {
         tabTitle: 'FFS Register New User',
         user: user,
-        sessionID: sessionID
+        sessionID: sessionID,
+        errorMessage: null
     }) 
 })
 
@@ -51,7 +52,9 @@ router.post('/register', (req, res) => {
             role: role
         }), req.body.password, (err, msg) => {
             if(err) {
-                res.send(err)
+                res.render('register.ejs', {
+                    errorMessage: err.message
+                })
             } else {
                 console.log('Registration successful');
                 res.redirect('/login')

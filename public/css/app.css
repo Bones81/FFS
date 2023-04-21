@@ -36,6 +36,7 @@ body {
   display: flex;
   flex-flow: row wrap;
   gap: 0.5em;
+  align-items: baseline;
 }
 
 .form-field > label, .form-field > input {
