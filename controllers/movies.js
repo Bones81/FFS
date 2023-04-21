@@ -8,7 +8,6 @@ const Nomination = require('../models/nominations')
 const seedNominations = require('../models/seed_nominations')
 const Screening = require('../models/screening')
 const seedScreenings = require('../models/seed_screenings')
-const maintenance = require('../models/maintenance')
 
 const genres = require('../models/genres')
 const nominators = require('../models/nominators')
@@ -112,16 +111,9 @@ router.get('/:id/json', (req, res) => {
 
 //INDEX ROUTES
 router.get('/', (req, res) => {
-    if (maintenance) {
-        res.render('maintenance.ejs', {
-            user: req.user,
-            sessionID: req.sessionID, 
-            tabTitle: 'FFS Maintenance Mode'
-        })
-    } else {
-        Movie.find({}, (err, allMovies) => {  
-            err ? console.log(err) : console.log('All movies found');
-            // res.json(allMovies);
+    Movie.find({}, (err, allMovies) => {  
+    err ? console.log(err) : console.log('All movies found');
+    // res.json(allMovies);
         res.render('movies/index.ejs', {
             user: req.user,
             sessionID: req.sessionID,
@@ -132,19 +124,12 @@ router.get('/', (req, res) => {
             actors: ffsActors
         })
         }).populate("nominations").populate("screening")
-    }
   })
   
 
 //NEW
 router.get('/new', (req, res) => {
-    if (maintenance) {
-        res.render('maintenance.ejs', { 
-            user: req.user,
-            sessionID: req.sessionID,
-            tabTitle: 'FFS Maintenance Mode'
-        })
-    } else if(!req.isAuthenticated() || req.user.role === 'visitor') {
+    if (!req.isAuthenticated() || req.user.role === 'visitor') {
         res.render('no_access.ejs', {
             tabTitle: 'Not Authorized',
             user: req.user,
@@ -162,13 +147,7 @@ router.get('/new', (req, res) => {
 
 //CREATE
 router.post('/', (req, res) => {
-    if (maintenance) {
-        res.render('maintenance.ejs', {
-            user: req.user,
-            sessionID: req.sessionID, 
-            tabTitle: 'FFS Maintenance Mode'
-        })
-    } else if(!req.isAuthenticated() || req.user.role === 'visitor') {
+    if (!req.isAuthenticated() || req.user.role === 'visitor') {
         res.render('no_access.ejs', {
             tabTitle: 'Not Authorized',
             user: req.user,
@@ -202,13 +181,7 @@ router.post('/', (req, res) => {
 
 //CONFIRM DELETE ROUTES
 router.get('/:id/confirm-delete', (req, res) => {
-    if (maintenance) {
-        res.render('maintenance.ejs', { 
-            user: req.user,
-            sessionID: req.sessionID,
-            tabTitle: 'FFS Maintenance Mode'
-        })
-    } else if(!req.isAuthenticated() || req.user.role === 'visitor') {
+    if (!req.isAuthenticated() || req.user.role === 'visitor') {
         res.render('no_access.ejs', {
             user: req.user,
             sessionID: req.sessionID,
@@ -228,13 +201,7 @@ router.get('/:id/confirm-delete', (req, res) => {
   
   //DELETE ROUTES
 router.delete('/:id', (req, res) => {
-    if (maintenance) {
-        res.render('maintenance.ejs', { 
-            user: req.user,
-            sessionID: req.sessionID,
-            tabTitle: 'FFS Maintenance Mode'
-        })
-    } else if(!req.isAuthenticated() || req.user.role === 'visitor') {
+    if (!req.isAuthenticated() || req.user.role === 'visitor') {
         res.render('no_access.ejs', {
             user: req.user,
             sessionID: req.sessionID,
@@ -271,13 +238,6 @@ router.delete('/:id', (req, res) => {
 
 //SHOW ROUTE
 router.get('/:id', (req, res) => {
-    if (maintenance) {
-        res.render('maintenance.ejs', { 
-            user: req.user,
-            sessionID: req.sessionID,
-            tabTitle: 'FFS Maintenance Mode'
-        })
-    } else {
         Movie.findById(req.params.id).populate("screening").populate("nominations").exec((err, foundMovie) => {
             Nomination.find({nominee: foundMovie._id}, (err, foundNoms) => {
                 Screening.findOne({selection: foundMovie._id}, (err, foundScreening) => {    
@@ -292,18 +252,11 @@ router.get('/:id', (req, res) => {
                 })
             }).populate("nominee").populate("screening")
         })
-    }
 })
 
 //SEARCH RESULTS ROUTE
 router.post('/search', (req, res) => {
-    if (maintenance) {
-        res.render('maintenance.ejs', { 
-            user: req.user,
-            sessionID: req.sessionID,
-            tabTitle: 'FFS Maintenance Mode'
-        })
-    } else if(!req.isAuthenticated() || req.user.role === 'visitor') {
+    if (!req.isAuthenticated() || req.user.role === 'visitor') {
         res.render('no_access.ejs', {
             user: req.user,
             sessionID: req.sessionID,
@@ -323,13 +276,7 @@ router.post('/search', (req, res) => {
   
 //SORT ROUTE
 router.post('/sort', async (req, res) => {
-    if (maintenance) {
-        res.render('maintenance.ejs', { 
-            user: req.user,
-            sessionID: req.sessionID,
-            tabTitle: 'FFS Maintenance Mode'
-        })
-    } else if(!req.isAuthenticated() || req.user.role === 'visitor') {
+    if (!req.isAuthenticated() || req.user.role === 'visitor') {
         res.render('no_access.ejs', {
             user: req.user,
             sessionID: req.sessionID,
@@ -484,13 +431,7 @@ router.post('/sort', async (req, res) => {
   
 //EDIT ROUTES
 router.get('/:id/edit', (req, res) => {
-    if (maintenance) {
-        res.render('maintenance.ejs', { 
-            user: req.user,
-            sessionID: req.sessionID,
-            tabTitle: 'FFS Maintenance Mode'
-        })
-    } else if(!req.isAuthenticated() || req.user.role === 'visitor') {
+    if (!req.isAuthenticated() || req.user.role === 'visitor') {
         res.render('no_access.ejs', {
             user: req.user,
             sessionID: req.sessionID,
@@ -517,13 +458,7 @@ router.get('/:id/edit', (req, res) => {
 
 //PUT ROUTES
 router.put('/:id', (req, res) => {
-    if (maintenance) {
-        res.render('maintenance.ejs', { 
-            user: req.user,
-            sessionID: req.sessionID,
-            tabTitle: 'FFS Maintenance Mode'
-        })
-    } else if(!req.isAuthenticated() || req.user.role === 'visitor') {
+    if (!req.isAuthenticated() || req.user.role === 'visitor') {
         res.render('no_access.ejs', {
             user: req.user,
             sessionID: req.sessionID,

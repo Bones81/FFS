@@ -26,10 +26,9 @@ const { application } = require('express')
 require('dotenv').config()
 
 //MIDDLEWARE
-const maintenance = require('./models/maintenance.js') // Boolean indicating whether maintenance mode is on or not; initial page will render maintenance.ejs if true
-
 const maintenanceMiddleware = (req, res, next) => {
-  if(maintenance) {
+  const isMaintenance = false
+  if(isMaintenance) {
     res.render('maintenance.ejs', {
       tabTitle: 'FFS Maintenance In Progress'
     })

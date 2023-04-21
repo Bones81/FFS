@@ -12,7 +12,6 @@ const seedMoviesNew = require('../models/seed_movies_new')
 
 const Nomination = require('../models/nominations')
 
-const maintenance = require('../models/maintenance')
 
 const updateWeekIDs = () => {
     Screening.find({}, (err, allScreenings) => { 
@@ -173,9 +172,6 @@ const updateWeekIDs = () => {
 router.get('/', (req, res) => {
     const user = req.user || null
     const sessionID = req.sessionID || "No sessionID found"
-    if (maintenance) {
-        res.render('maintenance.ejs', {tabTitle: 'FFS Maintenance Mode'})
-    } else {
 
         Screening.find({}).populate(//populate the selection and nominations fields
         [
@@ -205,7 +201,6 @@ router.get('/', (req, res) => {
                 
             })
         })
-    }
 })
 
 //JSON
@@ -236,13 +231,7 @@ router.get('/:id/json', (req, res) => {
 
 //NEW
 router.get('/new', (req, res) => {
-    if (maintenance) {
-        res.render('maintenance.ejs', { 
-            user: req.user,
-            sessionID: req.sessionID,
-            tabTitle: 'FFS Maintenance Mode'
-        })
-      } else if(!req.isAuthenticated() || req.user.role !== 'admin') { // only admins are allowed to create new screenings
+    if (!req.isAuthenticated() || req.user.role !== 'admin') { // only admins are allowed to create new screenings
           res.render('no_access.ejs', {
               user: req.user,
               sessionID: req.sessionID,
@@ -260,13 +249,7 @@ router.get('/new', (req, res) => {
 
 //CREATE
 router.post('/', (req, res) => {
-    if (maintenance) {
-        res.render('maintenance.ejs', { 
-            user: req.user,
-            sessionID: req.sessionID,
-            tabTitle: 'FFS Maintenance Mode'
-        })
-    } else if(!req.isAuthenticated() || req.user.role !== 'admin') { // only admins are allowed to create new screenings
+    if (!req.isAuthenticated() || req.user.role !== 'admin') { // only admins are allowed to create new screenings
         res.render('no_access.ejs', {
             user: req.user,
             sessionID: req.sessionID,
@@ -322,9 +305,7 @@ router.post('/', (req, res) => {
 
 //SHOW
 router.get('/:id', (req, res) => {
-    if (maintenance) {
-        res.render('maintenance.ejs', {tabTitle: 'FFS Maintenance Mode'})
-    } else {
+
     Screening.findById(req.params.id).populate(
         [
             {
@@ -347,18 +328,11 @@ router.get('/:id', (req, res) => {
                 screening: foundScreening
             })
         })
-    }
 })
 
 //EDIT
 router.get('/:id/edit', (req, res) => {
-    if (maintenance) {
-        res.render('maintenance.ejs', { 
-            user: req.user,
-            sessionID: req.sessionID,
-            tabTitle: 'FFS Maintenance Mode'
-        })
-    } else if(!req.isAuthenticated() || req.user.role !== 'admin') { // only admins are allowed to edit screenings
+    if (!req.isAuthenticated() || req.user.role !== 'admin') { // only admins are allowed to edit screenings
         res.render('no_access.ejs', {
             user: req.user,
             sessionID: req.sessionID,
@@ -402,13 +376,7 @@ router.get('/:id/edit', (req, res) => {
 
 //UPDATE
 router.put('/:id', (req, res) => {
-    if (maintenance) {
-        res.render('maintenance.ejs', { 
-            user: req.user,
-            sessionID: req.sessionID,
-            tabTitle: 'FFS Maintenance Mode'
-        })
-    } else if(!req.isAuthenticated() || req.user.role !== 'admin') { // only admins are allowed to edit screenings
+    if (!req.isAuthenticated() || req.user.role !== 'admin') { // only admins are allowed to edit screenings
         res.render('no_access.ejs', {
             user: req.user,
             sessionID: req.sessionID,
@@ -442,13 +410,7 @@ router.put('/:id', (req, res) => {
 
 //CONFIRM DELETE
 router.get('/:id/confirm-delete', (req, res) => {
-    if (maintenance) {
-        res.render('maintenance.ejs', { 
-            user: req.user,
-            sessionID: req.sessionID,
-            tabTitle: 'FFS Maintenance Mode'
-        })
-    } else if(!req.isAuthenticated() || req.user.role !== 'admin') { // only admins are allowed to edit screenings
+    if (!req.isAuthenticated() || req.user.role !== 'admin') { // only admins are allowed to edit screenings
         res.render('no_access.ejs', {
             user: req.user,
             sessionID: req.sessionID,
@@ -468,13 +430,7 @@ router.get('/:id/confirm-delete', (req, res) => {
 
 //DELETE
 router.delete('/:id', (req, res) => {
-    if (maintenance) {
-        res.render('maintenance.ejs', { 
-            user: req.user,
-            sessionID: req.sessionID,
-            tabTitle: 'FFS Maintenance Mode'
-        })
-    } else if(!req.isAuthenticated() || req.user.role !== 'admin') { // only admins are allowed to edit screenings
+    if (!req.isAuthenticated() || req.user.role !== 'admin') { // only admins are allowed to edit screenings
         res.render('no_access.ejs', {
             user: req.user,
             sessionID: req.sessionID,

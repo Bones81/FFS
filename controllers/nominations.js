@@ -7,8 +7,6 @@ const nominationSeed = require('../models/seed_nominations')
 const Screening = require('../models/screening')
 const Movie = require('../models/movies')
 
-const maintenance = require('../models/maintenance') 
-
 const genres = require('../models/genres')
 
 const nominators = require('../models/nominators')
@@ -50,9 +48,6 @@ router.get('/:id/json', (req, res) => {
 
 //INDEX
 router.get('/', (req, res) => {
-  if (maintenance) {
-    res.render('maintenance.ejs', {tabTitle: 'FFS Maintenance Mode'})
-} else {
     Screening.find({}, (err, screenings) => {
       if(err) console.log('screenings error' + err);
       Movie.find({}, (err, movies) => {
@@ -85,18 +80,11 @@ router.get('/', (req, res) => {
         })
       })
     })
-  }
 })
 
 //NEW
 router.get('/new', (req, res) => {
-  if (maintenance) {
-    res.render('maintenance.ejs', { 
-        user: req.user,
-        sessionID: req.sessionID,
-        tabTitle: 'FFS Maintenance Mode'
-    })
-  } else if(!req.isAuthenticated() || req.user.role === 'visitor') {
+  if (!req.isAuthenticated() || req.user.role === 'visitor') {
     res.render('no_access.ejs', {
         user: req.user,
         sessionID: req.sessionID,
@@ -208,98 +196,85 @@ const createNominationFromDB = (nomObj, movie, screening, res) => { //create a n
 
 //CREATE
 router.post('/', (req, res) => {
-  if (maintenance) {
-    res.render('maintenance.ejs', { 
-        user: req.user,
-        sessionID: req.sessionID,
-        tabTitle: 'FFS Maintenance Mode'
-    })
-} else if(!req.isAuthenticated() || req.user.role === 'visitor') {
+  if (!req.isAuthenticated() || req.user.role === 'visitor') {
     res.render('no_access.ejs', {
         user: req.user,
         sessionID: req.sessionID,
         tabTitle: 'Not Authorized'
     })
-} else {
-  // console.log(req.body)
-  let nomObj = {} // build a properly formatted nomination prior to calling Nomination.create
-  // all Nominations conform to model with keys that include screening, nominee, nominator, blurb, and winner.
-  nomObj.nominator = req.body.nominator
-  nomObj.blurb = req.body.blurb
-  nomObj.winner = req.body.winner === "on" ? true : false
+  } else {
+    // console.log(req.body)
+    let nomObj = {} // build a properly formatted nomination prior to calling Nomination.create
+    // all Nominations conform to model with keys that include screening, nominee, nominator, blurb, and winner.
+    nomObj.nominator = req.body.nominator
+    nomObj.blurb = req.body.blurb
+    nomObj.winner = req.body.winner === "on" ? true : false
 
-  if (req.body.nominee) { // if user chooses an unwatched movie from the database to submit
-    console.log('User chose an unwatched movie from existing db of movies. Creating nomination...');
-    Screening.findOne({weekID: req.body.screeningID}, (err, foundScreening) => { //assign the screeningID to the new nomination object
-      nomObj.screening = foundScreening._id
-      Movie.findOne({title: req.body.nominee}, (err, foundMovie) => { // find the movie in the database and assign it to the nomination object
-        nomObj.nominee = foundMovie._id
-        // Create the new nomination
-        createNominationFromDB(nomObj, foundMovie, foundScreening, res);
-      }) 
-    })
-  } else { //if it's a first-time nominee
-    console.log('taking the else road')
-    //check that it's not a duplicate
-    Movie.find({}, (err, allMovies) => {
-      for (let movie of allMovies) {
-          if (movie.title === req.body.title) {
-              res.send("<h1>Cannot create movie. Movie's title already exists in database. Check existing movie list.<h1>")
-              return
-          }
-      }
-      let movieObj = req.body
-      let castArray = req.body.cast.split(', ')
-      movieObj.cast = castArray
-      movieObj.year = +req.body.year // convert to number with unary operator (+)
-      movieObj.origNominator = req.body.nominator
-      movieObj.allNominators = [req.body.nominator]
-      movieObj.nominations = []
-      
-      Screening.findOne({weekID: req.body.screeningID}, (err, foundScreening) => {
-        if (req.body.winner === "on") { // if the nomination includes a newly added movie that also was a winner, make sure the movie data reflects that when created
-          movieObj.screened = true
-          movieObj.screening = foundScreening._id
+    if (req.body.nominee) { // if user chooses an unwatched movie from the database to submit
+      console.log('User chose an unwatched movie from existing db of movies. Creating nomination...');
+      Screening.findOne({weekID: req.body.screeningID}, (err, foundScreening) => { //assign the screeningID to the new nomination object
+        nomObj.screening = foundScreening._id
+        Movie.findOne({title: req.body.nominee}, (err, foundMovie) => { // find the movie in the database and assign it to the nomination object
+          nomObj.nominee = foundMovie._id
+          // Create the new nomination
+          createNominationFromDB(nomObj, foundMovie, foundScreening, res);
+        }) 
+      })
+    } else { //if it's a first-time nominee
+      console.log('taking the else road')
+      //check that it's not a duplicate
+      Movie.find({}, (err, allMovies) => {
+        for (let movie of allMovies) {
+            if (movie.title === req.body.title) {
+                res.send("<h1>Cannot create movie. Movie's title already exists in database. Check existing movie list.<h1>")
+                return
+            }
         }
-        nomObj.screening = foundScreening._id // regardless, the nomination will be associated with the screening date indicated in the form
-        Movie.create(movieObj, (err, createdMovie) => { // finally, you can create the movie
-          if(err) console.log(err);
-          //assign the newly created movie to the nomination object
-          nomObj.nominee = createdMovie._id
-          Nomination.create(nomObj, (err, createdNomination) => { // and then you can create the nomination
+        let movieObj = req.body
+        let castArray = req.body.cast.split(', ')
+        movieObj.cast = castArray
+        movieObj.year = +req.body.year // convert to number with unary operator (+)
+        movieObj.origNominator = req.body.nominator
+        movieObj.allNominators = [req.body.nominator]
+        movieObj.nominations = []
+        
+        Screening.findOne({weekID: req.body.screeningID}, (err, foundScreening) => {
+          if (req.body.winner === "on") { // if the nomination includes a newly added movie that also was a winner, make sure the movie data reflects that when created
+            movieObj.screened = true
+            movieObj.screening = foundScreening._id
+          }
+          nomObj.screening = foundScreening._id // regardless, the nomination will be associated with the screening date indicated in the form
+          Movie.create(movieObj, (err, createdMovie) => { // finally, you can create the movie
             if(err) console.log(err);
-            // now update the movie and the screening to include the newly created info for both the nomination and the movie
-            Movie.findByIdAndUpdate(createdMovie._id, {$set: {nominations: [createdNomination._id]}}, {new: true}, (err, updatedMovie) => { //associate nomination with movie
-              Screening.findByIdAndUpdate(foundScreening._id, {$set: {nominations: [...foundScreening.nominations, createdNomination._id]}}, {new: true}, (err, updatedScreening) => { //associate nomination with screening
-                err ? console.log(err) : console.log(updatedScreening)
-                if(movieObj.screened === true) { //only if movie was a winning nom, set the screening selection to reflect that
-                  Screening.findByIdAndUpdate(foundScreening._id, {$set: {selection: updatedMovie._id}}, {new: true}, (err, updatedScreening2) => {
-                    err ? console.log(err) : console.log(updatedScreening2);
-                    console.log('Set selection for screening: ' + updatedScreening2);
-                  })
-                }
-                console.log("Movie created: " + updatedMovie);
-                console.log("Nomination created: " + createdNomination);
-                res.redirect('/nominations');
+            //assign the newly created movie to the nomination object
+            nomObj.nominee = createdMovie._id
+            Nomination.create(nomObj, (err, createdNomination) => { // and then you can create the nomination
+              if(err) console.log(err);
+              // now update the movie and the screening to include the newly created info for both the nomination and the movie
+              Movie.findByIdAndUpdate(createdMovie._id, {$set: {nominations: [createdNomination._id]}}, {new: true}, (err, updatedMovie) => { //associate nomination with movie
+                Screening.findByIdAndUpdate(foundScreening._id, {$set: {nominations: [...foundScreening.nominations, createdNomination._id]}}, {new: true}, (err, updatedScreening) => { //associate nomination with screening
+                  err ? console.log(err) : console.log(updatedScreening)
+                  if(movieObj.screened === true) { //only if movie was a winning nom, set the screening selection to reflect that
+                    Screening.findByIdAndUpdate(foundScreening._id, {$set: {selection: updatedMovie._id}}, {new: true}, (err, updatedScreening2) => {
+                      err ? console.log(err) : console.log(updatedScreening2);
+                      console.log('Set selection for screening: ' + updatedScreening2);
+                    })
+                  }
+                  console.log("Movie created: " + updatedMovie);
+                  console.log("Nomination created: " + createdNomination);
+                  res.redirect('/nominations');
+                })
               })
             })
           })
         })
       })
-    })
+    }
   }
-}
-    
 })
 
 router.post('/initial-info', (req, res) => {
-  if (maintenance) {
-    res.render('maintenance.ejs', { 
-        user: req.user,
-        sessionID: req.sessionID,
-        tabTitle: 'FFS Maintenance Mode'
-    })
-  } else if(!req.isAuthenticated() || req.user.role === 'visitor') {
+  if (!req.isAuthenticated() || req.user.role === 'visitor') {
       res.render('no_access.ejs', {
           user: req.user,
           sessionID: req.sessionID,
@@ -337,13 +312,6 @@ router.post('/initial-info', (req, res) => {
 
 //SHOW
 router.get('/:id', (req, res) => {
-  if (maintenance) {
-    res.render('maintenance.ejs', { 
-        user: req.user,
-        sessionID: req.sessionID,
-        tabTitle: 'FFS Maintenance Mode'
-    })
-  } else {
     Nomination.findById(req.params.id, (err, foundNomination) => {
       res.render('nominations/show.ejs', {
         user: req.user,
@@ -352,19 +320,12 @@ router.get('/:id', (req, res) => {
         tabTitle: foundNomination.nominee.title + ' | Nomination' 
       })
     }).populate("screening").populate("nominee")
-  }
 })
 
 
 //EDIT
 router.get('/:id/edit', (req, res) => {
-  if (maintenance) {
-    res.render('maintenance.ejs', { 
-        user: req.user,
-        sessionID: req.sessionID,
-        tabTitle: 'FFS Maintenance Mode'
-    })
-  } else if(!req.isAuthenticated() || req.user.role === 'visitor') {
+  if (!req.isAuthenticated() || req.user.role === 'visitor') {
       res.render('no_access.ejs', {
           user: req.user,
           sessionID: req.sessionID,
@@ -388,13 +349,7 @@ router.get('/:id/edit', (req, res) => {
 
 //CONFIRM DELETE
 router.get('/:id/confirm-delete', (req, res) => {
-  if (maintenance) {
-    res.render('maintenance.ejs', { 
-        user: req.user,
-        sessionID: req.sessionID,
-        tabTitle: 'FFS Maintenance Mode'
-    })
-  } else if(!req.isAuthenticated() || req.user.role === 'visitor') {
+  if (!req.isAuthenticated() || req.user.role === 'visitor') {
       res.render('no_access.ejs', {
           user: req.user,
           sessionID: req.sessionID,
@@ -414,13 +369,7 @@ router.get('/:id/confirm-delete', (req, res) => {
   
 //DELETE
 router.delete('/:id', (req, res) => {
-  if (maintenance) {
-    res.render('maintenance.ejs', { 
-        user: req.user,
-        sessionID: req.sessionID,
-        tabTitle: 'FFS Maintenance Mode'
-    })
-  } else if(!req.isAuthenticated() || req.user.role === 'visitor') {
+  if (!req.isAuthenticated() || req.user.role === 'visitor') {
       res.render('no_access.ejs', {
           user: req.user,
           sessionID: req.sessionID,
@@ -492,13 +441,7 @@ router.delete('/:id', (req, res) => {
 
 //UPDATE
 router.put('/:id', (req, res) => {
-  if (maintenance) {
-    res.render('maintenance.ejs', { 
-        user: req.user,
-        sessionID: req.sessionID,
-        tabTitle: 'FFS Maintenance Mode'
-    })
-  } else if(!req.isAuthenticated() || req.user.role === 'visitor') {
+  if (!req.isAuthenticated() || req.user.role === 'visitor') {
       res.render('no_access.ejs', {
           user: req.user,
           sessionID: req.sessionID,
