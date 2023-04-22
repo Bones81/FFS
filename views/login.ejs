@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <%- include('./partials/head.ejs') %>
+</head>
+<body>
+    <header><%- include('./partials/header.ejs') %></header>
+    <h1 class="page-title">Login to FFS</h1>
+    <form action="/login" method="POST" id="login-form">
+        <div class="form-field">
+            <label for="username">Username: </label>
+            <input type="text" name="username" id="username" required/>
+        </div>
+        <br>
+        <div class="form-field">
+            <label for="password">Password: </label>
+            <input type="password" name="password" id="password" required/>
+        </div>
+        <hr>
+        <button type="submit">Login</button>
+    </form>
+
+    <a href="/register">Register New User</a>
+
+</body>
+<%- include('./partials/script.ejs') %>
+</html>

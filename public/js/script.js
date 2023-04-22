@@ -1,10 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
     console.log('JS Script works.');
+
+    //Hamburger menu behavior
     const mainNav = document.querySelector('.main-nav')
     const mobileNav = document.querySelector('.mobile-nav')
     const hamburger = document.querySelector('.hamburger')
 
-    //Hamburger menu behavior
     hamburger.addEventListener('click', () => {
         hamburger.classList.toggle('open')
         mobileNav.classList.toggle('active')
@@ -15,6 +16,21 @@ document.addEventListener('DOMContentLoaded', () => {
             hamburger.innerHTML = '<i class="fa-sharp fa-solid fa-bars"></i>'
         }
     })
+
+    // Update the position at which Nominations table sticks to bottom of dynamic height header
+    const makeTheadTrStickToBottomOfHeader = () => {
+        const header = document.querySelector('header')
+        const headerHeight = header.offsetHeight
+
+        const tableTheadTrs = document.querySelectorAll('#nominations-list thead tr, .screenings-table thead tr');
+
+        tableTheadTrs.forEach( el => {
+            el.style.top = headerHeight + 'px'
+        })
+    }
+
+    window.addEventListener('resize', makeTheadTrStickToBottomOfHeader)
+
 
     //Show/Hide Specific Genres Div
     const genreOptionsDiv = document.querySelector('.genre-options-div')

@@ -63,11 +63,11 @@
         <select name="actor" id="actor">
           <option value="" disabled selected>--Actors in FFS database--</option>
           <% for(let actor of actors) { %>
-          <option value="<%=actor%>" id="actor-<%=actors.indexOf(actor)%>"><%=actor%></option>
+          <option value="<%=actor%>" maxlength="30" id="actor-<%=actors.indexOf(actor)%>"><%=actor%></option>
           <% } %>
         </select>
       </div>
-    </fieldset><br/>
+    </fieldset>
     <fieldset id="genres-container">
       <legend>Genre Filter</legend>
       <div class="genres-type-choice">
@@ -116,7 +116,7 @@
         <input type="checkbox" name="reverse" id="reverse" />
         <label for="reverse">Reverse order?</label>
       </div>
-    </fieldset><br/>
+    </fieldset>
     <input type="submit" name="sortDatabase" id="sort-database-btn" value="Sort Movies with These Options">
   </form>
   
