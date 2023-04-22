@@ -44,7 +44,7 @@ To view and use The FFS Web App, visit [https://ffs.fly.dev](https://ffs.fly.dev
 
 ### Potential Future Features
 
-- FFS members currently participate in a nomination and voting process to select winning movies for each screening. They use a ranked choice alorithm to calculate the winner based on member votes. It would be great to employ the FFS app to manage this entire process: 
+- FFS members currently participate in a nomination and voting process to select winning movies for each screening. They use a ranked choice algorithm to calculate the winner based on member votes. It would be great to employ the FFS app to manage this entire process: 
   - opening a nomination window
   - collecting nominations from members
   - closing the nomination window
