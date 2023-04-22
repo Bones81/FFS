@@ -37,7 +37,6 @@ const maintenanceMiddleware = (req, res, next) => {
   }
 }
 
-app.use(maintenanceMiddleware) // renders maintenance ahead of all other routes
 
 app.use(express.static('public'))
 app.use(express.urlencoded({extended: true}))
@@ -51,9 +50,10 @@ app.use(session({
   store: MongoStore.create({ mongoUrl: mongoURI })
 }))
 
-
 app.use(passport.initialize())
 app.use(passport.session())
+
+app.use(maintenanceMiddleware) // renders maintenance ahead of all other routes
 
 const moviesController = require('./controllers/movies.js')
 const screeningsController = require('./controllers/screenings.js')
