@@ -13,7 +13,7 @@ const mongoURI = process.env.MONGODB_URI
 const mongoLOC = 'mongodb://localhost:27017/'+'FFS'
 const PORT = process.env.PORT || 3003
 
-mongoose.connect(mongoLOC, () => {
+mongoose.connect(mongoURI, () => {
   console.log('The connection with mongod is established')
 })
 
@@ -48,7 +48,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: { maxAge: 1000 * 60 * 60 * 2 },
-  store: MongoStore.create({ mongoUrl: mongoLOC })
+  store: MongoStore.create({ mongoUrl: mongoURI })
 }))
 
 
