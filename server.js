@@ -27,7 +27,7 @@ const { application } = require('express')
 
 //MIDDLEWARE
 const maintenanceMiddleware = (req, res, next) => {
-  const isMaintenance = false
+  const isMaintenance = true
   if(isMaintenance) {
     res.render('maintenance.ejs', {
       tabTitle: 'FFS Maintenance In Progress'
