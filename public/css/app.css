@@ -143,6 +143,10 @@ body {
   max-width: 80vw;
 }
 
+.show-card h3, .show-form {
+  margin: 1em auto;
+}
+
 .card img {
   object-fit: cover;
   max-width: 90%;
@@ -151,7 +155,7 @@ body {
 
 .card h3 {
   font-size: 1em;
-  margin: 0;
+  /* margin: 0; */
 }
 
 h1 {
@@ -330,6 +334,8 @@ td {
 
 .card .winner-text, .card .movie-title {
   font-size: 1em;
+  margin: 0;
+
 }
 
 .screening-date, .selection-title {
@@ -477,13 +483,22 @@ header {
 .mobile-greeting {
   display: block;
   margin: 1em auto;
+  padding: 1.5em;
+  background: linear-gradient(to top, aqua, aquamarine);
+  border: 2px solid black;
+  border-radius: 10px;
+  box-shadow: -1px 1px 5px black;
+}
 
+.mobile-greeting hr {
+  margin: 1em;
 }
 
 .mobile-greeting a {
   color: whitesmoke;
-  font-size: 10px;
+  font-size: 14px;
   background: rgba(192,192,192, 1);
+  font-family: var(--font1);
 }
 
 .full-nav {
@@ -512,7 +527,7 @@ header {
   transition: all 0.2s ease-in-out;
   height: 100vh;
   width: 100%;
-  background: var(--movie-bg);
+  background: var(--mobile-movie-bg);
 }
 
 .mobile-nav a {

@@ -5,6 +5,7 @@ const session = require('express-session')
 const mongoose = require('mongoose')
 const db = mongoose.connection
 const MongoStore = require('connect-mongo')
+require('dotenv').config()
 
 const methodOverride = require('method-override')
 
@@ -23,7 +24,6 @@ const req = require('express/lib/request')
 const res = require('express/lib/response')
 const { aggregate } = require('./models/movies.js')
 const { application } = require('express')
-require('dotenv').config()
 
 //MIDDLEWARE
 const maintenanceMiddleware = (req, res, next) => {
