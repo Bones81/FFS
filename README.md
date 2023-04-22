@@ -28,7 +28,7 @@ To view and use The FFS Web App, visit [https://ffs.fly.dev](https://ffs.fly.dev
 
 ### App History
 
-- The FFS Web App was begun in Feb 2022 as an assignment in General Assembly's Software Engineering Immersive Remote course. It was an exercise designed to help learn the basics of building a full stack web application with MVC (Model-View-Controller) principles. Express, Node, and MongoDB comprise the back-end while EJS views get served to the front-end.
+- The FFS Web App was begun in Feb 2022 as an assignment in General Assembly's Software Engineering Immersive Remote course. It was an exercise designed to help learn the basics of building a full stack web application with a RESTful API and MVC (Model-View-Controller) principles. Express, Node, and MongoDB comprise the back-end while EJS views get served to the front-end.
 
 - Initially, there was only a single model for movies, and the only movies included in the database were movies screened by the FFS. 
 
@@ -41,6 +41,16 @@ To view and use The FFS Web App, visit [https://ffs.fly.dev](https://ffs.fly.dev
 - FFS members have the additional ability to add films to the database and to add nominations for upcoming screenings. They can also edit existing movie information or nomination information. They can also delete movies or nominations should the need arise. 
 
 - FFS admins have all the above abilities plus the ability to add, edit, or delete screening information.
+
+- The app also includes JSON API endpoints for all screenings, nominations, and movies:
+  - [Screenings](https://ffs.fly.dev/screenings/json)
+  - [Nominations](https://ffs.fly.dev/nominations/json)
+  - [Movies](https://ffs.fly.dev/movies/json)
+
+- For each of these models/routes, individual object data is also available in JSON format by including the appropriate object id in the url. For example:
+  - [https://ffs.fly.dev/screenings/642c50fa605644e47adceba9/json](https://ffs.fly.dev/screenings/642c50fa605644e47adceba9/json)
+  - [https://ffs.fly.dev/nominations/642c5141605644e47adcebff/json](https://ffs.fly.dev/nominations/642c5141605644e47adcebff/json)
+  - [https://ffs.fly.dev/movies/6341124db86cd74b233755c0/json](https://ffs.fly.dev/movies/6341124db86cd74b233755c0/json)
 
 ### Potential Future Features
 
