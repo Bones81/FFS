@@ -54,10 +54,6 @@ body {
   font-size: 0.75em;
 }
 
-.screenings-title {
-  
-}
-
 .flex-container {
   display: flex;
   flex-flow: row wrap;
