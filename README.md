@@ -51,7 +51,7 @@ To view and use The FFS Web App, visit [https://ffs.fly.dev](https://ffs.fly.dev
   - beginning a voting window
   - collecting votes from members, limited to one ballot per member
   - closing the voting window
-  - performing a ranked choice alorithm to determine the winning movie
+  - performing a ranked choice algorithm to determine the winning movie
   - announcing the result to membership
  
 - Given the increasing amount of data with each additional movie added to the database, it would be interesting to include some data visualizations. Perhaps a visitor could see what genre of movie has been screened most often, etc. in bar or pie graph format. And eventually, perhaps users could select the data points they would like to see plotted in the graph. This would likely require incorporating a JS data visualization library such as Chart.js or D3.js
