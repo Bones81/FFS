@@ -27,6 +27,7 @@ module.exports = [
     'Historical',
     'Holiday',
     'Horror',
+    'Independent',
     'Kaiju',
     'Made-For-Television',
     'Martial Arts',
