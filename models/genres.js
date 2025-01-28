@@ -52,6 +52,7 @@ module.exports = [
     'Spy',
     'Steampunk',
     'Superhero',
+    'Supernatural',
     'Suspense',
     'Teen',
     'Thriller',
