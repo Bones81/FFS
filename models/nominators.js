@@ -20,5 +20,6 @@ module.exports = [
     'Lauren Berger',
     'Neal Tillery',
     'Emilia Sotelo',
-    'Caz Rosson'
+    'Caz Rosson',
+    'Matt Marker'
 ]
